@@ -6,17 +6,27 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Database
 {
+    /// <summary>
+    /// Represents an entry for a package that conflicts with another package in the database where both options cannot be selected at the same time.
+    /// </summary>
     public class ConflictingPackage : XmlComponent
     {
+        /// <summary>
+        /// Create an instance of the ConflictingPackage class.
+        /// </summary>
         public ConflictingPackage() : base()
         {
 
         }
 
+        /// <summary>
+        /// Create an instance of the ConflictingPackage class based on values from a given entry to copy.
+        /// </summary>
+        /// <param name="conflictingPackageToCopy">The entry to copy.</param>
         public ConflictingPackage(ConflictingPackage conflictingPackageToCopy) : base(conflictingPackageToCopy)
         {
-            this.PackageName = conflictingPackageToCopy.PackageName;
-            this.PackageUID = conflictingPackageToCopy.PackageUID;
+            this.ConflictingPackageName = conflictingPackageToCopy.ConflictingPackageName;
+            this.ConflictingPackageUID = conflictingPackageToCopy.ConflictingPackageUID;
             this.ConflictingSelectablePackage = conflictingPackageToCopy.ConflictingSelectablePackage;
             this.ParentSelectablePackage = conflictingPackageToCopy.ParentSelectablePackage;
         }
@@ -33,8 +43,8 @@ namespace RelhaxModpack.Database
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
             {
                 //list attributes
-                new XmlDatabaseProperty() { XmlName = nameof(PackageName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(PackageName) },
-                new XmlDatabaseProperty() { XmlName = nameof(PackageUID), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(PackageUID) }
+                new XmlDatabaseProperty() { XmlName = nameof(ConflictingPackageName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(ConflictingPackageName) },
+                new XmlDatabaseProperty() { XmlName = nameof(ConflictingPackageUID), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(ConflictingPackageUID) }
             };
             return xmlDatabaseProperties;
         }
@@ -63,28 +73,42 @@ namespace RelhaxModpack.Database
         #endregion
 
         /// <summary>
-        /// The name of the package that *this* package is dependent on
+        /// The name of the package that conflicts with this package.
         /// </summary>
-        public string PackageName { get; set; } = string.Empty;
+        public string ConflictingPackageName { get; set; } = string.Empty;
 
         /// <summary>
-        /// The UID of the package that *this* package is dependent on
+        /// The UID of the package that conflicts with this package.
         /// </summary>
-        public string PackageUID { get; set; } = string.Empty;
+        public string ConflictingPackageUID { get; set; } = string.Empty;
 
+        /// <summary>
+        /// The reference to the package that conflicts with this package.
+        /// </summary>
         public SelectablePackage ConflictingSelectablePackage { get; set; }
 
+        /// <summary>
+        /// The reference package that this conflicting package entry belongs to.
+        /// </summary>
         public SelectablePackage ParentSelectablePackage { get; set; }
 
+        /// <summary>
+        /// Determines if two entries are equal by comparing the package name and UID values.
+        /// </summary>
+        /// <param name="packageToCompare">The package to compare.</param>
+        /// <returns>True if the entires contain the same values, false otherwise.</returns>
         public bool IsEqual(ConflictingPackage packageToCompare)
         {
-            return packageToCompare.PackageName.Equals(this.PackageName) && packageToCompare.PackageUID.Equals(this.PackageUID);
+            return packageToCompare.ConflictingPackageName.Equals(this.ConflictingPackageName) && packageToCompare.ConflictingPackageUID.Equals(this.ConflictingPackageUID);
         }
 
-
+        /// <summary>
+        /// Provide a string representation of the entry.
+        /// </summary>
+        /// <returns>The string representation of the entry, containing the entry's conflicting package name and UID</returns>
         public override string ToString()
         {
-            return $"{nameof(PackageName)}: {PackageName}, {nameof(PackageUID)}: {PackageUID}";
+            return $"{nameof(ConflictingPackageName)}: {ConflictingPackageName}, {nameof(ConflictingPackageUID)}: {ConflictingPackageUID}";
         }
     }
 }

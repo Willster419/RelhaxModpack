@@ -212,8 +212,8 @@ namespace RelhaxModpack.Database
                         ParentSelectablePackage = this,
                         ConflictingSelectablePackage = null,
                         LoadedSchemaVersion = this.LoadedSchemaVersion,
-                        PackageName = conflictingPackageName,
-                        PackageUID = string.Empty
+                        ConflictingPackageName = conflictingPackageName,
+                        ConflictingPackageUID = string.Empty
                     };
                     ConflictingPackagesNew.Add(conflictingPackage);
                 }

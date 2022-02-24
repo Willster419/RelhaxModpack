@@ -1580,7 +1580,7 @@ namespace RelhaxModpack.Database
                 {
                     ConflictingPackage conflictingPackageEntry = package.ConflictingPackagesNew[i];
 
-                    if (string.IsNullOrEmpty(conflictingPackageEntry.PackageUID) && string.IsNullOrEmpty(conflictingPackageEntry.PackageName))
+                    if (string.IsNullOrEmpty(conflictingPackageEntry.ConflictingPackageUID) && string.IsNullOrEmpty(conflictingPackageEntry.ConflictingPackageName))
                     {
                         Logging.Error($"The package {package.PackageName} conflicting package entry {i} does not have a packageName or packageUID. It was removed.");
                         package.ConflictingPackagesNew.Remove(conflictingPackageEntry);
@@ -1590,19 +1590,19 @@ namespace RelhaxModpack.Database
 
                     SelectablePackage conflictingPackage;
                     string lookupProperty;
-                    if (string.IsNullOrEmpty(conflictingPackageEntry.PackageUID))
+                    if (string.IsNullOrEmpty(conflictingPackageEntry.ConflictingPackageUID))
                     {
-                        lookupProperty = conflictingPackageEntry.PackageName;
-                        conflictingPackage = GetSelectablePackageByPackageName(conflictingPackageEntry.PackageName);
+                        lookupProperty = conflictingPackageEntry.ConflictingPackageName;
+                        conflictingPackage = GetSelectablePackageByPackageName(conflictingPackageEntry.ConflictingPackageName);
                         if (conflictingPackage != null)
                         {
-                            conflictingPackageEntry.PackageUID = conflictingPackage.UID;
+                            conflictingPackageEntry.ConflictingPackageUID = conflictingPackage.UID;
                         }
                     }
                     else
                     {
-                        lookupProperty = conflictingPackageEntry.PackageUID;
-                        conflictingPackage = GetSelectablePackageByUid(conflictingPackageEntry.PackageUID);
+                        lookupProperty = conflictingPackageEntry.ConflictingPackageUID;
+                        conflictingPackage = GetSelectablePackageByUid(conflictingPackageEntry.ConflictingPackageUID);
                     }
 
                     if (conflictingPackage == null)
@@ -1637,14 +1637,14 @@ namespace RelhaxModpack.Database
             {
                 foreach (SelectablePackage conflictingPackage in _package.ConflictingPackagesProcessed)
                 {
-                    ConflictingPackage result = conflictingPackage.ConflictingPackagesNew.Find(_ => _.PackageUID.Equals(_package.UID));
+                    ConflictingPackage result = conflictingPackage.ConflictingPackagesNew.Find(_ => _.ConflictingPackageUID.Equals(_package.UID));
                     if (result == null)
                     {
                         conflictingPackage.ConflictingPackagesNew.Add(new ConflictingPackage()
                         {
                             LoadedSchemaVersion = conflictingPackage.LoadedSchemaVersion,
-                            PackageName = _package.PackageName,
-                            PackageUID = _package.UID,
+                            ConflictingPackageName = _package.PackageName,
+                            ConflictingPackageUID = _package.UID,
                             ParentSelectablePackage = conflictingPackage,
                             ConflictingSelectablePackage = _package
                         });

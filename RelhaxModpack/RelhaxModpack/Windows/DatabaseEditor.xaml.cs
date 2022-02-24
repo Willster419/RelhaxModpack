@@ -2754,7 +2754,7 @@ namespace RelhaxModpack.Windows
             if (conflictingPackageA == null || conflictingPackageB == null)
                 return;
 
-            ConflictingPackage packageAReference = conflictingPackageB.ConflictingPackagesNew.Find(pack => pack.PackageUID.Equals(conflictingPackageA.UID));
+            ConflictingPackage packageAReference = conflictingPackageB.ConflictingPackagesNew.Find(pack => pack.ConflictingPackageUID.Equals(conflictingPackageA.UID));
             if (packageAReference == null)
                 return;
 
@@ -3000,7 +3000,7 @@ namespace RelhaxModpack.Windows
                         Logging.Editor("Mouse right click with conflictingPackages visible, checking if package entry already exists");
                         foreach (ConflictingPackage conflictingPackageFromSelectedPackage in selectedPackage.ConflictingPackagesNew)
                         {
-                            if (conflictingPackageFromSelectedPackage.PackageName.Equals(conflictingPackage.PackageName) && conflictingPackageFromSelectedPackage.PackageUID.Equals(conflictingPackage.UID))
+                            if (conflictingPackageFromSelectedPackage.ConflictingPackageName.Equals(conflictingPackage.PackageName) && conflictingPackageFromSelectedPackage.ConflictingPackageUID.Equals(conflictingPackage.UID))
                             {
                                 Logging.Editor("Mouse right click with conflicting packages add, skipping adding cause already exists: {0}", LogLevel.Info, conflictingPackage.PackageName);
                                 MessageBox.Show("Conflict entry already exists");
@@ -3012,8 +3012,8 @@ namespace RelhaxModpack.Windows
                         ListBoxItem lbi = new ListBoxItem();
                         ConflictingPackage conflictingPackageEntryOfSelectedPackage = new ConflictingPackage()
                         {
-                            PackageName = conflictingPackage.PackageName,
-                            PackageUID = conflictingPackage.UID,
+                            ConflictingPackageName = conflictingPackage.PackageName,
+                            ConflictingPackageUID = conflictingPackage.UID,
                             ParentSelectablePackage = selectedPackage,
                             ConflictingSelectablePackage = conflictingPackage
                         };
@@ -3024,8 +3024,8 @@ namespace RelhaxModpack.Windows
                         //then add-back so that the conflicting package references are circular
                         conflictingPackage.ConflictingPackagesNew.Add(new ConflictingPackage()
                         {
-                            PackageName = selectedPackage.PackageName,
-                            PackageUID = selectedPackage.UID,
+                            ConflictingPackageName = selectedPackage.PackageName,
+                            ConflictingPackageUID = selectedPackage.UID,
                             ParentSelectablePackage = conflictingPackage,
                             ConflictingSelectablePackage = selectedPackage
                         });
