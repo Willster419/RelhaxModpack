@@ -438,8 +438,70 @@
         </member>
         <member name="T:RelhaxModpack.Atlases.Atlas">
             <summary>
-            A class that serves as a description of an atlas file with processing instructions
+            A class that serves as a xml representation of atlas creation instructions.
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.Atlases.Atlas.AtlasXmlSearchPath">
+            <summary>
+            For atlas instruction files, the xpath to return a list of all atlas instruction elements.
+            </summary>
+            <remarks>As of the time of this writing, all instructions are now stored inside the database and are no longer separate xml files in the package zip files.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.Atlas.#ctor">
+            <summary>
+            Create an instance of the Atlas class.
+            </summary>
+            <seealso cref="T:RelhaxModpack.Database.PackageExtractInstruction"/>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.Atlas.#ctor(RelhaxModpack.Atlases.Atlas)">
+            <summary>
+            Create an instance of the Atlas class, copying values from the given atlas instruction.
+            </summary>
+            <param name="atlasToCopy">The atlas instruction object to copy.</param>
+            <seealso cref="M:RelhaxModpack.Atlases.Atlas.Copy(RelhaxModpack.Atlases.Atlas)"/>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.Atlas.Copy(RelhaxModpack.Atlases.Atlas)">
+            <summary>
+            Create an instance of the Atlas class, copying values from the given atlas instruction.
+            </summary>
+            <param name="atlasToCopy">The atlas instruction object to copy.</param>
+            <returns>A new atlas file with all copied values.</returns>
+            <seealso cref="M:RelhaxModpack.Atlases.Atlas.#ctor(RelhaxModpack.Atlases.Atlas)"/>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.RootObjectPath">
+            <summary>
+            Get the xpath used for returning a list of Atlas instruction elements in an instructions document.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.Atlas.PropertiesToSerialize">
+            <summary>
+            Gets the list of all properties in the class should be serialized to and from xml.
+            </summary>
+            <returns>A string array of all properties to be serialized.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.Atlas.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.Atlas.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.Atlas.GetXmlDatabasePropertiesV1Dot2">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasFile">
             <summary>
@@ -1132,6 +1194,30 @@
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
+        <member name="M:RelhaxModpack.Database.Category.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.Category.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.Category.GetXmlDatabasePropertiesV1Dot2">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
         <member name="P:RelhaxModpack.Database.Category.Name">
             <summary>
             The category name displayed to the user in the selection list
@@ -1213,6 +1299,30 @@
             Returns true if at least one package is enabled and checked and visible from the first level of packages in the category
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Database.ConflictingPackage.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.ConflictingPackage.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.ConflictingPackage.GetXmlDatabasePropertiesV1Dot2">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
         <member name="P:RelhaxModpack.Database.ConflictingPackage.PackageName">
             <summary>
             The name of the package that *this* package is dependent on
@@ -1243,6 +1353,22 @@
             <summary>
             Returns a list database managers who are known to maintain this component
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.CoreDatabaseComponent.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.CoreDatabaseComponent.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
         <member name="T:RelhaxModpack.Database.DatabaseManager.LogicTracking">
             <summary>
@@ -1492,6 +1618,30 @@
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
+        <member name="M:RelhaxModpack.Database.DatabaseLogic.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseLogic.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseLogic.GetXmlDatabasePropertiesV1Dot2">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
         <member name="P:RelhaxModpack.Database.DatabaseLogic.PackageName">
             <summary>
             The name of the package that *this* package is dependent on
@@ -1577,6 +1727,30 @@
             </summary>
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.GetXmlDatabasePropertiesV1Dot2">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
         <member name="M:RelhaxModpack.Database.DatabasePackage.AttributesToXmlParseSelectionFiles">
             <summary>
@@ -1786,6 +1960,22 @@
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
+        <member name="M:RelhaxModpack.Database.Dependency.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.Dependency.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
         <member name="P:RelhaxModpack.Database.Dependency.DatabasePackageLogic">
             <summary>
             List of linked mods and configs that use this dependency at install time
@@ -1844,6 +2034,30 @@
             </summary>
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.Media.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.Media.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.Media.GetXmlDatabasePropertiesV1Dot2">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
         <member name="P:RelhaxModpack.Database.Media.URL">
             <summary>
@@ -1935,6 +2149,22 @@
             <param name="package">The package to get the hash code</param>
             <returns>The hash code of the PackageName of the Package</returns>
         </member>
+        <member name="M:RelhaxModpack.Database.PackageExtractInstruction.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.PackageExtractInstruction.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
         <member name="P:RelhaxModpack.Database.PackageExtractInstruction.Pkg">
             <summary>
             Complete path to the package file
@@ -2022,6 +2252,30 @@
             </summary>
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.GetXmlDatabasePropertiesV1Dot2">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.AttributesToXmlParseSelectionFiles">
             <summary>
@@ -2399,6 +2653,30 @@
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
+        <member name="M:RelhaxModpack.Database.UserFile.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.UserFile.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.UserFile.GetXmlDatabasePropertiesV1Dot2">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
         <member name="P:RelhaxModpack.Database.UserFile.Pattern">
             <summary>
             The path or pattern to a file or files to backup to a temporary directory
@@ -2428,6 +2706,30 @@
             </summary>
             <param name="userFileToCopy">The object to copy</param>
             <returns>A new UserFile object with the same values and new list elements with the same values</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.GetXmlDatabasePropertiesV1Dot0">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.GetXmlDatabasePropertiesV1Dot1">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.GetXmlDatabasePropertiesV1Dot2">
+            <summary>
+            Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+            </summary>
+            <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+            <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+            <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
         <member name="P:RelhaxModpack.Installer.Instruction.NativeProcessingFile">
             <summary>
