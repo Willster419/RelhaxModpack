@@ -236,7 +236,6 @@
     <Compile Include="Common\FileCopier.cs" />
     <Compile Include="Common\IComponentWithID.cs" />
     <Compile Include="Common\Md5DatabaseManager.cs" />
-    <Compile Include="Common\StringConstants.cs" />
     <Compile Include="Database\Category.cs" />
     <Compile Include="Database\ConflictingPackage.cs" />
     <Compile Include="Database\CoreDatabaseComponent.cs" />
