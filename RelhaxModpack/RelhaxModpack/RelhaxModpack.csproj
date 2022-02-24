@@ -328,7 +328,6 @@
     <Compile Include="Utilities\ClassEventArgs\EditorTransferEventArgs.cs" />
     <Compile Include="Utilities\FileUtils.cs" />
     <Compile Include="Utilities\FtpUtils.cs" />
-    <Compile Include="Common\GlobalSuppressions.cs" />
     <Compile Include="Atlases\Atlas.cs" />
     <Compile Include="Installer\InstallEngine.cs" />
     <Compile Include="Patching\Patch.cs" />
