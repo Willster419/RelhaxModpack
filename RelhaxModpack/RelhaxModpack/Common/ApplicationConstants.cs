@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace RelhaxModpack.Common
 {
     /// <summary>
-    /// Contains all constant and static read-only fields to exist throughout the entire application.
+    /// Contains common fields and properties used throughout the entire application.
     /// </summary>
     public static class ApplicationConstants
     {
@@ -229,7 +229,7 @@ namespace RelhaxModpack.Common
         public const string PythonLog = "python.log";
 
         /// <summary>
-        /// The name of the logs folder used for WG CEF browser and Relhax Modpack
+        /// The name of the logs folder used for WG CEF browser and for storing installer log files.
         /// </summary>
         public const string LogsFolder = "logs";
 
@@ -266,7 +266,7 @@ namespace RelhaxModpack.Common
         public static readonly string RelhaxModBackupFolderPathOld = Path.Combine(ApplicationStartupPath, "RelHaxModBackup");
 
         /// <summary>
-        /// The absolute path of the application user selections folder. Default location .
+        /// The absolute path of the application user selections folder. Default location.
         /// </summary>
         public static readonly string RelhaxUserSelectionsFolderPath = Path.Combine(ApplicationStartupPath, "RelhaxUserSelections");
 
@@ -388,21 +388,21 @@ namespace RelhaxModpack.Common
         public const string BigmodsDatabaseRootEscaped = "https://bigmods.relhaxmodpack.com/RelhaxModpack/resources/database/{dbVersion}/";
 
         /// <summary>
-        /// The default download mirror, escaped with the 'onlineFolder' macro.
+        /// The default download mirror located in Texas USA, escaped with the 'onlineFolder' macro.
         /// </summary>
-        /// <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
+        /// <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0.</remarks>
         public const string StartAddressMirrorUsaDefault = @"https://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
 
         /// <summary>
         /// The download mirror located in Germany.
         /// </summary>
-        /// <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
+        /// <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0.</remarks>
         public const string StartAddressMirrorDe = @"https://relhax.clanverwaltung.de/filedepot/files/{onlineFolder}/";
 
         /// <summary>
         /// A read-only list of all download mirrors in this application.
         /// </summary>
-        /// <remarks>The order of this list matters as the index is used to store the user choice</remarks>
+        /// <remarks>The order of this list matters as the index is used to store the user choice.</remarks>
         public static readonly string[] DownloadMirrors = new string[]
         {
             StartAddressMirrorUsaDefault,
@@ -412,7 +412,7 @@ namespace RelhaxModpack.Common
         /// <summary>
         /// The URL of the V2 beta database root folder, escaped with the 'branch' macro.
         /// </summary>
-        /// <remarks>'branch' is a name of a github branch on the RelhaxModpackDatabase repo</remarks>
+        /// <remarks>'branch' is a name of a github branch on the RelhaxModpackDatabase repo.</remarks>
         public const string BetaDatabaseV2FolderURLEscaped = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/{branch}/latest_database/";
 
         /// <summary>
@@ -499,7 +499,7 @@ namespace RelhaxModpack.Common
         public const string ConfigFileVersion3V0 = "3.0";
 
         /// <summary>
-        /// The name of the WoT process used for detecting if it is running
+        /// The name of the WoT process used for detecting if an instance of the client running.
         /// </summary>
         public const string WoTProcessName = "WorldOfTanks";
 

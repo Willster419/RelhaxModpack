@@ -696,7 +696,7 @@
         </member>
         <member name="T:RelhaxModpack.Common.ApplicationConstants">
             <summary>
-            Contains all constant and static read-only fields to exist throughout the entire application.
+            Contains common fields and properties used throughout the entire application.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.LastSavedConfigFilename">
@@ -908,7 +908,7 @@
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.LogsFolder">
             <summary>
-            The name of the logs folder used for WG CEF browser and Relhax Modpack
+            The name of the logs folder used for WG CEF browser and for storing installer log files.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.DotNetFrameworkLatestDownloadURL">
@@ -945,7 +945,7 @@
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxUserSelectionsFolderPath">
             <summary>
-            The absolute path of the application user selections folder. Default location .
+            The absolute path of the application user selections folder. Default location.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxUserSelectionsFolderPathOld">
@@ -1043,27 +1043,27 @@
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.StartAddressMirrorUsaDefault">
             <summary>
-            The default download mirror, escaped with the 'onlineFolder' macro.
+            The default download mirror located in Texas USA, escaped with the 'onlineFolder' macro.
             </summary>
-            <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
+            <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0.</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.StartAddressMirrorDe">
             <summary>
             The download mirror located in Germany.
             </summary>
-            <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
+            <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0.</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.DownloadMirrors">
             <summary>
             A read-only list of all download mirrors in this application.
             </summary>
-            <remarks>The order of this list matters as the index is used to store the user choice</remarks>
+            <remarks>The order of this list matters as the index is used to store the user choice.</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.BetaDatabaseV2FolderURLEscaped">
             <summary>
             The URL of the V2 beta database root folder, escaped with the 'branch' macro.
             </summary>
-            <remarks>'branch' is a name of a github branch on the RelhaxModpackDatabase repo</remarks>
+            <remarks>'branch' is a name of a github branch on the RelhaxModpackDatabase repo.</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.BetaDatabaseBranchesURL">
             <summary>
@@ -1147,7 +1147,7 @@
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.WoTProcessName">
             <summary>
-            The name of the WoT process used for detecting if it is running
+            The name of the WoT process used for detecting if an instance of the client running.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.WoTVersionXmlXpath">
