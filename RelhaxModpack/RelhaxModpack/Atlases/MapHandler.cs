@@ -13,15 +13,15 @@ using RelhaxModpack.Utilities.Enums;
 namespace RelhaxModpack.Atlases
 {
     /// <summary>
-    /// Class for handling of xml atlas map files (WG style)
+    /// A class for handling WG xml atlas map files.
     /// </summary>
     public class MapHandler
     {
         /// <summary>
-        /// Loads a WG atlas map file into a texture list
+        /// Loads a WG atlas map file into a texture list.
         /// </summary>
-        /// <param name="mapFile">The map file to load</param>
-        /// <returns>The texture list of success, false otherwise</returns>
+        /// <param name="mapFile">The map file to load.</param>
+        /// <returns>The texture list if success, null otherwise.</returns>
         public List<Texture> LoadMapFile(string mapFile)
         {
             //check to make sure file exists first
@@ -76,10 +76,10 @@ namespace RelhaxModpack.Atlases
         }
 
         /// <summary>
-        /// Saves a map dictionary to the WG map xml file
+        /// Saves a map dictionary to the WG map xml file.
         /// </summary>
-        /// <param name="filename">The location to save the file</param>
-        /// <param name="map">The Dictionary of image name (key) and location (value)</param>
+        /// <param name="filename">The location to save the file.</param>
+        /// <param name="map">The Dictionary of each image name (key) and location (value) on the atlas file.</param>
         public void SaveMapfile(string filename, Dictionary<string, Rectangle> map)
         {
             using (StreamWriter writer = new StreamWriter(filename))

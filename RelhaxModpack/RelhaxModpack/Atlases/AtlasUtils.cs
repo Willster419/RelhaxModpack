@@ -13,29 +13,29 @@ using System.Threading.Tasks;
 namespace RelhaxModpack.Atlases
 {
     /// <summary>
-    /// A utility class for Atlas file processing
+    /// A utility class for Atlas file processing.
     /// </summary>
     public static class AtlasUtils
     {
         /// <summary>
-        /// The link to the Microsoft Visual C++ dll package required by the atlas processing libraries
+        /// The link to the Microsoft Visual C++ dll package required by the atlas processing libraries.
         /// </summary>
         public const string MSVCPLink = "https://www.microsoft.com/en-us/download/details.aspx?id=40784";
 
         /// <summary>
-        /// The manager instance of the FreeImage Library
+        /// The manager instance of the FreeImage Library.
         /// </summary>
         public static RelhaxFreeImageLibrary FreeImageLibrary = new RelhaxFreeImageLibrary();
 
         /// <summary>
-        /// The manager instance of the Nvidia Texture Tools Library
+        /// The manager instance of the Nvidia Texture Tools Library.
         /// </summary>
         public static RelhaxNvTexLibrary NvTexLibrary = new RelhaxNvTexLibrary();
 
         /// <summary>
-        /// Test the ability to load an unmanaged library
+        /// Test the ability to load an unmanaged library.
         /// </summary>
-        /// <returns>True if library loaded, false otherwise</returns>
+        /// <returns>True if library loaded, false otherwise.</returns>
         public static bool TestLibrary(IRelhaxUnmanagedLibrary library, string name, bool unload)
         {
             Logging.Info("Testing {0} library", name);
@@ -76,9 +76,9 @@ namespace RelhaxModpack.Atlases
         }
 
         /// <summary>
-        /// Test the ability to load and unload all the atlas image processing libraries
+        /// Test the ability to load and unload all the atlas image processing libraries.
         /// </summary>
-        /// <returns>True if both libraries loaded, false otherwise</returns>
+        /// <returns>True if both libraries loaded, false otherwise.</returns>
         public static bool TestLoadAtlasLibraries(bool unload)
         {
             bool freeImageLoaded = TestLibrary(FreeImageLibrary, "FreeImage", true);
@@ -98,13 +98,13 @@ namespace RelhaxModpack.Atlases
         }
 
         /// <summary>
-        /// Lock object used in AtlasCreator for critical sections that can't be done at the same time
+        /// Lock object used in AtlasCreator for critical sections that can't be done at the same time.
         /// </summary>
-        /// <remarks>Each atlas file is created by its own thread. However, the DDS loading and saving API used can't be used more then once at a time</remarks>
+        /// <remarks>Each atlas file is created by its own thread. However, the DDS loading and saving API used can't be used more then once at a time.</remarks>
         public static object AtlasLoaderLockObject { get; } = new object();
 
         /// <summary>
-        /// A list of Atlas creating thread engines
+        /// A list of Atlas creating thread engines.
         /// </summary>
         public static List<AtlasCreator> AtlasBuilders = null;
 
@@ -133,7 +133,7 @@ namespace RelhaxModpack.Atlases
         }
 
         /// <summary>
-        /// Disposes of all statically used AtlasUtils resources, including releasing the custom texture list
+        /// Disposes of all statically used AtlasUtils resources, including releasing the custom texture list.
         /// </summary>
         public static void DisposeOfAllAtlasResources()
         {

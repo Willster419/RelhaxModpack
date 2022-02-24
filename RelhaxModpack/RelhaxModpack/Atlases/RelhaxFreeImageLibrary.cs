@@ -15,15 +15,15 @@ using RelhaxModpack.Common;
 namespace RelhaxModpack
 {
     /// <summary>
-    /// A wrapper class around the TexImpNet FreeImage library class
+    /// A wrapper class around the TexImpNet FreeImage library class.
     /// </summary>
-    /// <remarks>The class handles: 32 and 64 bit library loading determination, Extraction, and Loading into memory</remarks>
+    /// <remarks>The class handles 32 and 64 bit library loading determination, extraction, and loading into memory.</remarks>
     public class RelhaxFreeImageLibrary : IRelhaxUnmanagedLibrary
     {
         private FreeImageLibrary library = FreeImageLibrary.Instance;
 
         /// <summary>
-        /// Gets the name of the embedded zip file containing the dll, 32 or 64 bit version
+        /// Gets the name of the embedded zip file containing the dll, 32 or 64 bit version.
         /// </summary>
         public string EmbeddedFilename
         {
@@ -31,7 +31,7 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Gets the name of the dll file inside the embedded zip file, 32 or 64bit version
+        /// Gets the name of the dll file inside the embedded zip file, 32 or 64bit version.
         /// </summary>
         public string ExtractedFilename
         {
@@ -39,7 +39,7 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Gets the absolute path to the dll file
+        /// Gets the absolute path to the dll file.
         /// </summary>
         public string Filepath
         {
@@ -78,7 +78,7 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Determines if the library is loaded into memory
+        /// Determines if the library is loaded into memory.
         /// </summary>
         public bool IsLoaded
         {
@@ -86,9 +86,9 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Attempts to load the library using the Filepath property
+        /// Attempts to load the library using the Filepath property.
         /// </summary>
-        /// <returns>True if the library load was successful</returns>
+        /// <returns>True if the library load was successful.</returns>
         public bool Load()
         {
             if (!IsExtracted)
@@ -107,9 +107,9 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Attempts to unload the library
+        /// Attempts to unload the library.
         /// </summary>
-        /// <returns>True if the library was unloaded, false otherwise</returns>
+        /// <returns>True if the library was unloaded, false otherwise.</returns>
         public bool Unload()
         {
             if (!IsLoaded)
@@ -121,7 +121,7 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Extracts the embedded compressed library to the location in the Filepath property
+        /// Extracts the embedded compressed library to the location in the Filepath property.
         /// </summary>
         public void Extract()
         {

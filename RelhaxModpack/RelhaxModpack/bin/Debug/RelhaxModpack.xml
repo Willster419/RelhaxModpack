@@ -6,79 +6,88 @@
     <members>
         <member name="T:RelhaxModpack.Atlases.AtlasProgressDelegate">
             <summary>
-            The delegate to invoke when calling back to the sender for the AtlasProgres event
+            The delegate to invoke when calling back to the sender for the AtlasProgres event.
             </summary>
-            <param name="sender">The sending Atlas Creator</param>
-            <param name="e">Event arguments</param>
+            <param name="sender">The sending Atlas Creator.</param>
+            <param name="e">Event arguments.</param>
         </member>
         <member name="T:RelhaxModpack.Atlases.AtlasCreator">
             <summary>
-            Represents the entire process of building an atlas image
+            Represents the entire process of building an atlas image.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Atlases.AtlasCreator.MAX_ATLAS_SIZE_32BIT">
             <summary>
-            The (arbitrary, guessing) limit of atlas size that the DDS compressor can process without exceeding 2GB
+            The (arbitrary, estimated) limit of an atlas size that the DDS compressor can process without exceeding 2GB.
             </summary>
-            <remarks>In 32bit windows OSs, the maximum amount of memory that a process can have is 2GB.
-            Exceeding that in the compressor will trigger a AccessViolationException</remarks>
+            <remarks>
+            In 32bit windows OSs, the maximum amount of memory that a process can have is 2GB.
+            Exceeding that in the compressor will trigger an AccessViolationException.
+            </remarks>
         </member>
         <member name="F:RelhaxModpack.Atlases.AtlasCreator.Atlas">
             <summary>
-            The object of atlas arguments for building the image
+            The Atlas instructions object for building the image and map.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Atlases.AtlasCreator.Token">
             <summary>
-            The token for handling a cancel call from the user
+            The token for handling a cancellation call from the user.
             </summary>
         </member>
         <member name="E:RelhaxModpack.Atlases.AtlasCreator.OnAtlasProgres">
             <summary>
-            The event when atlas child progress occurs
+            The event when atlas creation progress occurs.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasCreator.CreateAtlas(RelhaxModpack.Atlases.Atlas)">
             <summary>
-            Create the atlas image and map xml
+            Create the Atlas image and map xml.
             </summary>
-            <param name="atlas">The atlas arguments object</param>
-            <returns>Success code if complete, any other FailCode otherwise</returns>
+            <param name="atlas">The atlas arguments object.</param>
+            <returns>Success code if complete, any other FailCode otherwise.</returns>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.FailCode"/>
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasCreator.CreateAtlas">
             <summary>
-            Create the atlas image and map xml
+            Create the atlas image and map xml.
             </summary>
-            <returns>Success code if complete, any other FailCode otherwise</returns>
+            <returns>Success code if complete, any other FailCode otherwise.</returns>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.FailCode"/>
         </member>
         <member name="P:RelhaxModpack.Atlases.AtlasCreator.ParseCustomTexturesTask">
             <summary>
-            The task of parsing all custom png images from multiple folders into a flat list of png bitmaps
+            The task object of parsing all custom images from multiple folders into a list of bitmaps.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Atlases.AtlasCreator.CustomContourIconImages">
             <summary>
-            The list of parsed custom png images into textures
+            The list of parsed custom images from folders into textures.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasCreator.LoadCustomContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
             <summary>
-            Loads all custom textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
+            Loads all custom textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread.
             </summary>
-            <param name="CustomFolderPaths">The list of absolute paths containing custom contour icon images to be loaded</param>
-            <param name="token">The cancellation token</param>
-            <returns>The list of textures</returns>
+            <param name="CustomFolderPaths">The list of absolute paths containing custom contour icon images to be loaded.</param>
+            <param name="token">The cancellation token.</param>
+            <returns>The list of textures.</returns>
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasCreator.DisposeParsedCustomTextures">
             <summary>
-            Dispose of all textures in the shared custom texture list
+            Dispose of all textures in the shared custom texture list.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasCreator.Dispose(System.Boolean)">
             <summary>
-            Dispose of the Atlas Creator (mostly disposing image data)
+            Dispose of the Atlas Creator (mostly disposing image data).
             </summary>
-            <param name="disposing">Set to true to dispose managed objects as well as unmanaged</param>
+            <param name="disposing">Set to true to dispose managed objects as well as unmanaged.</param>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.AtlasCreator.Finalize">
+            <summary>
+            Destruct the instance of the AtlasCreator by the garbage collector.
+            </summary>
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasCreator.Dispose">
             <summary>
@@ -87,45 +96,45 @@
         </member>
         <member name="T:RelhaxModpack.Atlases.AtlasUtils">
             <summary>
-            A utility class for Atlas file processing
+            A utility class for Atlas file processing.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Atlases.AtlasUtils.MSVCPLink">
             <summary>
-            The link to the Microsoft Visual C++ dll package required by the atlas processing libraries
+            The link to the Microsoft Visual C++ dll package required by the atlas processing libraries.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Atlases.AtlasUtils.FreeImageLibrary">
             <summary>
-            The manager instance of the FreeImage Library
+            The manager instance of the FreeImage Library.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Atlases.AtlasUtils.NvTexLibrary">
             <summary>
-            The manager instance of the Nvidia Texture Tools Library
+            The manager instance of the Nvidia Texture Tools Library.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasUtils.TestLibrary(RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary,System.String,System.Boolean)">
             <summary>
-            Test the ability to load an unmanaged library
+            Test the ability to load an unmanaged library.
             </summary>
-            <returns>True if library loaded, false otherwise</returns>
+            <returns>True if library loaded, false otherwise.</returns>
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasUtils.TestLoadAtlasLibraries(System.Boolean)">
             <summary>
-            Test the ability to load and unload all the atlas image processing libraries
+            Test the ability to load and unload all the atlas image processing libraries.
             </summary>
-            <returns>True if both libraries loaded, false otherwise</returns>
+            <returns>True if both libraries loaded, false otherwise.</returns>
         </member>
         <member name="P:RelhaxModpack.Atlases.AtlasUtils.AtlasLoaderLockObject">
             <summary>
-            Lock object used in AtlasCreator for critical sections that can't be done at the same time
+            Lock object used in AtlasCreator for critical sections that can't be done at the same time.
             </summary>
-            <remarks>Each atlas file is created by its own thread. However, the DDS loading and saving API used can't be used more then once at a time</remarks>
+            <remarks>Each atlas file is created by its own thread. However, the DDS loading and saving API used can't be used more then once at a time.</remarks>
         </member>
         <member name="F:RelhaxModpack.Atlases.AtlasUtils.AtlasBuilders">
             <summary>
-            A list of Atlas creating thread engines
+            A list of Atlas creating thread engines.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasUtils.VerifyImageLibsLoaded">
@@ -135,48 +144,48 @@
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasUtils.DisposeOfAllAtlasResources">
             <summary>
-            Disposes of all statically used AtlasUtils resources, including releasing the custom texture list
+            Disposes of all statically used AtlasUtils resources, including releasing the custom texture list.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Atlases.ImageHandler">
             <summary>
-            Class for handling loading and saving of DDS atlas files
+            Class for handling loading and saving of DDS atlas files.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Atlases.ImageHandler.LoadDDS(System.String)">
             <summary>
-            Loads a DDS image into a Bitmap object
+            Loads a DDS image into a Bitmap object.
             </summary>
-            <param name="filename">The relative or absolute location of the DDS file</param>
-            <returns>The Bitmap of the DDS file, or null if it failed</returns>
+            <param name="filename">The relative or absolute location of the DDS file.</param>
+            <returns>The Bitmap of the DDS file, or null if it failed.</returns>
         </member>
         <member name="M:RelhaxModpack.Atlases.ImageHandler.SaveDDS(System.String,System.Drawing.Bitmap,System.Boolean)">
             <summary>
-            Saves a Bitmap image into a DDS file of DXT5 compression
+            Saves a Bitmap image into a DDS file of DXT5 compression.
             </summary>
-            <param name="savePath">The path to save the file</param>
-            <param name="image">The bitmap to save</param>
-            <param name="disposeImage">Set to true to dispose of the inputted bitmap after it's saved</param>
-            <returns></returns>
+            <param name="savePath">The path to save the file.</param>
+            <param name="image">The bitmap to save.</param>
+            <param name="disposeImage">Set to true to dispose of the inputted bitmap after it's saved.</param>
+            <returns>True if image creation was successful, false otherwise.</returns>
         </member>
         <member name="T:RelhaxModpack.Atlases.MapHandler">
             <summary>
-            Class for handling of xml atlas map files (WG style)
+            A class for handling WG xml atlas map files.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Atlases.MapHandler.LoadMapFile(System.String)">
             <summary>
-            Loads a WG atlas map file into a texture list
+            Loads a WG atlas map file into a texture list.
             </summary>
-            <param name="mapFile">The map file to load</param>
-            <returns>The texture list of success, false otherwise</returns>
+            <param name="mapFile">The map file to load.</param>
+            <returns>The texture list if success, null otherwise.</returns>
         </member>
         <member name="M:RelhaxModpack.Atlases.MapHandler.SaveMapfile(System.String,System.Collections.Generic.Dictionary{System.String,System.Drawing.Rectangle})">
             <summary>
-            Saves a map dictionary to the WG map xml file
+            Saves a map dictionary to the WG map xml file.
             </summary>
-            <param name="filename">The location to save the file</param>
-            <param name="map">The Dictionary of image name (key) and location (value)</param>
+            <param name="filename">The location to save the file.</param>
+            <param name="map">The Dictionary of each image name (key) and location (value) on the atlas file.</param>
         </member>
         <member name="T:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker">
             <summary>Rectangle packer using an algorithm by Javier Arevalo</summary>
@@ -396,44 +405,44 @@
         </member>
         <member name="P:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.EmbeddedFilename">
             <summary>
-            Gets the name of the embedded zip file containing the dll, 32 or 64 bit version
+            Gets the name of the embedded zip file containing the dll, 32 or 64 bit version.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.ExtractedFilename">
             <summary>
-            Gets the name of the dll file inside the embedded zip file, 32 or 64bit version
+            Gets the name of the dll file inside the embedded zip file, 32 or 64 bit version.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.Filepath">
             <summary>
-            Gets the absolute path to the dll file
+            Gets the absolute path to the dll file.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.IsExtracted">
             <summary>
-            Determines if the file is extracted to the Filepath property location
+            Determines if the file is extracted to the Filepath property location.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.IsLoaded">
             <summary>
-            Determines if the library is loaded into memory
+            Determines if the library is loaded into memory.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.Load">
             <summary>
-            Attempts to load the library using the Filepath property
+            Attempts to load the library using the Filepath property.
             </summary>
-            <returns>True if the library load was successful</returns>
+            <returns>True if the library load was successful.</returns>
         </member>
         <member name="M:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.Unload">
             <summary>
-            Attempts to unload the library
+            Attempts to unload the library.
             </summary>
-            <returns>True if the library was unloaded, false otherwise</returns>
+            <returns>True if the library was unloaded, false otherwise.</returns>
         </member>
         <member name="M:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.Extract">
             <summary>
-            Extracts the embedded compressed library to the location in the Filepath property
+            Extracts the embedded compressed library to the location in the Filepath property.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Atlases.Atlas">
@@ -505,99 +514,127 @@
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasFile">
             <summary>
-            File name of the atlas image file to extract
+            File name of the atlas image file to extract from inside the game's install directory.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>
+            If loading from an xml instructions file, this is loaded from the xml file.
+            If the Pkg value is given, this is a location in a package zip file, else it is a file location in the game's install directory.
+            </remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.MapFile">
             <summary>
-            File name of the atlas map file to extract
+            File name of the atlas map file to extract from the game's install directory.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>
+            If loading from an xml instructions file, this is loaded from the xml file.
+            If the Pkg value is given, this is a location in a package zip file, else it is a file location in the game's install directory.
+            </remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasSaveDirectory">
             <summary>
-            Path to place the generated atlas image file and xml map
+            Path to place the generated atlas image file and xml map, relative to the game's install directory.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasWidth">
             <summary>
-            Width of the new atlases file. 0 = get from original atlas file
+            Width of the new atlases file. 0 = get from original atlas file.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasHeight">
             <summary>
-            Height of the new atlases file. 0 = get from original atlas file
+            Height of the new atlases file. 0 = get from original atlas file.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.Padding">
             <summary>
             Padding of the new atlases file (amount of pixels as a border between each image)
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.PowOf2">
             <summary>
-            Creating an atlas file only with log base 2 numbers (16, 32, 64, etc.)
+            Creating an atlas file only with log base 2 numbers (16, 32, 64, etc).
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.Square">
             <summary>
-            Creating an atlas file only in a square (same width and height of atlas)
+            Creating an atlas file only in a square (same width and height of atlas).
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.FastImagePacker">
             <summary>
-            allow to accept first successful image optimization layout
+            Allow the packer to accept first successful image optimization layout (placement).
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.ImageFolders">
             <summary>
-            List of folders that could contain images to replace original images
+            List of folders that could contain images to replace original images found in the game's atlas file.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.TextureList">
             <summary>
-            The list of textures in each atlas
+            The list of texture objects in each atlas.
             </summary>
             <remarks>This is *not* loaded from the xml file and is used internally</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.TempAtlasImageFilePath">
             <summary>
-            The file path where the original atlas image file will be extracted/copied to
+            The file path where the original atlas image file will be extracted/copied to, relative to the application's temporary directory.
             </summary>
             <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+            <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.RelhaxTempFolderPath"/>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.TempAtlasMapFilePath">
             <summary>
-            The file path where the original atlas map file will be extracted/copied to
+            The file path where the original atlas map file will be extracted/copied to, relative to the application's temporary directory.
             </summary>
             <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+            <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.RelhaxTempFolderPath"/>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasImageFilePath">
             <summary>
-            The file path where the created atlas image file will be placed
+            The file path where the created atlas image file will be placed.
             </summary>
-            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+            <remarks>
+            This is *not* loaded from the xml file and is used internally.
+            This is created by combining the AtlasSaveDirectory and AtlasFile properties.
+            </remarks>
+            <seealso cref="P:RelhaxModpack.Atlases.Atlas.AtlasSaveDirectory"/>
+            <seealso cref="P:RelhaxModpack.Atlases.Atlas.AtlasFile"/>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasMapFilePath">
             <summary>
-            The file path where the created map file will be placed
+            The file path where the created map file will be placed.
             </summary>
-            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+            <remarks>
+            This is *not* loaded from the xml file and is used internally.
+            This is created by combining the AtlasSaveDirectory and AtlasFile properties.
+            </remarks>
         </member>
         <member name="M:RelhaxModpack.Atlases.Atlas.ToString">
             <summary>
-            Returns a string representation of the object
+            Returns a string representation of the object.
             </summary>
-            <returns>The atlas file name</returns>
+            <returns>The atlas file name, or "(empty)", if no atlas name is given.</returns>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.DumpInfoToLog">
+            <summary>
+            Gets a string formatted list of internal properties and values for log output.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.Atlas.InstructionsEqual(RelhaxModpack.Installer.Instruction)">
+            <summary>
+            Compares two instructions to determine if their values are equal.
+            </summary>
+            <param name="instructionToCompare">The instruction to compare against.</param>
+            <returns>True if the compared values are equal, false otherwise.</returns>
         </member>
         <member name="F:RelhaxModpack.Automation.AutomationMacro.MacroReplaceRegex">
             <summary>
@@ -6481,41 +6518,53 @@
             A Texture is a piece of an atlas file. Contains image data such as the position, size, and bitmap itself.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Texture.PropertiesForSerializationAttributes">
+            <summary>
+            Gets a list of properties that represent xml attributes to be loaded/saved to/from an xml document.
+            </summary>
+            <returns>The list of properties.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Texture.PropertiesForSerializationElements">
+            <summary>
+            Gets a list of properties thata represent xml elements to be loaded/saved to/from an xml document.
+            </summary>
+            <returns>The list of properties.</returns>
+        </member>
         <member name="P:RelhaxModpack.Texture.Name">
             <summary>
-            The file name of where this texture came from
+            The file name of where this texture came from, without extension.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>This is loaded from the map file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.X">
             <summary>
-            The x position of the texture in the atlas image
+            The x position of the texture in the atlas image.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>This is loaded from the map file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.Y">
             <summary>
-            The y position of the texture in the atlas image
+            The y position of the texture in the atlas image.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>This is loaded from the xml file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.Width">
             <summary>
-            The width of the texture in the atlas image
+            The width of the texture in the atlas image.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>This is loaded from the map file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.Height">
             <summary>
-            The height of the texture in the atlas image
+            The height of the texture in the atlas image.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>This is loaded from the map file.</remarks>
         </member>
         <member name="F:RelhaxModpack.Texture.AtlasImage">
             <summary>
-            The actual bitmap in memory of the image
+            The actual bitmap in memory of the image.
             </summary>
-            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+            <remarks>This is *not* loaded from the map file and is used internally.</remarks>
         </member>
         <member name="T:RelhaxModpack.Windows.ConflictingPackageDialog">
             <summary>
@@ -8450,23 +8499,23 @@
         </member>
         <member name="T:RelhaxModpack.RelhaxFreeImageLibrary">
             <summary>
-            A wrapper class around the TexImpNet FreeImage library class
+            A wrapper class around the TexImpNet FreeImage library class.
             </summary>
-            <remarks>The class handles: 32 and 64 bit library loading determination, Extraction, and Loading into memory</remarks>
+            <remarks>The class handles 32 and 64 bit library loading determination, extraction, and loading into memory.</remarks>
         </member>
         <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.EmbeddedFilename">
             <summary>
-            Gets the name of the embedded zip file containing the dll, 32 or 64 bit version
+            Gets the name of the embedded zip file containing the dll, 32 or 64 bit version.
             </summary>
         </member>
         <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.ExtractedFilename">
             <summary>
-            Gets the name of the dll file inside the embedded zip file, 32 or 64bit version
+            Gets the name of the dll file inside the embedded zip file, 32 or 64bit version.
             </summary>
         </member>
         <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.Filepath">
             <summary>
-            Gets the absolute path to the dll file
+            Gets the absolute path to the dll file.
             </summary>
         </member>
         <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.IsExtracted">
@@ -8476,45 +8525,45 @@
         </member>
         <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.IsLoaded">
             <summary>
-            Determines if the library is loaded into memory
+            Determines if the library is loaded into memory.
             </summary>
         </member>
         <member name="M:RelhaxModpack.RelhaxFreeImageLibrary.Load">
             <summary>
-            Attempts to load the library using the Filepath property
+            Attempts to load the library using the Filepath property.
             </summary>
-            <returns>True if the library load was successful</returns>
+            <returns>True if the library load was successful.</returns>
         </member>
         <member name="M:RelhaxModpack.RelhaxFreeImageLibrary.Unload">
             <summary>
-            Attempts to unload the library
+            Attempts to unload the library.
             </summary>
-            <returns>True if the library was unloaded, false otherwise</returns>
+            <returns>True if the library was unloaded, false otherwise.</returns>
         </member>
         <member name="M:RelhaxModpack.RelhaxFreeImageLibrary.Extract">
             <summary>
-            Extracts the embedded compressed library to the location in the Filepath property
+            Extracts the embedded compressed library to the location in the Filepath property.
             </summary>
         </member>
         <member name="T:RelhaxModpack.RelhaxNvTexLibrary">
             <summary>
-            A wrapper class around the TexImpNet NvidiaTT library class
+            A wrapper class around the TexImpNet NvidiaTT library class.
             </summary>
-            <remarks>The class handles: 32 and 64 bit library loading determination, Extraction, and Loading into memory</remarks>
+            <remarks>The class handles 32 and 64 bit library loading determination, extraction, and loading into memory.</remarks>
         </member>
         <member name="P:RelhaxModpack.RelhaxNvTexLibrary.EmbeddedFilename">
             <summary>
-            Gets the name of the embedded zip file containing the dll, 32 or 64 bit version
+            Gets the name of the embedded zip file containing the dll, 32 or 64 bit version.
             </summary>
         </member>
         <member name="P:RelhaxModpack.RelhaxNvTexLibrary.ExtractedFilename">
             <summary>
-            Gets the name of the dll file inside the embedded zip file, 32 or 64bit version
+            Gets the name of the dll file inside the embedded zip file, 32 or 64bit version.
             </summary>
         </member>
         <member name="P:RelhaxModpack.RelhaxNvTexLibrary.Filepath">
             <summary>
-            Gets the absolute path to the dll file
+            Gets the absolute path to the dll file.
             </summary>
         </member>
         <member name="P:RelhaxModpack.RelhaxNvTexLibrary.IsExtracted">
@@ -8524,24 +8573,24 @@
         </member>
         <member name="P:RelhaxModpack.RelhaxNvTexLibrary.IsLoaded">
             <summary>
-            Determines if the library is loaded into memory
+            Determines if the library is loaded into memory.
             </summary>
         </member>
         <member name="M:RelhaxModpack.RelhaxNvTexLibrary.Load">
             <summary>
-            Attempts to load the library using the Filepath property
+            Attempts to load the library using the Filepath property.
             </summary>
-            <returns>True if the library load was successful</returns>
+            <returns>True if the library load was successful.</returns>
         </member>
         <member name="M:RelhaxModpack.RelhaxNvTexLibrary.Unload">
             <summary>
-            Attempts to unload the library
+            Attempts to unload the library.
             </summary>
-            <returns>True if the library was unloaded, false otherwise</returns>
+            <returns>True if the library was unloaded, false otherwise.</returns>
         </member>
         <member name="M:RelhaxModpack.RelhaxNvTexLibrary.Extract">
             <summary>
-            Extracts the embedded compressed library to the location in the Filepath property
+            Extracts the embedded compressed library to the location in the Filepath property.
             </summary>
         </member>
         <member name="T:RelhaxModpack.CiInfo">

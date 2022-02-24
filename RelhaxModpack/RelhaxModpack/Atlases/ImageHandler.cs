@@ -12,15 +12,15 @@ using TeximpNet.Compression;
 namespace RelhaxModpack.Atlases
 {
     /// <summary>
-    /// Class for handling loading and saving of DDS atlas files
+    /// Class for handling loading and saving of DDS atlas files.
     /// </summary>
     public class ImageHandler
     {
         /// <summary>
-        /// Loads a DDS image into a Bitmap object
+        /// Loads a DDS image into a Bitmap object.
         /// </summary>
-        /// <param name="filename">The relative or absolute location of the DDS file</param>
-        /// <returns>The Bitmap of the DDS file, or null if it failed</returns>
+        /// <param name="filename">The relative or absolute location of the DDS file.</param>
+        /// <returns>The Bitmap of the DDS file, or null if it failed.</returns>
         public Bitmap LoadDDS(string filename)
         {
             //check to make sure file exists
@@ -53,12 +53,12 @@ namespace RelhaxModpack.Atlases
         }
 
         /// <summary>
-        /// Saves a Bitmap image into a DDS file of DXT5 compression
+        /// Saves a Bitmap image into a DDS file of DXT5 compression.
         /// </summary>
-        /// <param name="savePath">The path to save the file</param>
-        /// <param name="image">The bitmap to save</param>
-        /// <param name="disposeImage">Set to true to dispose of the inputted bitmap after it's saved</param>
-        /// <returns></returns>
+        /// <param name="savePath">The path to save the file.</param>
+        /// <param name="image">The bitmap to save.</param>
+        /// <param name="disposeImage">Set to true to dispose of the inputted bitmap after it's saved.</param>
+        /// <returns>True if image creation was successful, false otherwise.</returns>
         public bool SaveDDS(string savePath, Bitmap image, bool disposeImage = false)
         {
             //get atlas filename

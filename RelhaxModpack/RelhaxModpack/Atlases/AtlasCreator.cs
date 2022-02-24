@@ -21,36 +21,38 @@ using TeximpNet.Compression;
 namespace RelhaxModpack.Atlases
 {
     /// <summary>
-    /// The delegate to invoke when calling back to the sender for the AtlasProgres event
+    /// The delegate to invoke when calling back to the sender for the AtlasProgres event.
     /// </summary>
-    /// <param name="sender">The sending Atlas Creator</param>
-    /// <param name="e">Event arguments</param>
+    /// <param name="sender">The sending Atlas Creator.</param>
+    /// <param name="e">Event arguments.</param>
     public delegate void AtlasProgressDelegate(object sender, EventArgs e);
 
     /// <summary>
-    /// Represents the entire process of building an atlas image
+    /// Represents the entire process of building an atlas image.
     /// </summary>
     public class AtlasCreator : IDisposable
     {
         /// <summary>
-        /// The (arbitrary, guessing) limit of atlas size that the DDS compressor can process without exceeding 2GB
+        /// The (arbitrary, estimated) limit of an atlas size that the DDS compressor can process without exceeding 2GB.
         /// </summary>
-        /// <remarks>In 32bit windows OSs, the maximum amount of memory that a process can have is 2GB.
-        /// Exceeding that in the compressor will trigger a AccessViolationException</remarks>
+        /// <remarks>
+        /// In 32bit windows OSs, the maximum amount of memory that a process can have is 2GB.
+        /// Exceeding that in the compressor will trigger an AccessViolationException.
+        /// </remarks>
         public static int MAX_ATLAS_SIZE_32BIT = 8000 * 8000;
 
         /// <summary>
-        /// The object of atlas arguments for building the image
+        /// The Atlas instructions object for building the image and map.
         /// </summary>
         public Atlas Atlas = null;
 
         /// <summary>
-        /// The token for handling a cancel call from the user
+        /// The token for handling a cancellation call from the user.
         /// </summary>
         public CancellationToken Token;
 
         /// <summary>
-        /// The event when atlas child progress occurs
+        /// The event when atlas creation progress occurs.
         /// </summary>
         public event AtlasProgressDelegate OnAtlasProgres;
 
@@ -63,10 +65,11 @@ namespace RelhaxModpack.Atlases
         private long totalMillisecondsToCreateImage = 0;
 
         /// <summary>
-        /// Create the atlas image and map xml
+        /// Create the Atlas image and map xml.
         /// </summary>
-        /// <param name="atlas">The atlas arguments object</param>
-        /// <returns>Success code if complete, any other FailCode otherwise</returns>
+        /// <param name="atlas">The atlas arguments object.</param>
+        /// <returns>Success code if complete, any other FailCode otherwise.</returns>
+        /// <seealso cref="FailCode"/>
         public FailCode CreateAtlas(Atlas atlas)
         {
             this.Atlas = atlas;
@@ -74,9 +77,10 @@ namespace RelhaxModpack.Atlases
         }
 
         /// <summary>
-        /// Create the atlas image and map xml
+        /// Create the atlas image and map xml.
         /// </summary>
-        /// <returns>Success code if complete, any other FailCode otherwise</returns>
+        /// <returns>Success code if complete, any other FailCode otherwise.</returns>
+        /// <seealso cref="FailCode"/>
         public FailCode CreateAtlas()
         {
             //input checks
@@ -86,7 +90,7 @@ namespace RelhaxModpack.Atlases
             stopwatch.Restart();
 
             //configure names and paths
-            //set the name of the mapfile based on the filename of the atlas image, if not set from xml load
+            //set the name of the map file based on the filename of the atlas image, if not set from xml load
             Logging.Info("[atlas file {0}]: Preparing to create atlas", Atlas.AtlasFile);
             if (string.IsNullOrEmpty(Atlas.MapFile))
                 Atlas.MapFile = string.Format("{0}.xml", Path.GetFileNameWithoutExtension(Atlas.AtlasFile));
@@ -343,23 +347,23 @@ namespace RelhaxModpack.Atlases
 
         #region Atlas custom icons parsing
         /// <summary>
-        /// The task of parsing all custom png images from multiple folders into a flat list of png bitmaps
+        /// The task object of parsing all custom images from multiple folders into a list of bitmaps.
         /// </summary>
         public static Task ParseCustomTexturesTask { get; private set; } = null;
 
         /// <summary>
-        /// The list of parsed custom png images into textures
+        /// The list of parsed custom images from folders into textures.
         /// </summary>
         public static List<Texture> CustomContourIconImages { get; private set; } = null;
 
         private static Stopwatch ParseStopwatch = new Stopwatch();
 
         /// <summary>
-        /// Loads all custom textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
+        /// Loads all custom textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread.
         /// </summary>
-        /// <param name="CustomFolderPaths">The list of absolute paths containing custom contour icon images to be loaded</param>
-        /// <param name="token">The cancellation token</param>
-        /// <returns>The list of textures</returns>
+        /// <param name="CustomFolderPaths">The list of absolute paths containing custom contour icon images to be loaded.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The list of textures.</returns>
         public static Task LoadCustomContourIconsAsync(List<string> CustomFolderPaths, CancellationToken token)
         {
             ParseCustomTexturesTask = Task.Run(() =>
@@ -437,7 +441,7 @@ namespace RelhaxModpack.Atlases
         }
 
         /// <summary>
-        /// Dispose of all textures in the shared custom texture list
+        /// Dispose of all textures in the shared custom texture list.
         /// </summary>
         public static void DisposeParsedCustomTextures()
         {
@@ -507,9 +511,9 @@ namespace RelhaxModpack.Atlases
         private bool disposedValue = false; // To detect redundant calls
 
         /// <summary>
-        /// Dispose of the Atlas Creator (mostly disposing image data)
+        /// Dispose of the Atlas Creator (mostly disposing image data).
         /// </summary>
-        /// <param name="disposing">Set to true to dispose managed objects as well as unmanaged</param>
+        /// <param name="disposing">Set to true to dispose managed objects as well as unmanaged.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -528,6 +532,9 @@ namespace RelhaxModpack.Atlases
             }
         }
 
+        /// <summary>
+        /// Destruct the instance of the AtlasCreator by the garbage collector.
+        /// </summary>
         ~AtlasCreator()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
