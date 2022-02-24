@@ -184,7 +184,7 @@ namespace RelhaxModpack.Utilities
             CheckAndEnableTLS();
 
             //get the list of branches
-            using (PatientWebClient client = new PatientWebClient() { Timeout = 3000 })
+            using (PatientWebClient client = new PatientWebClient() { Timeout = 30 * TO_SECONDS })
             {
                 
                 try
