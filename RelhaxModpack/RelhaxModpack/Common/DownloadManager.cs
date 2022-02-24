@@ -15,22 +15,55 @@ using System.Windows.Forms;
 
 namespace RelhaxModpack.Common
 {
+    /// <summary>
+    /// The DownloadManager class provides an implementation to calculate a file's md5 hash as it downloads and compare it at the end to ensure a complete download.
+    /// </summary>
     public class DownloadManager : IDisposable
     {
+        /// <summary>
+        /// The maximum size of data to receive for each read/write operation.
+        /// </summary>
         public const int BYTE_CHUNKS = 4096;
 
+        /// <summary>
+        /// The Md5 hash output result.
+        /// </summary>
         public string Hash { get; protected set; } = string.Empty;
 
+        /// <summary>
+        /// The number of times that a failed download should be retried.
+        /// </summary>
         public int RetryCount { get; set; } = 3;
 
+        /// <summary>
+        /// The url path to the download location. Typically, this is the folder path on the server up to the file itself to download.
+        /// </summary>
         public string UrlBase { get; set; }
 
+        /// <summary>
+        /// The location to download the file to. Typically, this is a folder path on a disk up to the file itself.
+        /// </summary>
         public string DownloadLocationBase { get; set; }
 
+        /// <summary>
+        /// A progress implementation for reporting progress operations back to a waiting thread.
+        /// </summary>
         public IProgress<RelhaxDownloadProgress> Progress { get; set; }
 
+        /// <summary>
+        /// A cancellation token to allow for user cancellation of the async operation.
+        /// </summary>
         public CancellationToken CancellationToken { get; set; }
 
+        /// <summary>
+        /// Gets if the instance has been disposed.
+        /// </summary>
+        public bool IsDisposed { get; private set; } = false;
+
+        /// <summary>
+        /// A synchronization mechanism that can allow a thread to wait until a download operation is completed.
+        /// </summary>
+        /// <remarks>This is used in the install engine, where a thread needs to wait until a download is completed before it can be extracted.</remarks>
         public ManualResetEvent ManualResetEvent;
 
         private WebClient webClient;
@@ -40,12 +73,21 @@ namespace RelhaxModpack.Common
         private RelhaxDownloadProgress downloadProgress;
         private Md5DatabaseManager databaseManager;
 
+        /// <summary>
+        /// Create an instance of the DownloadManager class.
+        /// </summary>
+        /// <remarks>A WebClient and Md5DatabaseManager are automatically created when this class is instanced.</remarks>
         public DownloadManager()
         {
             webClient = new WebClient();
             databaseManager = new Md5DatabaseManager();
         }
 
+        /// <summary>
+        /// Start a download operation for a list of packages.
+        /// </summary>
+        /// <param name="packagesToDownload">The list of packages to download.</param>
+        /// <returns>The task object that holds the return data and context.</returns>
         public Task DownloadPackagesAsync(List<DatabasePackage> packagesToDownload)
         {
             if (string.IsNullOrEmpty(UrlBase))
@@ -58,6 +100,16 @@ namespace RelhaxModpack.Common
                 throw new BadMemeException("DownloadLocationBase is empty/null");
             }
 
+            if (packagesToDownload == null || packagesToDownload.Count == 0)
+            {
+                throw new BadMemeException("packagesToDownload is null or 0");
+            }
+
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException("DownloadManager");
+            }
+
             if (Progress == null)
             {
                 Logging.Info("Progress is null, no progress will be reported for this download operation");
@@ -66,6 +118,11 @@ namespace RelhaxModpack.Common
             if (CancellationToken == null)
             {
                 Logging.Info("CancellationToken is null, no cancellations will be acknowledged for this download operation");
+            }
+
+            if (ManualResetEvent == null)
+            {
+                Logging.Info($"{nameof(ManualResetEvent)} is null, an awaiting thread cannot wait until a package is downloaded");
             }
 
             downloadProgress = new RelhaxDownloadProgress() { ParrentTotal = packagesToDownload.Count };
@@ -246,12 +303,16 @@ namespace RelhaxModpack.Common
             }
         }
 
+        /// <summary>
+        /// Releases all unmanaged resources used by the instance.
+        /// </summary>
         public void Dispose()
         {
             ((IDisposable)webClient).Dispose();
             ((IDisposable)md5Hash)?.Dispose();
             ((IDisposable)stream)?.Dispose();
             ((IDisposable)filestream)?.Dispose();
+            IsDisposed = true;
         }
 
         private void ThrowIfCancellationRequested()
