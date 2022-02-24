@@ -154,104 +154,123 @@ namespace RelhaxModpack.Atlases
         #endregion
 
         /// <summary>
-        /// File name of the atlas image file to extract
+        /// File name of the atlas image file to extract from inside the game's install directory.
         /// </summary>
-        /// <remarks>This is loaded from the xml file</remarks>
+        /// <remarks>
+        /// If loading from an xml instructions file, this is loaded from the xml file.
+        /// If the Pkg value is given, this is a location in a package zip file, else it is a file location in the game's install directory.
+        /// </remarks>
         public string AtlasFile { get; set; } = string.Empty;
 
         /// <summary>
-        /// File name of the atlas map file to extract
+        /// File name of the atlas map file to extract from the game's install directory.
         /// </summary>
-        /// <remarks>This is loaded from the xml file</remarks>
+        /// <remarks>
+        /// If loading from an xml instructions file, this is loaded from the xml file.
+        /// If the Pkg value is given, this is a location in a package zip file, else it is a file location in the game's install directory.
+        /// </remarks>
         public string MapFile { get; set; } = string.Empty;
 
         /// <summary>
-        /// Path to place the generated atlas image file and xml map
+        /// Path to place the generated atlas image file and xml map, relative to the game's install directory.
         /// </summary>
-        /// <remarks>This is loaded from the xml file</remarks>
+        /// <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         public string AtlasSaveDirectory { get; set; } = string.Empty;
 
         /// <summary>
-        /// Width of the new atlases file. 0 = get from original atlas file
+        /// Width of the new atlases file. 0 = get from original atlas file.
         /// </summary>
-        /// <remarks>This is loaded from the xml file</remarks>
+        /// <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         public int AtlasWidth { get; set; } = 0;
 
         /// <summary>
-        /// Height of the new atlases file. 0 = get from original atlas file
+        /// Height of the new atlases file. 0 = get from original atlas file.
         /// </summary>
-        /// <remarks>This is loaded from the xml file</remarks>
+        /// <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         public int AtlasHeight { get; set; } = 0;
 
         /// <summary>
         /// Padding of the new atlases file (amount of pixels as a border between each image)
         /// </summary>
-        /// <remarks>This is loaded from the xml file</remarks>
+        /// <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         public int Padding { get; set; } = 1;
 
         /// <summary>
-        /// Creating an atlas file only with log base 2 numbers (16, 32, 64, etc.)
+        /// Creating an atlas file only with log base 2 numbers (16, 32, 64, etc).
         /// </summary>
-        /// <remarks>This is loaded from the xml file</remarks>
+        /// <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         public bool PowOf2 { get; set; } = false;
 
         /// <summary>
-        /// Creating an atlas file only in a square (same width and height of atlas)
+        /// Creating an atlas file only in a square (same width and height of atlas).
         /// </summary>
-        /// <remarks>This is loaded from the xml file</remarks>
+        /// <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         public bool Square { get; set; } = false;
 
         /// <summary>
-        /// allow to accept first successful image optimization layout
+        /// Allow the packer to accept first successful image optimization layout (placement).
         /// </summary>
-        /// <remarks>This is loaded from the xml file</remarks>
+        /// <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         public bool FastImagePacker { get; set; } = true;
 
         /// <summary>
-        /// List of folders that could contain images to replace original images
+        /// List of folders that could contain images to replace original images found in the game's atlas file.
         /// </summary>
-        /// <remarks>This is loaded from the xml file</remarks>
+        /// <remarks>If loading from an xml instructions file, this is loaded from the xml file.</remarks>
         public List<string> ImageFolders { get; set; } = new List<string>();
 
         /// <summary>
-        /// The list of textures in each atlas
+        /// The list of texture objects in each atlas.
         /// </summary>
         /// <remarks>This is *not* loaded from the xml file and is used internally</remarks>
         public List<Texture> TextureList { get; set; } = new List<Texture>();
 
         /// <summary>
-        /// The file path where the original atlas image file will be extracted/copied to
+        /// The file path where the original atlas image file will be extracted/copied to, relative to the application's temporary directory.
         /// </summary>
         /// <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        /// <seealso cref="ApplicationConstants.RelhaxTempFolderPath"/>
         public string TempAtlasImageFilePath { get; set; } = string.Empty;
 
         /// <summary>
-        /// The file path where the original atlas map file will be extracted/copied to
+        /// The file path where the original atlas map file will be extracted/copied to, relative to the application's temporary directory.
         /// </summary>
         /// <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        /// <seealso cref="ApplicationConstants.RelhaxTempFolderPath"/>
         public string TempAtlasMapFilePath { get; set; } = string.Empty;
 
         /// <summary>
-        /// The file path where the created atlas image file will be placed
+        /// The file path where the created atlas image file will be placed.
         /// </summary>
-        /// <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        /// <remarks>
+        /// This is *not* loaded from the xml file and is used internally.
+        /// This is created by combining the AtlasSaveDirectory and AtlasFile properties.
+        /// </remarks>
+        /// <seealso cref="AtlasSaveDirectory"/>
+        /// <seealso cref="AtlasFile"/>
         public string AtlasImageFilePath { get; set; } = string.Empty;
 
         /// <summary>
-        /// The file path where the created map file will be placed
+        /// The file path where the created map file will be placed.
         /// </summary>
-        /// <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        /// <remarks>
+        /// This is *not* loaded from the xml file and is used internally.
+        /// This is created by combining the AtlasSaveDirectory and AtlasFile properties.
+        /// </remarks>
         public string AtlasMapFilePath { get; set; } = string.Empty;
         
         /// <summary>
-        /// Returns a string representation of the object
+        /// Returns a string representation of the object.
         /// </summary>
-        /// <returns>The atlas file name</returns>
+        /// <returns>The atlas file name, or "(empty)", if no atlas name is given.</returns>
         public override string ToString()
         {
             return string.Format("{0}: {1}", nameof(AtlasFile), string.IsNullOrEmpty(AtlasFile) ? "(empty)" : AtlasFile);
         }
 
+        /// <summary>
+        /// Gets a string formatted list of internal properties and values for log output.
+        /// </summary>
         public override string DumpInfoToLog
         {
             get
@@ -263,6 +282,11 @@ namespace RelhaxModpack.Atlases
             }
         }
 
+        /// <summary>
+        /// Compares two instructions to determine if their values are equal.
+        /// </summary>
+        /// <param name="instructionToCompare">The instruction to compare against.</param>
+        /// <returns>True if the compared values are equal, false otherwise.</returns>
         public override bool InstructionsEqual(Instruction instructionToCompare)
         {
             if (!base.InstructionsEqual(instructionToCompare))
