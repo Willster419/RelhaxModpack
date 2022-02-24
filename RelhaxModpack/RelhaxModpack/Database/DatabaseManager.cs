@@ -24,97 +24,214 @@ using RelhaxModpack.Atlases;
 
 namespace RelhaxModpack.Database
 {
+    /// <summary>
+    /// Provides methods for loading and saving xml component objects to and from xml database files.
+    /// </summary>
     public class DatabaseManager
     {
         /// <summary>
-        /// A structure used to keep a reference of a component and a dependency that it calls
+        /// A structure used to keep a reference of a component and a dependency that it calls.
         /// </summary>
-        /// <remarks>This is used to determine if any packages call any dependencies who's packageName does not exist in the database</remarks>
+        /// <remarks>This is used to determine if any packages call any dependencies who's packageName does not exist in the database.</remarks>
         public struct LogicTracking
         {
             /// <summary>
-            /// The database component what has dependencies
+            /// The database component what has dependencies.
             /// </summary>
             public IComponentWithDependencies ComponentWithDependencies;
 
             /// <summary>
-            /// The called dependency from the component
+            /// The called dependency from the component.
             /// </summary>
             public DatabaseLogic DatabaseLogic;
         }
 
+        /// <summary>
+        /// The document version 1.1 string.
+        /// </summary>
         public const string DocumentVersion1V1 = "1.1";
 
+        /// <summary>
+        /// The document version 1.2 string.
+        /// </summary>
         public const string DocumentVersion1V2 = "1.2";
 
+        /// <summary>
+        /// The current latest used schema.
+        /// </summary>
+        /// <seealso cref="XmlComponent.SchemaV1Dot2"/>
         public const string LatestSchema = XmlComponent.SchemaV1Dot2;
 
+        /// <summary>
+        /// The xml attribute used in the root database xml file to determine which version of WoT this database is compatible with.
+        /// </summary>
         public const string WoTClientVersionXmlString = "version";
 
+        /// <summary>
+        /// The xml attribute used in the root database xml file to determine which online FTP folder this database should use.
+        /// </summary>
         public const string WoTOnlineFolderVersionXmlString = "onlineFolder";
 
+        /// <summary>
+        /// The xml attribute used in the root database xml file to determine what version format the database is in.
+        /// </summary>
         public const string DocumentVersionXmlString = "documentVersion";
 
+        /// <summary>
+        /// The xml attribute used in the root database xml file to determine what schema version the database is using for each xml component.
+        /// </summary>
         public const string SchemaVersionXmlString = "schemaVersion";
 
         /// <summary>
-        /// The list of categories
+        /// The list of categories.
         /// </summary>
         public List<Category> ParsedCategoryList { get; private set; }
 
         /// <summary>
-        /// The list of global dependencies
+        /// The list of global dependencies.
         /// </summary>
         public List<DatabasePackage> GlobalDependencies { get; private set; }
 
         /// <summary>
-        /// The list of dependencies
+        /// The list of dependencies.
         /// </summary>
         public List<Dependency> Dependencies { get; private set; }
 
+        /// <summary>
+        /// The reference to the loaded root document object of the database.
+        /// </summary>
         public XmlDocument DatabaseRootXmlDocument { get; private set; }
 
+        /// <summary>
+        /// The parsed version of the WoT client that this database is compatible with.
+        /// </summary>
         public string WoTClientVersion { get; private set; }
 
+        /// <summary>
+        /// The parsed name of the online folder that this database should use for downloading packages.
+        /// </summary>
         public string WoTOnlineFolderVersion { get; private set; }
 
+        /// <summary>
+        /// The parsed version format of the database xml.
+        /// </summary>
         public string DocumentVersion { get; private set; }
 
+        /// <summary>
+        /// The parsed schema version format of the database xml.
+        /// </summary>
         public string SchemaVersion { get; private set; }
 
         /// <summary>
-        /// A reference to the modpack settings window configuration class
+        /// A reference to the modpack settings window configuration class.
         /// </summary>
+        /// <remarks>This is used for determining the version of the database to load (stable or beta), and if beta, the branch to use for loading it.</remarks>
         public ModpackSettings ModpackSettings { get; set; }
 
+        /// <summary>
+        /// A reference to the command line settings configuration class.
+        /// </summary>
+        /// <remarks>This is used for determining if the database to be loaded is in 'test mode'.</remarks>
         public CommandLineSettings CommandLineSettings { get; set; }
 
+        /// <summary>
+        /// The manager info data file downloaded on application startup.
+        /// </summary>
+        /// <seealso cref="ApplicationConstants.ManagerVersion"/>
         public ZipFile ManagerInfoZipfile { get; set; }
 
+        /// <summary>
+        /// The version of the database to load, or has been loaded.
+        /// </summary>
         public DatabaseVersions DatabaseDistroToLoad { get; private set; }
 
+        /// <summary>
+        /// The list of dependencies calculated to install.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
         public List<Dependency> DependenciesToInstall { get { return dependenciesToInstall; } }
 
+        /// <summary>
+        /// The list of packages to install, including dependencies and user selected packages, and excluding packages if a minimal install is set from ModpackSettings.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
         public List<DatabasePackage> PackagesToInstall { get { return packagesToInstall; } }
 
+        /// <summary>
+        /// The list of user selected packages to install, including dependencies and user selected packages, and excluding packages if a minimal install is set from ModpackSettings.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
         public List<SelectablePackage> SelectablePackagesToInstall { get { return selectablePackagesToInstall; } }
 
+        /// <summary>
+        /// The list of packages to install that have a zip file.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
+        /// <seealso cref="PackagesToInstall"/>
         public List<DatabasePackage> PackagesToInstallWithZipFile { get { return packagesToInstall?.FindAll(package => !string.IsNullOrWhiteSpace(package.ZipFile)); } }
 
+        /// <summary>
+        /// The list of user selected packages to install that have a zip file.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
+        /// <seealso cref="SelectablePackagesToInstall"/>
         public List<SelectablePackage> SelectablePackagesToInstallWithZipFiles { get { return selectablePackagesToInstall?.FindAll(package => !string.IsNullOrWhiteSpace(package.ZipFile)); } }
 
+        /// <summary>
+        /// The list of packages to install that have zip files, that need to be downloaded.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
+        /// <seealso cref="PackagesToInstallWithZipFile"/>
         public List<DatabasePackage> PackagesToDownload { get { return PackagesToInstallWithZipFile?.FindAll(pack => pack.DownloadFlag); } }
 
+        /// <summary>
+        /// The list of packages to install (that is, those with zip files), sorted into their install groups.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
         public List<DatabasePackage>[] PackagesToInstallByInstallGroup { get { return orderedListPackagesToInstall; } }
 
+        /// <summary>
+        /// The list of packages to install that have triggers.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
+        /// <seealso cref="PackagesToInstall"/>
+        /// <seealso cref="Trigger"/>
         public List<DatabasePackage> PackagesToInstallWithTriggers { get { return packagesToInstall?.FindAll(package => !string.IsNullOrWhiteSpace(package.Triggers)); } }
 
+        /// <summary>
+        /// The list of patch operations to perform after package extraction and xml unpack operations.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
         public List<Patch> PatchesToInstall { get { return patchesToInstall; } }
 
+        /// <summary>
+        /// The list of xml unpack operations to perform after package extraction.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
         public List<XmlUnpack> XmlUnpacksToInstall { get { return xmlUnpacksToInstall; } }
 
+        /// <summary>
+        /// The list of shortcuts creation operations to perform after package extraction.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
         public List<Shortcut> ShortcutsToInstall { get { return shortcutsToInstall; } }
 
+        /// <summary>
+        /// The list of atlas creation operations to perform after package extraction.
+        /// </summary>
+        /// <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+        /// <seealso cref="CalculateInstallLists(bool, bool)"/>
         public List<Atlas> AtlasesToInstall { get { return atlasesToInstall; } }
 
         private string databaseRootXmlString;
@@ -146,16 +263,19 @@ namespace RelhaxModpack.Database
         private List<Atlas> atlasesToInstall;
 
         /// <summary>
-        /// Creates an instance of the RelhaxWindow class
+        /// Creates an instance of the DatabaseManager class.
         /// </summary>
+        /// <param name="modpackSettings">The reference to the modpack settings class.</param>
         public DatabaseManager(ModpackSettings modpackSettings)
         {
             this.ModpackSettings = modpackSettings;
         }
 
         /// <summary>
-        /// Creates an instance of the RelhaxWindow class
+        /// Creates an instance of the DatabaseManager class.
         /// </summary>
+        /// <param name="modpackSettings">The reference to the modpack settings class.</param>
+        /// <param name="commandLineSettings">The reference to the command line settings class.</param>
         public DatabaseManager(ModpackSettings modpackSettings, CommandLineSettings commandLineSettings)
         {
             this.ModpackSettings = modpackSettings;
@@ -163,7 +283,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Creates an instance of the RelhaxWindow class
+        /// Creates an instance of the DatabaseManager class.
         /// </summary>
         public DatabaseManager()
         {
@@ -171,6 +291,13 @@ namespace RelhaxModpack.Database
         }
 
         #region Load database methods
+        /// <summary>
+        /// Loads and parses a database into the DatabaseManager.
+        /// </summary>
+        /// <param name="databaseDistroToLoad">The distribution (stable, beta or test) of the database to load.</param>
+        /// <param name="locationToLoadFrom">The path (url or folder) to load the database files from.</param>
+        /// <param name="betaDatabaseBranch">If loading the beta database, the github branch to use for loading the database.</param>
+        /// <returns>The status enumeration code of the operation.</returns>
         public async Task<DatabaseLoadFailCode> LoadDatabaseAsync(DatabaseVersions databaseDistroToLoad, string locationToLoadFrom, string betaDatabaseBranch)
         {
             if (ModpackSettings == null)
@@ -184,10 +311,10 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Load a test database from the specified location, including the root filename
+        /// Load a test database from the specified location, including the root filename.
         /// </summary>
-        /// <param name="locationToLoadFrom">The path to the root xml file</param>
-        /// <returns>The status enumeration code of the operation</returns>
+        /// <param name="locationToLoadFrom">The path to the root xml file.</param>
+        /// <returns>The status enumeration code of the operation.</returns>
         public async Task<DatabaseLoadFailCode> LoadDatabaseTestAsync(string locationToLoadFrom)
         {
             //this version of the overloaded method, it's implied that we're loading in test mode
@@ -198,6 +325,11 @@ namespace RelhaxModpack.Database
             return await LoadDatabaseWithOptionsAsync();
         }
 
+        /// <summary>
+        /// Loads and parses a database into the DatabaseManager.
+        /// </summary>
+        /// <param name="databaseDistroToLoad">The distribution (stable, beta or test) of the database to load.</param>
+        /// <returns>The status enumeration code of the operation.</returns>
         public async Task<DatabaseLoadFailCode> LoadDatabaseDistroAsync(DatabaseVersions databaseDistroToLoad)
         {
             if (ModpackSettings == null)
@@ -210,6 +342,10 @@ namespace RelhaxModpack.Database
             return await LoadDatabaseWithOptionsAsync();
         }
 
+        /// <summary>
+        /// Loads and parses a database into the DatabaseManager
+        /// </summary>
+        /// <returns>The status enumeration code of the operation.</returns>
         public async Task<DatabaseLoadFailCode> LoadDatabaseAsync()
         {
             if (ModpackSettings == null)
@@ -256,6 +392,12 @@ namespace RelhaxModpack.Database
             return DatabaseLoadFailCode.None;
         }
 
+        /// <summary>
+        /// Loads and parses the stable database of a specific client version to the DatabaseManager.
+        /// </summary>
+        /// <param name="clientVersion">The version of the client to try to load. This should correspond to the value of what is in the desired database's version.</param>
+        /// <returns>Returns DatabaseLoadFailCode.None</returns>
+        /// <remarks>This is used in the ModpackToolbox for getting a list of all packages that correspond to a WoT version. It shouldn't be used for any generic purpose.</remarks>
         public async Task<DatabaseLoadFailCode> LoadDatabaseStableSpecificClientAsync(string clientVersion)
         {
             if (string.IsNullOrEmpty(clientVersion))
@@ -270,6 +412,15 @@ namespace RelhaxModpack.Database
             return DatabaseLoadFailCode.None;
         }
 
+        /// <summary>
+        /// Loads and parses a database from xml strings into the DatabaseManager.
+        /// </summary>
+        /// <param name="rootDocument">The xml document object of the root document.</param>
+        /// <param name="globalDependenciesXml">The xml string of the global dependencies document.</param>
+        /// <param name="dependneciesXml">The xml string of the dependencies document.</param>
+        /// <param name="categoriesXml">The list of xml strings of each category document</param>
+        /// <returns>Returns DatabaseLoadFailCode.None</returns>
+        /// <remarks>This is used in the ModpackToolbox for a developer purpose. It shouldn't be used for any generic purpose.</remarks>
         public DatabaseLoadFailCode LoadDatabaseCustomFromStringsAsync(XmlDocument rootDocument, string globalDependenciesXml, string dependneciesXml, List<string> categoriesXml)
         {
             if (string.IsNullOrWhiteSpace(globalDependenciesXml))
@@ -469,6 +620,12 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Load WoT online folder and version from root document metadata
+        /// <summary>
+        /// Loads the database root document into the DatabaseManager
+        /// </summary>
+        /// <param name="databaseDistroToLoad">The distribution of the database to load.</param>
+        /// <param name="locationToLoadFrom">If loading a test distribution, the location to the xml file.</param>
+        /// <returns></returns>
         public async Task<DatabaseLoadFailCode> LoadWoTVersionInfoFromXmlDocumentAsync(DatabaseVersions databaseDistroToLoad, string locationToLoadFrom)
         {
             if (databaseDistroToLoad == DatabaseVersions.Test && string.IsNullOrEmpty(locationToLoadFrom))
@@ -499,6 +656,10 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Parsing database from xml into memory
+        /// <summary>
+        /// Gets the direct download links to each beta database xml file from a given branch specified in the ModpackSettings instance.
+        /// </summary>
+        /// <returns>A list of direct download links for each xml document of the beta database.</returns>
         public async Task<List<string>> GetBetaDatabase1V1FilesListAsync()
         {
             this.DatabaseDistroToLoad = DatabaseVersions.Beta;
@@ -655,8 +816,9 @@ namespace RelhaxModpack.Database
 
         #region Database Loading
         /// <summary>
-        /// Parse a database into the version 1.1 format from files on the disk
+        /// Parse a database into the version 1.1 format from files on the disk.
         /// </summary>
+        /// <returns>True if the parsing was successful, false otherwise.</returns>
         private bool ParseDatabase1V1FromFiles()
         {
             //load each document to make sure they all exist first
@@ -715,15 +877,15 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Parse a database into version 1.1 from string representations of the Xml files
+        /// Parse a database into version 1.1 from string representations of the Xml files.
         /// </summary>
-        /// <param name="globalDependenciesXml">The Xml string of the global dependencies document</param>
-        /// <param name="dependneciesXml">The Xml string of the dependencies document</param>
-        /// <param name="categoriesXml">The list of Xml strings of the categories document</param>
-        /// <param name="globalDependencies">The list of global dependencies</param>
-        /// <param name="dependencies">The list of dependencies</param>
-        /// <param name="parsedCategoryList">The list of categories</param>
-        /// <returns></returns>
+        /// <param name="globalDependenciesXml">The Xml string of the global dependencies document.</param>
+        /// <param name="dependneciesXml">The Xml string of the dependencies document.</param>
+        /// <param name="categoriesXml">The list of Xml strings of the categories document.</param>
+        /// <param name="globalDependencies">The list of global dependencies.</param>
+        /// <param name="dependencies">The list of dependencies.</param>
+        /// <param name="parsedCategoryList">The list of categories.</param>
+        /// <returns>True if the parsing was successful, false otherwise.</returns>
         private bool ParseDatabase1V1FromStrings(string globalDependenciesXml, string dependneciesXml, List<string> categoriesXml,
             List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
@@ -765,6 +927,16 @@ namespace RelhaxModpack.Database
             return ParseDatabase(globalDependenciesdoc, globalDependencies, dependenciesdoc, dependencies, categoryDocuments, parsedCategoryList);
         }
 
+        /// <summary>
+        /// Parse a database into the DatabaseManager from the xml object files.
+        /// </summary>
+        /// <param name="globalDependenciesDoc">The xml object of global dependencies.</param>
+        /// <param name="globalDependenciesList">The list of global dependencies to populate.</param>
+        /// <param name="dependenciesDoc">The xml object of dependencies.</param>
+        /// <param name="dependenciesList">The list of dependencies to populate.</param>
+        /// <param name="categoryDocuments">The list of xml objects of each category.</param>
+        /// <param name="parsedCategoryList">The list of categories to populate.</param>
+        /// <returns>True if the parsing was successful, false otherwise.</returns>
         public bool ParseDatabase(XDocument globalDependenciesDoc, List<DatabasePackage> globalDependenciesList, XDocument dependenciesDoc,
             List<Dependency> dependenciesList, List<XDocument> categoryDocuments, List<Category> parsedCategoryList)
         {
@@ -780,6 +952,16 @@ namespace RelhaxModpack.Database
             }
         }
 
+        /// <summary>
+        /// Parse a database of format v1.2 into the DatabaseManager from the xml object files.
+        /// </summary>
+        /// <param name="globalDependenciesDoc">The xml object of global dependencies.</param>
+        /// <param name="globalDependenciesList">The list of global dependencies to populate.</param>
+        /// <param name="dependenciesDoc">The xml object of dependencies.</param>
+        /// <param name="dependenciesList">The list of dependencies to populate.</param>
+        /// <param name="categoryDocuments">The list of xml objects of each category.</param>
+        /// <param name="parsedCategoryList">The list of categories to populate.</param>
+        /// <returns>True if the parsing was successful, false otherwise.</returns>
         public bool ParseDatabase1V2(XDocument globalDependenciesDoc, List<DatabasePackage> globalDependenciesList, XDocument dependenciesDoc,
             List<Dependency> dependenciesList, List<XDocument> categoryDocuments, List<Category> parsedCategoryList)
         {
@@ -879,15 +1061,15 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Parse a database into version 1.1 from XDocument objects
+        /// Parse a database of format 1.1 into the DatabaseManager from the xml object files.
         /// </summary>
-        /// <param name="globalDependenciesDoc">The Xml document of global dependencies</param>
-        /// <param name="globalDependenciesList">The list of global dependencies</param>
-        /// <param name="dependenciesDoc">The Xml document of dependencies</param>
-        /// <param name="dependenciesList">The list of dependencies</param>
-        /// <param name="categoryDocuments">The list of xml documents of the category Xml documents</param>
-        /// <param name="parsedCategoryList">The list of categories</param>
-        /// <returns></returns>
+        /// <param name="globalDependenciesDoc">The xml object of global dependencies.</param>
+        /// <param name="globalDependenciesList">The list of global dependencies to populate.</param>
+        /// <param name="dependenciesDoc">The xml object of dependencies.</param>
+        /// <param name="dependenciesList">The list of dependencies to populate.</param>
+        /// <param name="categoryDocuments">The list of xml objects of each category.</param>
+        /// <param name="parsedCategoryList">The list of categories to populate.</param>
+        /// <returns>True if the parsing was successful, false otherwise.</returns>
         public bool ParseDatabase1V1(XDocument globalDependenciesDoc, List<DatabasePackage> globalDependenciesList, XDocument dependenciesDoc,
             List<Dependency> dependenciesList, List<XDocument> categoryDocuments, List<Category> parsedCategoryList)
         {
@@ -1053,6 +1235,12 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Database Saving
+        /// <summary>
+        /// Save the database to a given location on disk.
+        /// </summary>
+        /// <param name="saveLocation">The folder path to save the xml documents to.</param>
+        /// <param name="documentVersion">The version format of the xml documents to save.</param>
+        /// <param name="schemaVersion">The schema version format (if the document version supports it) of the properties of xml documents to save.</param>
         public void SaveDatabase(string saveLocation, string documentVersion, string schemaVersion = null)
         {
             if (string.IsNullOrEmpty(saveLocation))
@@ -1069,7 +1257,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Save the database to an Xml version format
+        /// Save the database to an Xml version format.
         /// </summary>
         public void SaveDatabase(string saveLocation, string documentVersion = null)
         {
@@ -1260,9 +1448,9 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Save the database to the Xml version 1.1 standard
+        /// Save the database to the Xml version 1.1 standard.
         /// </summary>
-        /// <param name="savePath">The path to save all the xml files to</param>
+        /// <param name="savePath">The path to save all the xml files to.</param>
         private void SaveDatabase1V1(string savePath)
         {
             //make root of document
@@ -1372,7 +1560,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Saves a list of packages to a document
+        /// Saves a list of packages to a document using the document format version 1.1
         /// </summary>
         /// <param name="packagesToSave">The generic list of packages to save</param>
         /// <param name="documentRootElement">The element that will be holding this list</param>
@@ -1521,6 +1709,9 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Process database after loading
+        /// <summary>
+        /// Perform any database post-load processing (such as performing reference linking of packages, conflicts, etc).
+        /// </summary>
         public void ProcessDatabase()
         {
             foreach (Category category in ParsedCategoryList)
@@ -1656,6 +1847,11 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Install-time calculations
+        /// <summary>
+        /// Run calculations on package list components to determine what packages, features, etc get included for an installation operation.
+        /// </summary>
+        /// <param name="suppressFrequentDependencyCalculationMessages">If true, will suppress some dependency calculation messages.</param>
+        /// <param name="showDependencyCalculationErrorMessages">If true, will show some dependency error calculation messages (some are always shown).</param>
         public void CalculateInstallLists(bool suppressFrequentDependencyCalculationMessages, bool showDependencyCalculationErrorMessages)
         {
             CalculateDependencies(suppressFrequentDependencyCalculationMessages, showDependencyCalculationErrorMessages);
@@ -1668,9 +1864,10 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
+        /// Calculates what dependencies should be installed given a user's selection (and other recursive dependency calculations).
         /// </summary>
-        /// <param name="suppressSomeLogging">Flag for it some of the more verbose logging should be suppressed</param>
+        /// <param name="suppressSomeLogging">If true, will suppress some dependency calculation messages.</param>
+        /// <param name="showDependencyCalculationErrorMessages">If true, will show some dependency error calculation messages (some are always shown).</param>
         private void CalculateDependencies(bool suppressSomeLogging, bool showDependencyCalculationErrorMessages)
         {
             //flat list is packages
@@ -2073,6 +2270,11 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Utility methods
+        /// <summary>
+        /// Find a SelectablePackage in the list of loaded packages by searching for its UID.
+        /// </summary>
+        /// <param name="targetUid">The UID of the package to find.</param>
+        /// <returns>The package if found, otherwise null.</returns>
         public SelectablePackage GetSelectablePackageByUid(string targetUid)
         {
             return GetSelectablePackageByUid(GetFlatSelectablePackageList(), targetUid);
@@ -2083,6 +2285,11 @@ namespace RelhaxModpack.Database
             return packages.FirstOrDefault(pack => pack.UID.Equals(targetUid));
         }
 
+        /// <summary>
+        /// Find a SelectablePackage in the list of loaded packages by searching for its package name (PackageName, not user display name).
+        /// </summary>
+        /// <param name="targetPackageName">The package name of the package to find.</param>
+        /// <returns>The package if found, otherwise null.</returns>
         public SelectablePackage GetSelectablePackageByPackageName(string targetPackageName)
         {
             return GetSelectablePackageByPackageName(GetFlatSelectablePackageList(), targetPackageName);
