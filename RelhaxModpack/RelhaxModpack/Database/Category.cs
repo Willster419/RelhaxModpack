@@ -11,36 +11,44 @@ using RelhaxModpack.Utilities.Enums;
 namespace RelhaxModpack.Database
 {
     /// <summary>
-    /// a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
+    /// a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages.
     /// </summary>
     public class Category : CoreDatabaseComponent, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
+        /// <summary>
+        /// Create an instance of the Category class.
+        /// </summary>
         public Category() : base()
         {
 
         }
 
+        /// <summary>
+        /// Create an instance of the Category class, copying the name and OffsetInstallGroups properties.
+        /// </summary>
+        /// <param name="categoryToCopy">The category to copy from.</param>
         public Category(Category categoryToCopy) : base(categoryToCopy)
         {
-
+            this.Name = categoryToCopy.Name;
+            this.OffsetInstallGroups = categoryToCopy.OffsetInstallGroups;
         }
 
         #region Xml serialization V1
         /// <summary>
-        /// Defines a list of properties in the class to be serialized into xml attributes
+        /// Defines a list of properties in the class to be serialized into xml attributes.
         /// </summary>
-        /// <returns>A list of string property names</returns>
-        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public string[] PropertiesForSerializationAttributes()
         {
             return new string[] { nameof(Name), nameof(OffsetInstallGroups) };
         }
 
         /// <summary>
-        /// Defines a list of properties in the class to be serialized into xml elements
+        /// Defines a list of properties in the class to be serialized into xml elements.
         /// </summary>
-        /// <returns>A list of string property names</returns>
-        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public string[] PropertiesForSerializationElements()
         {
             return new string[] { nameof(Dependencies), nameof(Maintainers) };
@@ -90,6 +98,17 @@ namespace RelhaxModpack.Database
             return this.GetXmlDatabasePropertiesV1Dot1();
         }
 
+        /// <summary>
+        /// A hook from XmlComponent for when an xml entry is being loaded. This can be used to handle custom or one-off conversions to manage any legacy serialization issues (for example, old database formats never had a wrapping "Packages" element).
+        /// </summary>
+        /// <param name="thisPropertyXml">The xml database property entry being loaded. For example, the "Packages" list entry.</param>
+        /// <param name="propertyXmlElement">The xml element entry of the current object being loaded. For example, the "Category" element.</param>
+        /// <param name="schemaVersion">The version of the schema currently being loaded.</param>
+        /// <param name="propertyInfo">The info meta-data about the property in the class object to be written to. For example, the "Packages" list property.</param>
+        /// <param name="valueOfProperty">The current value of the property in the object. For example, this would be the list object of the "Packages" list property.</param>
+        /// <param name="elementOfProperty">The xml element entry of the property being loaded. For example, the "Packages" xml entry.</param>
+        /// <param name="continueProcessingProperty">A flag used back in XmlComponent if the current xml element to load (like "Packages") should continue to be loaded by XmlComponent.</param>
+        /// <seealso cref="XmlComponent"/>
         protected override void OnParsingPropertyToXmlElement(XmlDatabaseProperty thisPropertyXml, XElement propertyXmlElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
         {
             continueProcessingProperty = true;
@@ -120,13 +139,24 @@ namespace RelhaxModpack.Database
             }
         }
 
-        protected override void OnParsingPropertyFromXmlElement(XmlDatabaseProperty propertyFromXml, XElement propertyElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
+        /// <summary>
+        /// A hook from XmlComponent for when an xml entry is being saved. This can be used to handle custom or one-off conversions to manage any legacy serialization issues (for example, old database formats never had a wrapping "Packages" element).
+        /// </summary>
+        /// <param name="thisPropertyXml">The xml database property entry being saved. For example, the "Packages" list entry.</param>
+        /// <param name="propertyXmlElement">The xml element entry of the current object being saved. For example, the "Category" element.</param>
+        /// <param name="schemaVersion">The version of the schema currently being saved.</param>
+        /// <param name="propertyInfo">The info meta-data about the property in the class object to be read from. For example, the "Packages" list property.</param>
+        /// <param name="valueOfProperty">The current value of the property in the object. For example, this would be the list object of the "Packages" list property.</param>
+        /// <param name="elementOfProperty">The xml element entry of the property being saved. For example, the "Packages" xml entry.</param>
+        /// <param name="continueProcessingProperty">A flag used back in XmlComponent if the current xml element to save (like "Packages") should continue to be saved by XmlComponent.</param>
+        /// <seealso cref="XmlComponent"/>
+        protected override void OnParsingPropertyFromXmlElement(XmlDatabaseProperty thisPropertyXml, XElement propertyXmlElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
         {
             continueProcessingProperty = true;
-            if (propertyFromXml.PropertyName.Equals(nameof(Packages)) && schemaVersion.Equals(SchemaV1Dot0))
+            if (thisPropertyXml.PropertyName.Equals(nameof(Packages)) && schemaVersion.Equals(SchemaV1Dot0))
             {
                 //manually parse these because in this schema (in converting from old db load method), there is no "Packages" folder for categories
-                List<XElement> xmlPackages = propertyElement.Elements("Package").ToList();
+                List<XElement> xmlPackages = propertyXmlElement.Elements("Package").ToList();
 
                 foreach(XElement element in xmlPackages)
                 {
@@ -139,6 +169,11 @@ namespace RelhaxModpack.Database
             }
         }
 
+        /// <summary>
+        /// A hook from XmlComponent for when an xml entry is finished being loaded into an object.
+        /// </summary>
+        /// <param name="propertyElement">The xml element of the entry being loaded. For example, the "Category" xml element.</param>
+        /// <param name="loadStatus">The status of the loading of this object, if all properties of it were previously loaded correctly.</param>
         protected override void OnFinishedLoadingFromXml(XElement propertyElement, bool loadStatus)
         {
             base.OnFinishedLoadingFromXml(propertyElement, loadStatus);
@@ -158,6 +193,7 @@ namespace RelhaxModpack.Database
                 PackageName = string.Format("Category_{0}_Header", Name.Replace(' ', '_')),
                 Packages = Packages
             };
+
             //also assign the parent references
             CategoryHeader.Parent = CategoryHeader;
             CategoryHeader.TopParent = CategoryHeader;
@@ -166,80 +202,84 @@ namespace RelhaxModpack.Database
 
         #region Database Properties
         /// <summary>
-        /// The category name displayed to the user in the selection list
+        /// The category name displayed to the user in the selection list.
         /// </summary>
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// The xml filename of this category. Used in database structure V2
+        /// The xml filename of this category. Used in database structure V2.
         /// </summary>
         public string XmlFilename { get; set; } = string.Empty;
 
         /// <summary>
-        /// Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree
+        /// Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree.
         /// </summary>
         public bool OffsetInstallGroups { get; set; } = true;
 
         /// <summary>
-        /// The list of packages contained in this category
+        /// The list of packages contained in this category.
         /// </summary>
         public List<SelectablePackage> Packages { get; set; } = new List<SelectablePackage>();
 
         /// <summary>
-        /// When a databasePackage, the internal packageName. When category, the category name
+        /// When a databasePackage, the internal packageName. When category, the category name.
         /// </summary>
         public override string ComponentInternalName { get { return Name; } }
 
         /// <summary>
-        /// List of dependencies of this category (Any package selected in this category needs these dependencies)
+        /// List of dependencies of this category (Any package selected in this category needs these dependencies).
         /// </summary>
         public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
         #endregion
 
         #region UI Properties
         /// <summary>
-        /// The TabItem object reference
+        /// The TabItem object reference.
         /// </summary>
         public SelectionListTabItem TabPage { get; set; } = null;
 
         /// <summary>
-        /// The package created at selection list building that represents the header of this category
+        /// The package created at selection list building that represents the header of this category.
         /// </summary>
         public SelectablePackage CategoryHeader { get; set; } = null;
 
         /// <summary>
-        /// Reference for the UI element of this package in the database editor
+        /// Reference for the UI element of this package in the database editor.
         /// </summary>
         public TreeViewItem EditorTreeViewItem { get; set; } = null;
         #endregion
 
         #region Other Properties and Methods
+        /// <summary>
+        /// The DatabaseManager object being used to load and save the category entry.
+        /// </summary>
         public DatabaseManager DatabaseManager { get; set; }
 
         /// <summary>
         /// Sorts the Categories by their name property. Currently not implemented.
         /// </summary>
-        /// <param name="x">The first Category to compare</param>
-        /// <param name="y">The second Category to compare</param>
-        /// <returns>1 if y is later in the alphabet, 0 if equal, -1 else</returns>
+        /// <param name="x">The first Category to compare.</param>
+        /// <param name="y">The second Category to compare.</param>
+        /// <returns>1 if y is later in the alphabet, 0 if equal, -1 else.</returns>
         public static int CompareCatagories(Category x, Category y)
         {
             return x.Name.CompareTo(y.Name);
         }
 
         /// <summary>
-        /// Output the object to a string representation
+        /// Output the object to a string representation.
         /// </summary>
-        /// <returns>The name of the category</returns>
+        /// <returns>The name of the category.</returns>
         public override string ToString()
         {
             return Name;
         }
 
         /// <summary>
-        /// Returns a single depth (flat) list of packages in the category. Leveling is preserved (a sub-package will be directly below the parent in the list)
+        /// Returns a single depth (flat) list of packages in the category. Leveling is preserved (a sub-package will be directly below the parent in the list).
         /// </summary>
-        /// <returns>The list of packages</returns>
+        /// <returns>The list of packages.</returns>
+        /// <remarks>Does not include getting the Category's SelectablePackage header.</remarks>
         public List<SelectablePackage> GetFlatPackageList()
         {
             List<SelectablePackage> flatPackageList = new List<SelectablePackage>();
@@ -263,9 +303,10 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Check if any packages in this category are selected for install
+        /// Check if any packages in this category are selected for install.
         /// </summary>
-        /// <returns>Try if any package is selected, false otherwise</returns>
+        /// <returns>Try if any package is selected, false otherwise.</returns>
+        /// <remarks>Does not include checking the Category's SelectablePackage header.</remarks>
         public bool AnyPackagesChecked()
         {
             foreach(SelectablePackage package in GetFlatPackageList())
@@ -278,8 +319,10 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Returns true if at least one package is enabled and checked from the first level of packages in the category
+        /// Returns true if at least one package is enabled and checked from the first level of packages in the category.
         /// </summary>
+        /// <returns>True if any packages in this category are checked and enabled, false otherwise.</returns>
+        /// <remarks>Does not include checking the Category's SelectablePackage header.</remarks>
         public bool IsAnyPackageCheckedEnabled()
         {
             bool anyPackages = false;
@@ -292,8 +335,10 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Returns true if at least one package is enabled and checked and visible from the first level of packages in the category
+        /// Returns true if at least one package is enabled and checked and visible from the first level of packages in the category.
         /// </summary>
+        /// <returns>True if at least one package is checked, enabled and visible, false otherwise.</returns>
+        /// <remarks>Does not include checking the Category's SelectablePackage header.</remarks>
         public bool IsAnyPackageCheckedEnabledVisible()
         {
             bool anyPackages = false;
@@ -305,6 +350,10 @@ namespace RelhaxModpack.Database
             return anyPackages;
         }
 
+        /// <summary>
+        /// Performs reference linking code for each entry in the database, so that using Parent properties (for example) can allow traversal around the package tree of this category.
+        /// </summary>
+        /// <remarks>As of this writing, it links the Parent, TopParent, ParentCategory and sets the level of the package in the tree.</remarks>
         public void ProcessPackages()
         {
             foreach (SelectablePackage sp in Packages)
