@@ -7,25 +7,35 @@ using System.Windows.Controls;
 
 namespace RelhaxModpack.Database
 {
+    /// <summary>
+    /// A CoreDatabaseComponent class is an XmlComponent to be saved/loaded to/from xml, but contains a list of maintainers of that component.
+    /// </summary>
     public abstract class CoreDatabaseComponent : XmlComponent
     {
+        /// <summary>
+        /// Create an instance of the CoreDatabaseComponent class.
+        /// </summary>
         public CoreDatabaseComponent() : base()
         {
 
         }
 
+        /// <summary>
+        /// Create an instance of the CoreDatabaseComponent class with copying a list of maintainers from a component to copy.
+        /// </summary>
+        /// <param name="componentToCopy">The component to copy.</param>
         public CoreDatabaseComponent(CoreDatabaseComponent componentToCopy) : base (componentToCopy)
         {
             this.Maintainers = componentToCopy.Maintainers;
         }
 
         /// <summary>
-        /// Reference for the UI element of this package in the database editor
+        /// Reference for the UI element of this package in the database editor.
         /// </summary>
-        TreeViewItem EditorTreeViewItem { get; set; }
+        public TreeViewItem EditorTreeViewItem { get; set; }
 
         /// <summary>
-        /// A list of database managers who are known to maintain this component
+        /// A list of database managers who are known to maintain this component.
         /// </summary>
         public string Maintainers { get; set; } = string.Empty;
 
@@ -36,7 +46,7 @@ namespace RelhaxModpack.Database
         public abstract string ComponentInternalName { get; }
 
         /// <summary>
-        /// Returns a list database managers who are known to maintain this component
+        /// Returns a list database managers who are known to maintain this component.
         /// </summary>
         public List<string> MaintainersList
         {
