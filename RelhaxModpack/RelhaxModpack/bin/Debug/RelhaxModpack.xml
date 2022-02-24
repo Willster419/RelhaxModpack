@@ -1201,6 +1201,142 @@
             On all other Windows operating systems(including other Windows 10 operating systems): 528049.
             See: https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed </remarks>
         </member>
+        <member name="T:RelhaxModpack.Common.DownloadManager">
+            <summary>
+            The DownloadManager class provides an implementation to calculate a file's md5 hash as it downloads and compare it at the end to ensure a complete download.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.DownloadManager.BYTE_CHUNKS">
+            <summary>
+            The maximum size of data to receive for each read/write operation.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.DownloadManager.Hash">
+            <summary>
+            The Md5 hash output result.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.DownloadManager.RetryCount">
+            <summary>
+            The number of times that a failed download should be retried.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.DownloadManager.UrlBase">
+            <summary>
+            The url path to the download location. Typically, this is the folder path on the server up to the file itself to download.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.DownloadManager.DownloadLocationBase">
+            <summary>
+            The location to download the file to. Typically, this is a folder path on a disk up to the file itself.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.DownloadManager.Progress">
+            <summary>
+            A progress implementation for reporting progress operations back to a waiting thread.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.DownloadManager.CancellationToken">
+            <summary>
+            A cancellation token to allow for user cancellation of the async operation.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.DownloadManager.IsDisposed">
+            <summary>
+            Gets if the instance has been disposed.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.DownloadManager.ManualResetEvent">
+            <summary>
+            A synchronization mechanism that can allow a thread to wait until a download operation is completed.
+            </summary>
+            <remarks>This is used in the install engine, where a thread needs to wait until a download is completed before it can be extracted.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Common.DownloadManager.#ctor">
+            <summary>
+            Create an instance of the DownloadManager class.
+            </summary>
+            <remarks>A WebClient and Md5DatabaseManager are automatically created when this class is instanced.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Common.DownloadManager.DownloadPackagesAsync(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage})">
+            <summary>
+            Start a download operation for a list of packages.
+            </summary>
+            <param name="packagesToDownload">The list of packages to download.</param>
+            <returns>The task object that holds the return data and context.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Common.DownloadManager.Dispose">
+            <summary>
+            Releases all unmanaged resources used by the instance.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Common.FileCopier">
+            <summary>
+            The FileCopier class provides an implementation to, as you may have guessed, copy files. Provides progress and cancellation to a user thread.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.FileCopier.BYTE_CHUNKS">
+            <summary>
+            The maximum size of data to receive for each read/write operation.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.FileCopier.Reporter">
+            <summary>
+            A progress implementation for reporting progress operations back to a waiting thread.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.FileCopier.CancellationToken">
+            <summary>
+            A cancellation token to allow for user cancellation of the async operation.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.FileCopier.SourceFile">
+            <summary>
+            The complete path to the file to copy.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.FileCopier.DestinationFile">
+            <summary>
+            The complete path of the destination file to copy to.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.FileCopier.progress">
+            <summary>
+            The object to use to report progress with to the user thread.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Common.FileCopier.#ctor">
+            <summary>
+            Create an instance of the FileCopier class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Common.FileCopier.#ctor(RelhaxModpack.UI.RelhaxProgress)">
+            <summary>
+            Create an instance of the FileCopier class.
+            </summary>
+            <param name="progress">The object to use to report progress to the user thread.</param>
+        </member>
+        <member name="M:RelhaxModpack.Common.FileCopier.#ctor(System.String,System.String)">
+            <summary>
+            Create an instance of the FilelCopier class.
+            </summary>
+            <param name="sourceFile">The path to file to copy from.</param>
+            <param name="destinationFile">The path to the file to write to.</param>
+        </member>
+        <member name="M:RelhaxModpack.Common.FileCopier.CopyFileAsync(System.String,System.String)">
+            <summary>
+            Start a copy operation.
+            </summary>
+            <param name="sourceFile">The path to file to copy from.</param>
+            <param name="destinationFile">The path to the file to write to.</param>
+            <returns>True if the file copy succeeded, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Common.FileCopier.CopyFileAsync">
+            <summary>
+            Start a copy operation.
+            </summary>
+            <returns>True if the file copy succeeded, false otherwise.</returns>
+        </member>
         <member name="T:RelhaxModpack.Common.IComponentWithID">
             <summary>
             An interface to allow a unique identifier for the given component. Used mostly for identifying a broken or incorrectly parsed component from a log statement
@@ -1211,6 +1347,114 @@
             The internal ID of the component. Can be anything used to identify it.
             </summary>
             <remarks>When a databasePackage, the internal packageName. When category, the category name.</remarks>
+        </member>
+        <member name="T:RelhaxModpack.Common.Md5DatabaseManager">
+            <summary>
+            Provides a method to write and read file hash values for files in a folder, and determining if a local copy of a file is up to date based on what the server hash and/or file time is.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.Md5DatabaseManager.DatabaseRootNodeName">
+            <summary>
+            The root node in the xml database file.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.Md5DatabaseManager.DatabaseFileNodeName">
+            <summary>
+            The name of the xml element for each file entry in the database file.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.Md5DatabaseManager.DatabaseFilenameAttributeName">
+            <summary>
+            The attribute of each file entry xml element to store the name of the file.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.Md5DatabaseManager.DatabaseFiletimeAttributeName">
+            <summary>
+            The attribute of each file entry xml element to store the time of the file.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.Md5DatabaseManager.DatabaseFiletimeMd5Name">
+            <summary>
+            The attribute of each file entry xml element to store the md5 hash of the file.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.Md5DatabaseManager.DatabaseLoaded">
+            <summary>
+            Gets if the xml document has been loaded into the database manager.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Common.Md5DatabaseManager.LoadMd5Database(System.String)">
+            <summary>
+            Loads the xml document into the database manager.
+            </summary>
+            <param name="fileLocation">The location of the xml database file to load.</param>
+        </member>
+        <member name="M:RelhaxModpack.Common.Md5DatabaseManager.SaveMd5Database(System.String)">
+            <summary>
+            Saves the xml document to a path on disk.
+            </summary>
+            <param name="fileLocation">The location to save the xml database to.</param>
+        </member>
+        <member name="M:RelhaxModpack.Common.Md5DatabaseManager.FileEntryUpToDate(System.String,System.DateTime)">
+            <summary>
+            Determines if a file entry in the database is up to date by checking the md5 hash and given file time.
+            </summary>
+            <param name="packageFilename">The name of the file to look up.</param>
+            <param name="fileTime">The last modified time of the file entry to look up.</param>
+            <returns>True if the file entry's name, time and md5 match, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Common.Md5DatabaseManager.FileEntryUpToDate(System.String,System.String)">
+            <summary>
+            Determines if a file entry in the database is up to date by checking the md5 hash and given file time.
+            </summary>
+            <param name="packageFilename">The name of the file to look up.</param>
+            <param name="fileTimeString">The last modified time of the file entry to look up.</param>
+            <returns>True if the file entry's name, time and md5 match, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Common.Md5DatabaseManager.GetMd5HashFileEntry(System.String,System.DateTime)">
+            <summary>
+            Gets an md5 hash entry of a file based on a given file name and time.
+            </summary>
+            <param name="packageFilename">The name of the file to look up.</param>
+            <param name="fileTime">The last modified time of the file entry to look up.</param>
+            <returns>The hash of the file if it is found, or null if the entry isn't found.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Common.Md5DatabaseManager.GetMd5HashFileEntry(System.String,System.String)">
+            <summary>
+            Gets an md5 hash entry of a file based on a given file name and time.
+            </summary>
+            <param name="packageFilename">The name of the file to look up.</param>
+            <param name="fileTimeString">The last modified time of the file entry to look up.</param>
+            <returns>The hash of the file if it is found, or null if the entry isn't found.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Common.Md5DatabaseManager.UpdateFileEntry(System.String,System.DateTime,System.String)">
+            <summary>
+            Updates a file entry in the database with the given filename, time and md5 value. If the entry is not found, then it is added.
+            </summary>
+            <param name="packageFilename">The name of the file to enter.</param>
+            <param name="fileTime">The time of the file to enter.</param>
+            <param name="md5Value">The md5 hash of the file to enter.</param>
+        </member>
+        <member name="M:RelhaxModpack.Common.Md5DatabaseManager.UpdateFileEntry(System.String,System.String,System.String)">
+            <summary>
+            Updates a file entry in the database with the given filename, time and md5 value. If the entry is not found, then it is added.
+            </summary>
+            <param name="packageFilename">The name of the file to enter.</param>
+            <param name="fileTimeString">The time of the file to enter.</param>
+            <param name="md5Value">The md5 hash of the file to enter.</param>
+        </member>
+        <member name="M:RelhaxModpack.Common.Md5DatabaseManager.DeleteFileEntry(System.String)">
+            <summary>
+            Deletes a file entry for the database by file name, if the entry exists.
+            </summary>
+            <param name="packageFilename">The name of the file to lookup.</param>
+        </member>
+        <member name="M:RelhaxModpack.Common.Md5DatabaseManager.FileEntryWithoutTimeExists(System.String)">
+            <summary>
+            Checks if a file entry exists for a given file name.
+            </summary>
+            <param name="packageFilename">The name of the file to lookup.</param>
+            <returns>true if the file entry exists in the database, false if it does not.</returns>
         </member>
         <member name="T:RelhaxModpack.Database.Category">
             <summary>
@@ -8592,6 +8836,17 @@
             <summary>
             Extracts the embedded compressed library to the location in the Filepath property.
             </summary>
+        </member>
+        <member name="T:RelhaxModpack.BadMemeException">
+            <summary>
+            An exception used mostly for mistakes that could happen during development, 'sanity check' type verification. And also for bad memes.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.BadMemeException.#ctor(System.String)">
+            <summary>
+            Throw a bad meme exception.
+            </summary>
+            <param name="message">The message to tell the developer why his meme is bad.</param>
         </member>
         <member name="T:RelhaxModpack.CiInfo">
             <summary>Info about the continuous integration server build that produced this binary.</summary> 
