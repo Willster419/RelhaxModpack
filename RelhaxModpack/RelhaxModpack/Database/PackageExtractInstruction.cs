@@ -21,6 +21,12 @@ namespace RelhaxModpack.Database
         }
 
         #region Xml serialization V2
+        /// <summary>
+        /// Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+        /// </summary>
+        /// <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+        /// <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+        /// <seealso cref="XmlDatabaseProperty"/>
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
@@ -32,6 +38,12 @@ namespace RelhaxModpack.Database
             return xmlDatabaseProperties;
         }
 
+        /// <summary>
+        /// Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+        /// </summary>
+        /// <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+        /// <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+        /// <seealso cref="XmlDatabaseProperty"/>
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
