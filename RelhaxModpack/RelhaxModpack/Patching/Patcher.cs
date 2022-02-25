@@ -28,6 +28,9 @@ namespace RelhaxModpack.Patching
         /// <remarks>Debug mode will create additional files as individual steps of the patch process are outputted for debug</remarks>
         public bool DebugMode { get; set; } = false;
 
+        /// <summary>
+        /// The WoT client directory path to use for the {app} Patchpath parameter.
+        /// </summary>
         public string WoTDirectory { get; set; }
 
         /// <summary>
@@ -83,6 +86,11 @@ namespace RelhaxModpack.Patching
             return RunPatch(p);
         }
 
+        /// <summary>
+        /// Run a patch operation from the Installer.
+        /// </summary>
+        /// <param name="p">The patch instructions object</param>
+        /// <returns>The operation exit code</returns>
         public PatchExitCode RunPatchFromInstaller(Patch p)
         {
             Logging.Debug(LogOptions.ClassName, "Patch format version: {0}", p.Version);
@@ -125,6 +133,11 @@ namespace RelhaxModpack.Patching
             return RunPatch(p);
         }
 
+        /// <summary>
+        /// Run a patch operation from the Editor.
+        /// </summary>
+        /// <param name="p">The patch instructions object</param>
+        /// <returns>The operation exit code</returns>
         public PatchExitCode RunPatchFromEditor(Patch p)
         {
             return RunPatch(p);
