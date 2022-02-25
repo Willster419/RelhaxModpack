@@ -83,8 +83,9 @@ namespace RelhaxModpack
         /// Initialize the logging system for the application
         /// </summary>
         /// <param name="logfile">The log file to initialize</param>
-        /// <param name="verbose">Flag if the logfile will be outputting diagnostic info</param>
+        /// <param name="verbose">Flag if the logfile will be outputting diagnostic info (only used if beta or alpha build)</param>
         /// <param name="logfilePath">The custom path of where to initialize the file</param>
+        /// <param name="logInitFail">If true, show an error message box if the log file fails to initialize.</param>
         /// <returns>True if successful initialization, false otherwise</returns>
         /// <remarks>The verbose value will be ignored if the Application is not a beta or alpha build.</remarks>
         public static bool Init(Logfiles logfile, bool verbose, bool logInitFail, string logfilePath = null)
@@ -128,10 +129,8 @@ namespace RelhaxModpack
             }
 
             if (fileToWriteTo != null)
-                throw new BadMemeException("only do this once jackass");
-#pragma warning disable IDE0068 // Use recommended dispose pattern
+                throw new BadMemeException("only do this once");
             fileToWriteTo = new Logfile(logfilePath, ApplicationLogfileTimestamp, verbose);
-#pragma warning restore IDE0068 // Use recommended dispose pattern
 
             //now that it's newed, the reference needs to be reverse assigned
             switch (logfile)
@@ -546,7 +545,7 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Writes an debug level message to the application log
+        /// Writes a debug level message to the application log
         /// </summary>
         /// <param name="options">Log append options to include class name, method name, or both</param>
         /// <param name="message">The formatted string to be passed into the string.Format() method</param>
@@ -573,7 +572,7 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Writes an debug (info) level message to the application log
+        /// Writes a debug (info) level message to the application log
         /// </summary>
         /// <param name="options">Log append options to include class name, method name, or both</param>
         /// <param name="message">The formatted string to be passed into the string.Format() method</param>
@@ -600,16 +599,34 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Writes a debug level message to a logfile instance.
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="message">The message to write</param>
         public static void Debug(Logfiles logfile, string message)
         {
             WriteToLog(message, logfile, LogLevel.Debug);
         }
 
+        /// <summary>
+        /// Writes a debug level message to a logfile instance.
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="message">The message to write</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
         public static void Debug(Logfiles logfile, string message, params object[] args)
         {
             WriteToLog(message, logfile, LogLevel.Debug, args);
         }
 
+        /// <summary>
+        /// Writes a debug level message to a logfile instance.
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="options">The log message options to include with the message.</param>
+        /// <param name="message">The message to write</param>
+        /// <seealso cref="LogOptions"/>
         public static void Debug(Logfiles logfile, LogOptions options, string message)
         {
             switch (options)
@@ -632,6 +649,14 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Writes a debug level message to a logfile instance.
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="options">The log message options to include with the message.</param>
+        /// <param name="message">The message to write</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
+        /// <seealso cref="LogOptions"/>
         public static void Debug(Logfiles logfile, LogOptions options, string message, params object[] args)
         {
             switch (options)
@@ -728,16 +753,34 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Writes an information (info) level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="message">The message to write</param>
         public static void Info(Logfiles logfile, string message)
         {
             WriteToLog(message, logfile, LogLevel.Info);
         }
 
+        /// <summary>
+        /// Writes an information (info) level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="message">The message to write</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
         public static void Info(Logfiles logfile, string message, params object[] args)
         {
             WriteToLog(message, logfile, LogLevel.Info, args);
         }
 
+        /// <summary>
+        /// Writes an information (info) level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="options">The log message options to include with the message.</param>
+        /// <param name="message">The message to write</param>
+        /// <seealso cref="LogOptions"/>
         public static void Info(Logfiles logfile, LogOptions options, string message)
         {
             switch (options)
@@ -760,6 +803,14 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Writes an information (info) level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="options">The log message options to include with the message.</param>
+        /// <param name="message">The message to write</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
+        /// <seealso cref="LogOptions"/>
         public static void Info(Logfiles logfile, LogOptions options, string message, params object[] args)
         {
             switch (options)
@@ -856,16 +907,34 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Writes a warning level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="message">The message to write</param>
         public static void Warning(Logfiles logfile, string message)
         {
             WriteToLog(message, logfile, LogLevel.Warning);
         }
 
+        /// <summary>
+        /// Writes a warning level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="message">The message to write</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
         public static void Warning(Logfiles logfile, string message, params object[] args)
         {
             WriteToLog(message, logfile, LogLevel.Warning, args);
         }
 
+        /// <summary>
+        /// Writes a warning level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="options">The log message options to include with the message.</param>
+        /// <param name="message">The message to write</param>
+        /// <seealso cref="LogOptions"/>
         public static void Warning(Logfiles logfile, LogOptions options, string message)
         {
             switch (options)
@@ -888,6 +957,14 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Writes a warning level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="options">The log message options to include with the message.</param>
+        /// <param name="message">The message to write</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
+        /// <seealso cref="LogOptions"/>
         public static void Warning(Logfiles logfile, LogOptions options, string message, params object[] args)
         {
             switch (options)
@@ -984,16 +1061,34 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Writes an error level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="message">The message to write</param>
         public static void Error(Logfiles logfile, string message)
         {
             WriteToLog(message, logfile, LogLevel.Error);
         }
 
+        /// <summary>
+        /// Writes an error level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="message">The message to write</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
         public static void Error(Logfiles logfile, string message, params object[] args)
         {
             WriteToLog(message, logfile, LogLevel.Error, args);
         }
 
+        /// <summary>
+        /// Writes an error level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="options">The log message options to include with the message.</param>
+        /// <param name="message">The message to write</param>
+        /// <seealso cref="LogOptions"/>
         public static void Error(Logfiles logfile, LogOptions options, string message)
         {
             switch (options)
@@ -1016,6 +1111,14 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Writes an error level message to the application log
+        /// </summary>
+        /// <param name="logfile">The logfile to write to.</param>
+        /// <param name="options">The log message options to include with the message.</param>
+        /// <param name="message">The message to write</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
+        /// <seealso cref="LogOptions"/>
         public static void Error(Logfiles logfile, LogOptions options, string message, params object[] args)
         {
             switch (options)
