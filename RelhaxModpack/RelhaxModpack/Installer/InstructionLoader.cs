@@ -17,8 +17,19 @@ using System.Xml.XPath;
 
 namespace RelhaxModpack.Installer
 {
+    /// <summary>
+    /// The instructionLoader class is for loading instructions from legacy style individual xml documents into a list of Instruction objects.
+    /// </summary>
     public class InstructionLoader
     {
+        /// <summary>
+        /// Create a list of instructions from xml files in a directory.
+        /// </summary>
+        /// <param name="folderPath">The directory path to the location of xml files.</param>
+        /// <param name="instructionsType">The type of instructions to load.</param>
+        /// <param name="xmlSearchpath">The xml xpath to use to get the list of xml objects of each instruction xml.</param>
+        /// <param name="originalPatchNames">A dictionary to serve as a map for each original filename of each xml document.</param>
+        /// <returns>The loaded list of instructions, or an empty list if no instructions loaded.</returns>
         public List<Instruction> CreateInstructionsList(string folderPath, InstructionsType instructionsType, string xmlSearchpath, Dictionary<string, string> originalPatchNames = null)
         {
             if (string.IsNullOrEmpty(folderPath))
@@ -52,6 +63,15 @@ namespace RelhaxModpack.Installer
             return instructions;
         }
 
+        /// <summary>
+        /// Adds instructions to a given Instruction list.
+        /// </summary>
+        /// <param name="file">The file that contains instructions to load.</param>
+        /// <param name="instructions">The instructions list to add loaded instructions to.</param>
+        /// <param name="instructionsType">The type of instructions to load.</param>
+        /// <param name="xmlSearchpath">The xml xpath to use to get the list of xml objects of each instruction xml.</param>
+        /// <seealso cref="InstructionsType"/>
+        /// <seealso cref="Instruction"/>
         public void AddInstructionObjectsToList(string file, List<Instruction> instructions, InstructionsType instructionsType, string xmlSearchpath)
         {
             if (!File.Exists(file))
