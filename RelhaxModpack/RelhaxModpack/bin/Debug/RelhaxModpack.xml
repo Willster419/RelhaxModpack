@@ -7188,23 +7188,23 @@
         </member>
         <member name="T:RelhaxModpack.RelhaxZipFile">
             <summary>
-            A wrapper class around the Ionic.Zip.Zipfile with the purpose of saving the thread ID that the zip file belongs to
+            A wrapper class around the Ionic.Zip.Zipfile with the purpose of saving the thread ID that the zip file belongs to.
             </summary>
         </member>
         <member name="F:RelhaxModpack.RelhaxZipFile.ThreadID">
             <summary>
-            The ID number of the thread that the zip file belongs to
+            The ID number of the thread that the zip file belongs to.
             </summary>
         </member>
         <member name="F:RelhaxModpack.RelhaxZipFile.IsUserMod">
             <summary>
-            Flag for if this zip file is a user mod
+            Flag for if this zip file is a user mod.
             </summary>
-            <remarks>User mods are treated slightly differently then regular mods. They have no valid threadID, and should not be deleted if the extraction fails.</remarks>
+            <remarks>User mods are treated differently then regular mods. They have no valid threadID, and should not be deleted if the extraction fails.</remarks>
         </member>
         <member name="M:RelhaxModpack.RelhaxZipFile.#ctor(System.String)">
             <summary>
-            Constructor for making a RelhaxZipFile
+            Create an instance of a RelhaxZipFile.
             </summary>
             <param name="fileName">The name of the file to send to the base constructor. File must already exist.</param>
         </member>
@@ -7215,99 +7215,131 @@
         </member>
         <member name="P:RelhaxModpack.InstallEngine.OrderedPackagesToInstall">
             <summary>
-            List of packages that have zip files to install and are enabled (and checked if selectable) and ordered into installGroups
+            Get the list of packages that have zip files to install and are enabled, and ordered into installGroups
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.InstallEngine.PackagesToInstall">
+            <summary>
+            Get the list of packages to install that are enabled.
             </summary>
         </member>
         <member name="P:RelhaxModpack.InstallEngine.PackagesToInstallWithZipfile">
             <summary>
-            List of packages that have zip files to install and are enabled (and checked if selectable)
+            List of packages that have zip files to install and are enabled (and checked if selectable).
             </summary>
         </member>
         <member name="P:RelhaxModpack.InstallEngine.UserPackagesToInstall">
             <summary>
-            List of user packages placed in the RelhaxUserMods folder and selected for installation
+            List of user packages placed in the RelhaxUserMods folder and selected for installation.
             </summary>
         </member>
         <member name="P:RelhaxModpack.InstallEngine.ParsedCategoryList">
             <summary>
-            A reference for the list of parsed categories
+            A reference for the list of parsed categories.
             </summary>
         </member>
         <member name="P:RelhaxModpack.InstallEngine.Dependencies">
             <summary>
-            A reference for the list of parsed dependencies
+            A reference for the list of parsed dependencies.
             </summary>
         </member>
         <member name="P:RelhaxModpack.InstallEngine.GlobalDependencies">
             <summary>
-            A reference for the list of parsed globally installed dependencies
+            A reference for the list of parsed globally installed dependencies.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.InstallEngine.DatabaseManager">
+            <summary>
+            Get or set the DatabaseManager used to get the installation lists.
             </summary>
         </member>
         <member name="P:RelhaxModpack.InstallEngine.ModpackSettings">
             <summary>
-            The Modpack settings configuration class
+            Get or set the Modpack settings configuration class.
             </summary>
         </member>
         <member name="P:RelhaxModpack.InstallEngine.CommandLineSettings">
             <summary>
-            The Command line settings configuration class
+            Get or set Command line settings configuration class.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.InstallEngine.DatabaseVersion">
+            <summary>
+            Get or set the version of the database that was installed.
+            </summary>
+            <remarks>This is only used for writing into the install's log file.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.InstallEngine.WoTClientVersion">
+            <summary>
+            Get or set the version of the WoT client that is being installed for. This also is used to set the version number of the mods and res_mods folders.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.InstallEngine.WoTDirectory">
+            <summary>
+            Get or set the root WoT client install directory to install to.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.InstallEngine.DownloadManager">
+            <summary>
+            Get or set the DownloadManger instance used for downloading (and waiting on) packages.
             </summary>
         </member>
         <member name="F:RelhaxModpack.InstallEngine.TriggerContouricons">
             <summary>
-            The event name for starting the contour icon atlas building
+            The event name for starting the contour icon atlas building.
             </summary>
         </member>
         <member name="F:RelhaxModpack.InstallEngine.TriggerInstallFonts">
             <summary>
-            The event name for starting the installation of fonts
+            The event name for starting the installation of fonts.
             </summary>
         </member>
         <member name="F:RelhaxModpack.InstallEngine.TriggerCreateShortcuts">
             <summary>
-            The event name for starting the creation of shortcuts
+            The event name for starting the creation of shortcuts.
             </summary>
         </member>
         <member name="F:RelhaxModpack.InstallEngine.CompleteTriggerList">
             <summary>
-            A list of all current trigger event names
+            A list of all current trigger event names.
             </summary>
         </member>
         <member name="F:RelhaxModpack.InstallEngine.Triggers">
             <summary>
-            A list of all current trigger event objects. For more information, see the trigger class
+            A list of all current trigger event objects. For more information, see the trigger class.
             </summary>
+            <seealso cref="T:RelhaxModpack.Database.Trigger"/>
         </member>
         <member name="F:RelhaxModpack.InstallEngine.CancellationToken">
             <summary>
-            The token used for handling and checking for cancellation requests
+            The token used for handling and checking for cancellation requests.
             </summary>
         </member>
         <member name="F:RelhaxModpack.InstallEngine.DisableTriggersForInstall">
             <summary>
-            Flag for if the install engine should honor the user setting or if installing user packages, disable triggers anyways
+            Flag for if the install engine should honor the user setting or if installing user packages, disable triggers anyways.
             </summary>
         </member>
         <member name="M:RelhaxModpack.InstallEngine.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Settings.CommandLineSettings)">
             <summary>
             Creates an instance of the InstallEngine class.
             </summary>
-            <param name="modpackSettings">The modpack settings configuration class</param>
-            <param name="commandLineSettings">The command line settings configuration class</param>
+            <param name="modpackSettings">The modpack settings configuration class.</param>
+            <param name="commandLineSettings">The command line settings configuration class.</param>
         </member>
         <member name="M:RelhaxModpack.InstallEngine.RunInstallationAsync(System.IProgress{RelhaxModpack.UI.RelhaxInstallerProgress})">
             <summary>
-            Run an asynchronous installation
+            Run an asynchronous installation.
             </summary>
-            <param name="progress">The progress reporter object</param>
-            <returns>A RelhaxInstallFinishedEventArgs object contain installation data for if the installation succeed or ended prematurely</returns>
+            <param name="progress">The progress reporter object.</param>
+            <returns>A RelhaxInstallFinishedEventArgs object contain installation data for if the installation succeed or ended prematurely.</returns>
         </member>
         <member name="M:RelhaxModpack.InstallEngine.RunUninstallationAsync(System.IProgress{RelhaxModpack.UI.RelhaxInstallerProgress})">
             <summary>
-            Run an asynchronous uninstallation
+            Run an asynchronous uninstallation.
             </summary>
-            <param name="progress">The progress reporter object</param>
-            <returns>A RelhaxInstallFinishedEventArgs object contain uninstallation data for if the uninstallation succeed or ended prematurely</returns>
+            <param name="progress">The progress reporter object.</param>
+            <returns>A RelhaxInstallFinishedEventArgs object contain uninstallation data for if the uninstallation succeed or ended prematurely.</returns>
         </member>
         <member name="M:RelhaxModpack.InstallEngine.UninstallMods(RelhaxModpack.Utilities.Enums.UninstallModes,System.Boolean)">
             <summary>

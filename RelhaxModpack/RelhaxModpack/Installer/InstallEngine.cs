@@ -29,23 +29,23 @@ namespace RelhaxModpack
 {
     #region Stuff
     /// <summary>
-    /// A wrapper class around the Ionic.Zip.Zipfile with the purpose of saving the thread ID that the zip file belongs to
+    /// A wrapper class around the Ionic.Zip.Zipfile with the purpose of saving the thread ID that the zip file belongs to.
     /// </summary>
     public class RelhaxZipFile : ZipFile
     {
         /// <summary>
-        /// The ID number of the thread that the zip file belongs to
+        /// The ID number of the thread that the zip file belongs to.
         /// </summary>
         public int ThreadID;
 
         /// <summary>
-        /// Flag for if this zip file is a user mod
+        /// Flag for if this zip file is a user mod.
         /// </summary>
-        /// <remarks>User mods are treated slightly differently then regular mods. They have no valid threadID, and should not be deleted if the extraction fails.</remarks>
+        /// <remarks>User mods are treated differently then regular mods. They have no valid threadID, and should not be deleted if the extraction fails.</remarks>
         public bool IsUserMod = false;
 
         /// <summary>
-        /// Constructor for making a RelhaxZipFile
+        /// Create an instance of a RelhaxZipFile.
         /// </summary>
         /// <param name="fileName">The name of the file to send to the base constructor. File must already exist.</param>
         public RelhaxZipFile(string fileName) : base(fileName) { }
@@ -59,20 +59,23 @@ namespace RelhaxModpack
     {
         #region Instance Variables
         /// <summary>
-        /// List of packages that have zip files to install and are enabled (and checked if selectable) and ordered into installGroups
+        /// Get the list of packages that have zip files to install and are enabled, and ordered into installGroups
         /// </summary>
         public List<DatabasePackage>[] OrderedPackagesToInstall
         {
             get { return DatabaseManager.PackagesToInstallByInstallGroup; }
         }
 
+        /// <summary>
+        /// Get the list of packages to install that are enabled.
+        /// </summary>
         public List<DatabasePackage> PackagesToInstall
         {
             get { return DatabaseManager.PackagesToInstall; }
         }
 
         /// <summary>
-        /// List of packages that have zip files to install and are enabled (and checked if selectable)
+        /// List of packages that have zip files to install and are enabled (and checked if selectable).
         /// </summary>
         public List<DatabasePackage> PackagesToInstallWithZipfile
         {
@@ -80,13 +83,12 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// List of user packages placed in the RelhaxUserMods folder and selected for installation
+        /// List of user packages placed in the RelhaxUserMods folder and selected for installation.
         /// </summary>
         public List<SelectablePackage> UserPackagesToInstall { get; set; }
 
-        //for passing back to application (DO NOT WRITE TO)
         /// <summary>
-        /// A reference for the list of parsed categories
+        /// A reference for the list of parsed categories.
         /// </summary>
         public List<Category> ParsedCategoryList
         {
@@ -94,7 +96,7 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// A reference for the list of parsed dependencies
+        /// A reference for the list of parsed dependencies.
         /// </summary>
         public List<Dependency> Dependencies
         {
@@ -102,53 +104,66 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// A reference for the list of parsed globally installed dependencies
+        /// A reference for the list of parsed globally installed dependencies.
         /// </summary>
         public List<DatabasePackage> GlobalDependencies
         {
             get { return DatabaseManager.GlobalDependencies; }
         }
 
+        /// <summary>
+        /// Get or set the DatabaseManager used to get the installation lists.
+        /// </summary>
         public DatabaseManager DatabaseManager { get; set; }
 
         /// <summary>
-        /// The Modpack settings configuration class
+        /// Get or set the Modpack settings configuration class.
         /// </summary>
         public ModpackSettings ModpackSettings { get; set; }
 
         /// <summary>
-        /// The Command line settings configuration class
+        /// Get or set Command line settings configuration class.
         /// </summary>
         public CommandLineSettings CommandLineSettings { get; set; }
 
+        /// <summary>
+        /// Get or set the version of the database that was installed.
+        /// </summary>
+        /// <remarks>This is only used for writing into the install's log file.</remarks>
         public string DatabaseVersion { get; set; }
 
+        /// <summary>
+        /// Get or set the version of the WoT client that is being installed for. This also is used to set the version number of the mods and res_mods folders.
+        /// </summary>
         public string WoTClientVersion { get; set; }
 
+        /// <summary>
+        /// Get or set the root WoT client install directory to install to.
+        /// </summary>
         public string WoTDirectory { get; set; }
 
+        /// <summary>
+        /// Get or set the DownloadManger instance used for downloading (and waiting on) packages.
+        /// </summary>
         public DownloadManager DownloadManager { get; set; }
 
-        public bool DownloadingPackages { get; set; }
-
-        //names of triggers
         /// <summary>
-        /// The event name for starting the contour icon atlas building
+        /// The event name for starting the contour icon atlas building.
         /// </summary>
         public const string TriggerContouricons = "build_contour_icons";
 
         /// <summary>
-        /// The event name for starting the installation of fonts
+        /// The event name for starting the installation of fonts.
         /// </summary>
         public const string TriggerInstallFonts = "install_fonts";
 
         /// <summary>
-        /// The event name for starting the creation of shortcuts
+        /// The event name for starting the creation of shortcuts.
         /// </summary>
         public const string TriggerCreateShortcuts = "create_shortcuts";
 
         /// <summary>
-        /// A list of all current trigger event names
+        /// A list of all current trigger event names.
         /// </summary>
         public static readonly string[] CompleteTriggerList = new string[]
         {
@@ -158,8 +173,9 @@ namespace RelhaxModpack
         };
 
         /// <summary>
-        /// A list of all current trigger event objects. For more information, see the trigger class
+        /// A list of all current trigger event objects. For more information, see the trigger class.
         /// </summary>
+        /// <seealso cref="Trigger"/>
         public static readonly List<Trigger> Triggers = new List<Trigger>
         {
             new Trigger(){ Fired = false, Name = TriggerContouricons,    NumberProcessed = 0, Total = 0 },
@@ -168,9 +184,14 @@ namespace RelhaxModpack
         };
 
         /// <summary>
-        /// The token used for handling and checking for cancellation requests
+        /// The token used for handling and checking for cancellation requests.
         /// </summary>
         public CancellationToken CancellationToken;
+
+        /// <summary>
+        /// Flag for if the install engine should honor the user setting or if installing user packages, disable triggers anyways.
+        /// </summary>
+        public bool DisableTriggersForInstall = true;
 
         //other
         private Stopwatch InstallStopWatch = new Stopwatch();
@@ -179,7 +200,6 @@ namespace RelhaxModpack
         private IProgress<RelhaxInstallerProgress> Progress = null;
         private RelhaxInstallerProgress Prog = null;
         private string XvmFolderName = string.Empty;
-        private Dictionary<string, string> OriginalPatchNames = new Dictionary<string, string>();
         private string backupZipfileNameForCancelDeletion = string.Empty;
         private Patcher Patcher;
 
@@ -205,22 +225,14 @@ namespace RelhaxModpack
         //flag for if installing or uninstalling
         private bool Installing = true;
 
-        //locking object for if a patch name already exists (multithread extraction)
-        private object duplicatePatchNameObjectLocker = new object();
-
         private ManualResetEvent ManualResetEvent;
-
-        /// <summary>
-        /// Flag for if the install engine should honor the user setting or if installing user packages, disable triggers anyways
-        /// </summary>
-        public bool DisableTriggersForInstall = true;
         #endregion
 
         /// <summary>
         /// Creates an instance of the InstallEngine class.
         /// </summary>
-        /// <param name="modpackSettings">The modpack settings configuration class</param>
-        /// <param name="commandLineSettings">The command line settings configuration class</param>
+        /// <param name="modpackSettings">The modpack settings configuration class.</param>
+        /// <param name="commandLineSettings">The command line settings configuration class.</param>
         public InstallEngine(ModpackSettings modpackSettings, CommandLineSettings commandLineSettings)
         {
             if (ModpackSettings == null)
@@ -231,10 +243,10 @@ namespace RelhaxModpack
 
         #region Installer entry points
         /// <summary>
-        /// Run an asynchronous installation
+        /// Run an asynchronous installation.
         /// </summary>
-        /// <param name="progress">The progress reporter object</param>
-        /// <returns>A RelhaxInstallFinishedEventArgs object contain installation data for if the installation succeed or ended prematurely</returns>
+        /// <param name="progress">The progress reporter object.</param>
+        /// <returns>A RelhaxInstallFinishedEventArgs object contain installation data for if the installation succeed or ended prematurely.</returns>
         public Task<RelhaxInstallFinishedEventArgs> RunInstallationAsync(IProgress<RelhaxInstallerProgress> progress)
         {
             if (ModpackSettings == null) throw new NullReferenceException();
@@ -320,10 +332,10 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Run an asynchronous uninstallation
+        /// Run an asynchronous uninstallation.
         /// </summary>
-        /// <param name="progress">The progress reporter object</param>
-        /// <returns>A RelhaxInstallFinishedEventArgs object contain uninstallation data for if the uninstallation succeed or ended prematurely</returns>
+        /// <param name="progress">The progress reporter object.</param>
+        /// <returns>A RelhaxInstallFinishedEventArgs object contain uninstallation data for if the uninstallation succeed or ended prematurely.</returns>
         public Task<RelhaxInstallFinishedEventArgs> RunUninstallationAsync(IProgress<RelhaxInstallerProgress> progress)
         {
             if (ModpackSettings == null) throw new NullReferenceException();
@@ -427,7 +439,7 @@ namespace RelhaxModpack
             }
 
             //if download while install is set, setup the event thread synchronization mechanism to handle waiting on the download thread
-            if (ModpackSettings.InstallWhileDownloading && DownloadingPackages)
+            if (ModpackSettings.InstallWhileDownloading && (DatabaseManager.PackagesToDownload != null && DatabaseManager.PackagesToDownload.Count > 0))
             {
                 this.ManualResetEvent = new ManualResetEvent(false);
                 DownloadManager.ManualResetEvent = this.ManualResetEvent;

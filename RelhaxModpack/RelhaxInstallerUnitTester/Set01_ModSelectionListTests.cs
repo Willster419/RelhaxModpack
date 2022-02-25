@@ -243,7 +243,6 @@ namespace RelhaxInstallerUnitTester
                 DatabaseManager = databaseManager,
                 UserPackagesToInstall = userModsToInstall,
                 CancellationToken = nullToken,
-                DownloadingPackages = (packagesToDownload.Count > 0),
                 DisableTriggersForInstall = true,
                 DatabaseVersion = "TESTING",
                 WoTDirectory = wotExeFolderpath,

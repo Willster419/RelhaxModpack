@@ -1357,7 +1357,6 @@ namespace RelhaxModpack
                 DatabaseManager = databaseManager,
                 UserPackagesToInstall = userModsToInstall,
                 CancellationToken = installerCancellationTokenSource.Token,
-                DownloadingPackages = (packagesToDownload.Count > 0),
                 DisableTriggersForInstall = disableTriggersForInstall,
                 DatabaseVersion = this.DatabaseVersion,
                 WoTDirectory = this.WoTDirectory,
