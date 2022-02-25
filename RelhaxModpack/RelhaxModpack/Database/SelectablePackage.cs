@@ -522,14 +522,19 @@ namespace RelhaxModpack.Database
         public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
 
         /// <summary>
-        /// A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
-        /// Refer to examples for more information
+        /// A list of any packageNames of packages that conflict with this package. A conflict will result the package not being processed.
         /// </summary>
         [Obsolete("The ConflictingPackages property has been replaced with ConflictingPackagesNew")]
         public string ConflictingPackages { get; set; } = string.Empty;
 
+        /// <summary>
+        /// A list of entries that specify packages by UID, PackageName, and if loaded, the package references themselves, that conflict with this package. Packages on this list cannot be selected if this package is currently selected.
+        /// </summary>
         public List<ConflictingPackage> ConflictingPackagesNew { get; set; } = new List<ConflictingPackage>();
 
+        /// <summary>
+        /// Gets a list of selectable packages that conflict with this package. Packages on this list cannot be selected if this package is currently selected.
+        /// </summary>
         public List<SelectablePackage> ConflictingPackagesProcessed
         {
             get

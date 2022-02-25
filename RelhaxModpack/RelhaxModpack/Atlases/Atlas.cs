@@ -16,7 +16,7 @@ namespace RelhaxModpack.Atlases
     public class Atlas : PackageExtractInstruction
     {
         /// <summary>
-        /// For atlas instruction files, the xpath to return a list of all atlas instruction elements.
+        /// For atlas instruction files, the xpath to return a list of all atlas instruction xml elements.
         /// </summary>
         /// <remarks>As of the time of this writing, all instructions are now stored inside the database and are no longer separate xml files in the package zip files.</remarks>
         public const string AtlasXmlSearchPath = "/atlases/atlas";
@@ -64,14 +64,15 @@ namespace RelhaxModpack.Atlases
 
         #region Xml serialization V1
         /// <summary>
-        /// Get the xpath used for returning a list of Atlas instruction elements in an instructions document.
+        /// The xpath to use to get a list of xml element objects that represent each instruction to serialize.
         /// </summary>
         public override string RootObjectPath { get { return AtlasXmlSearchPath; } }
 
         /// <summary>
-        /// Gets the list of all properties in the class should be serialized to and from xml.
+        /// Defines a list of properties in the class to be serialized into xml elements.
         /// </summary>
-        /// <returns>A string array of all properties to be serialized.</returns>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml elements may always exist, but they may have empty inner text values.</remarks>
         public override string[] PropertiesToSerialize()
         {
             return new string[]
@@ -269,8 +270,9 @@ namespace RelhaxModpack.Atlases
         }
 
         /// <summary>
-        /// Gets a string formatted list of internal properties and values for log output.
+        /// Gets a log formatted string for debugging containing key object name and values.
         /// </summary>
+        /// <remarks>If debug output is enabled for the log file during an installation, then each instruction will have it's DumpInfoToLog property called.</remarks>
         public override string DumpInfoToLog
         {
             get

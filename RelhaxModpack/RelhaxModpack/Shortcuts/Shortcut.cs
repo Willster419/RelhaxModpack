@@ -13,13 +13,24 @@ namespace RelhaxModpack.Shortcuts
     /// </summary>
     public class Shortcut : Instruction
     {
+        /// <summary>
+        /// For shortcut instruction files, the xpath to return a list of all shortcut instruction xml elements.
+        /// </summary>
+        /// <remarks>As of the time of this writing, all instructions are now stored inside the database and are no longer separate xml files in the package zip files.</remarks>
         public const string ShortcutXmlSearchPath = "/shortcuts/shortcut";
 
+        /// <summary>
+        /// Creates an instance of the Shortcut class.
+        /// </summary>
         public Shortcut() : base()
         {
 
         }
 
+        /// <summary>
+        /// Creates an instance of the Shortcut class, copying values form a given Shortcut object.
+        /// </summary>
+        /// <param name="shortcutToCopy">The Shortcut object to copy.</param>
         public Shortcut(Shortcut shortcutToCopy) : base()
         {
             this.Path = shortcutToCopy.Path;
@@ -27,14 +38,27 @@ namespace RelhaxModpack.Shortcuts
             this.Enabled = shortcutToCopy.Enabled;
         }
 
+        /// <summary>
+        /// Creates a copy of the given Shortcut object.
+        /// </summary>
+        /// <param name="shortcutToCopy">The Shortcut object to copy.</param>
+        /// <returns>A copy of the Shortcut object.</returns>
         public static Shortcut Copy(Shortcut shortcutToCopy)
         {
             return new Shortcut(shortcutToCopy);
         }
 
         #region Xml serialization V1
+        /// <summary>
+        /// The xpath to use to get a list of xml element objects that represent each instruction to serialize.
+        /// </summary>
         public override string RootObjectPath { get { return ShortcutXmlSearchPath; } }
 
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml elements.
+        /// </summary>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml elements may always exist, but they may have empty inner text values.</remarks>
         public override string[] PropertiesToSerialize()
         {
             return new string[]
@@ -47,6 +71,12 @@ namespace RelhaxModpack.Shortcuts
         #endregion
 
         #region Xml serialization V2
+        /// <summary>
+        /// Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+        /// </summary>
+        /// <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+        /// <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+        /// <seealso cref="XmlDatabaseProperty"/>
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
@@ -59,6 +89,12 @@ namespace RelhaxModpack.Shortcuts
             return xmlDatabaseProperties;
         }
 
+        /// <summary>
+        /// Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+        /// </summary>
+        /// <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+        /// <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+        /// <seealso cref="XmlDatabaseProperty"/>
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
@@ -71,6 +107,12 @@ namespace RelhaxModpack.Shortcuts
             return xmlDatabaseProperties;
         }
 
+        /// <summary>
+        /// Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+        /// </summary>
+        /// <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+        /// <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+        /// <seealso cref="XmlDatabaseProperty"/>
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2()
         {
             return this.GetXmlDatabasePropertiesV1Dot1();
@@ -95,12 +137,16 @@ namespace RelhaxModpack.Shortcuts
         /// <summary>
         /// String representation of the object
         /// </summary>
-        /// <returns>The name and target of the shortcut</returns>
+        /// <returns>The name property and value of the shortcut.</returns>
         public override string ToString()
         {
             return string.Format("Name={0}", Name);
         }
 
+        /// <summary>
+        /// Gets a log formatted string for debugging containing key object name and values.
+        /// </summary>
+        /// <remarks>If debug output is enabled for the log file during an installation, then each instruction will have it's DumpInfoToLog property called.</remarks>
         public override string DumpInfoToLog
         {
             get
@@ -109,6 +155,11 @@ namespace RelhaxModpack.Shortcuts
             }
         }
 
+        /// <summary>
+        /// Compares two instructions to determine if their values are equal.
+        /// </summary>
+        /// <param name="instructionToCompare">The instruction to compare against.</param>
+        /// <returns>True if the compared values are equal, false otherwise.</returns>
         public override bool InstructionsEqual(Instruction instructionToCompare)
         {
             Shortcut shortcutToCompare = instructionToCompare as Shortcut;
@@ -128,6 +179,4 @@ namespace RelhaxModpack.Shortcuts
             return true;
         }
     }
-
-    
 }

@@ -57,7 +57,7 @@ namespace RelhaxModpack.Installer
         public DatabasePackage Package { get; set; }
 
         /// <summary>
-        /// Gets a log formatted string for debugging.
+        /// Gets a log formatted string for debugging containing key object name and values.
         /// </summary>
         /// <remarks>If debug output is enabled for the log file during an installation, then each instruction will have it's DumpInfoToLog property called.</remarks>
         public virtual string DumpInfoToLog

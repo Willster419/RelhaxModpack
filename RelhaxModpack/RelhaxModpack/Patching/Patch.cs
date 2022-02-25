@@ -38,7 +38,9 @@ namespace RelhaxModpack.Patching
         /// </summary>
         public const string TypeXvm = "xvm";
 
-        //valid xml modes to put into mode combobox
+        /// <summary>
+        /// A list of all supported xml patch operation modes
+        /// </summary>
         public static readonly string[] ValidXmlModes = new string[]
         {
             "add",
@@ -46,7 +48,10 @@ namespace RelhaxModpack.Patching
             "remove"
         };
 
-        //valid json modes to put into mode combobox
+        
+        /// <summary>
+        /// A list of all supported json patch operation modes
+        /// </summary>
         public static readonly string[] ValidJsonModes = new string[]
         {
             "add",
@@ -58,13 +63,24 @@ namespace RelhaxModpack.Patching
             "arrayclear"
         };
 
+        /// <summary>
+        /// For patch instruction files, the xpath to return a list of all patch instruction xml elements.
+        /// </summary>
+        /// <remarks>As of the time of this writing, all instructions are now stored inside the database and are no longer separate xml files in the package zip files.</remarks>
         public const string PatchXmlSearchPath = "/patchs/patch";
 
+        /// <summary>
+        /// Create an instance of the Patch class
+        /// </summary>
         public Patch() : base()
         {
 
         }
 
+        /// <summary>
+        /// Create an instance of the Patch class, copying values from a given patch.
+        /// </summary>
+        /// <param name="patchToCopy">The Patch instance to copy from.</param>
         public Patch(Patch patchToCopy) : base(patchToCopy)
         {
             this.Path = patchToCopy.Path;
@@ -80,14 +96,27 @@ namespace RelhaxModpack.Patching
             this.Line = patchToCopy.Line;
         }
 
+        /// <summary>
+        /// Make a copy of a Patch instance
+        /// </summary>
+        /// <param name="shortcutToCopy">The Patch instance to copy from.</param>
+        /// <returns>A copy of the given Patch instance.</returns>
         public static Patch Copy(Patch shortcutToCopy)
         {
             return new Patch(shortcutToCopy);
         }
 
         #region Xml serialization V1
+        /// <summary>
+        /// The xpath to use to get a list of xml element objects that represent each instruction to serialize.
+        /// </summary>
         public override string RootObjectPath { get { return PatchXmlSearchPath; } }
 
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml elements.
+        /// </summary>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml elements may always exist, but they may have empty inner text values.</remarks>
         public override string[] PropertiesToSerialize()
         {
             return new string[]
@@ -107,6 +136,12 @@ namespace RelhaxModpack.Patching
         #endregion
 
         #region Xml serialization V2
+        /// <summary>
+        /// Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+        /// </summary>
+        /// <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+        /// <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+        /// <seealso cref="XmlDatabaseProperty"/>
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
@@ -125,6 +160,12 @@ namespace RelhaxModpack.Patching
             return xmlDatabaseProperties;
         }
 
+        /// <summary>
+        /// Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+        /// </summary>
+        /// <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+        /// <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+        /// <seealso cref="XmlDatabaseProperty"/>
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
@@ -143,6 +184,12 @@ namespace RelhaxModpack.Patching
             return xmlDatabaseProperties;
         }
 
+        /// <summary>
+        /// Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+        /// </summary>
+        /// <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+        /// <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+        /// <seealso cref="XmlDatabaseProperty"/>
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2()
         {
             return this.GetXmlDatabasePropertiesV1Dot1();
@@ -198,6 +245,9 @@ namespace RelhaxModpack.Patching
             }
         }
 
+        /// <summary>
+        /// If a regex patch, a comma seperated list of line numbers to attempt to apply the patch on.
+        /// </summary>
         public string Line { get; set; } = string.Empty;
 
         /// <summary>
@@ -216,8 +266,9 @@ namespace RelhaxModpack.Patching
         public bool FollowPath { get; set; } = false;
 
         /// <summary>
-        /// Collects all patch information for logging
+        /// Gets a log formatted string for debugging containing key object name and values.
         /// </summary>
+        /// <remarks>If debug output is enabled for the log file during an installation, then each instruction will have it's DumpInfoToLog property called.</remarks>
         public override string DumpInfoToLog
         {
             get
@@ -298,6 +349,11 @@ namespace RelhaxModpack.Patching
             return GetInvalidPatchesForSave(patchList.Cast<Patch>().ToList());
         }
 
+        /// <summary>
+        /// Compares two instructions to determine if their values are equal.
+        /// </summary>
+        /// <param name="instructionToCompare">The instruction to compare against.</param>
+        /// <returns>True if the compared values are equal, false otherwise.</returns>
         public override bool InstructionsEqual(Instruction instructionToCompare)
         {
             Patch patchToCompare = instructionToCompare as Patch;
@@ -337,6 +393,10 @@ namespace RelhaxModpack.Patching
             return true;
         }
 
+        /// <summary>
+        /// Returns a string representation of the object.
+        /// </summary>
+        /// <returns>The patch's target file name, or "(empty)", if no target file name is given.</returns>
         public override string ToString()
         {
             return string.Format("File={0}", string.IsNullOrEmpty(File) ? "(empty)": File);
