@@ -52,7 +52,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Called from the constructor, handle any object initialization that should be done.
+        /// Called from the constructor, handles any object initialization that should be done.
         /// </summary>
         protected virtual void InitComponent()
         {

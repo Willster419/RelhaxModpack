@@ -7,12 +7,12 @@ namespace RelhaxModpack.Database
 {
     /// <summary>
     /// Represents a package with logical calculations. A dependency is only installed when a selectable package is checked
-    /// for installation and is dependent on the dependency i.e. 6th sense sound and icon mods require the 6th sense script dependency
+    /// for installation and is dependent on the dependency i.e. 6th sense sound and icon mods require the 6th sense script dependency.
     /// </summary>
     public class Dependency : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
         /// <summary>
-        /// Create an instance of the Dependency class and over-ride DatabasePackage default values
+        /// Create an instance of the Dependency class and over-ride DatabasePackage default values.
         /// </summary>
         public Dependency() : base()
         {
@@ -21,10 +21,10 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Create an instance of the Dependency class and over-ride DatabasePackage default values, while using values provided for copy objects
+        /// Create an instance of the Dependency class and over-ride DatabasePackage default values, while using values provided for copy objects.
         /// </summary>
-        /// <param name="packageToCopyFrom">The package to copy the information from</param>
-        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
+        /// <param name="packageToCopyFrom">The package to copy the information from.</param>
+        /// <param name="deep">Set to true to copy list objects, false to use new lists.</param>
         public Dependency(DatabasePackage packageToCopyFrom, bool deep) : base(packageToCopyFrom)
         {
             if (deep && packageToCopyFrom is Dependency dep)
@@ -34,6 +34,9 @@ namespace RelhaxModpack.Database
             }
         }
 
+        /// <summary>
+        /// Called from the constructor, handle any object initialization that should be done.
+        /// </summary>
         protected override void InitComponent()
         {
             base.InitComponent();
@@ -43,20 +46,20 @@ namespace RelhaxModpack.Database
 
         #region Xml serialization V1
         /// <summary>
-        /// Defines a list of properties in the class to be serialized into xml attributes
+        /// Defines a list of properties in the class to be serialized into xml attributes.
         /// </summary>
-        /// <returns>A list of string property names</returns>
-        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public override string[] PropertiesForSerializationAttributes()
         {
             return base.PropertiesForSerializationAttributes();
         }
 
         /// <summary>
-        /// Defines a list of properties in the class to be serialized into xml elements
+        /// Defines a list of properties in the class to be serialized into xml elements.
         /// </summary>
-        /// <returns>A list of string property names</returns>
-        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public override string[] PropertiesForSerializationElements()
         {
             return base.PropertiesForSerializationElements().Concat(DependencyPropertiesToXmlParseElements.ToArray()).ToArray();
@@ -101,12 +104,12 @@ namespace RelhaxModpack.Database
 
         #region Database Properties
         /// <summary>
-        /// List of linked mods and configs that use this dependency at install time
+        /// List of linked packages that use this dependency at install time.
         /// </summary>
         public List<DatabaseLogic> DatabasePackageLogic { get; set; } = new List<DatabaseLogic>();
 
         /// <summary>
-        /// List of dependencies this dependency calls on
+        /// List of dependencies this dependency calls on.
         /// </summary>
         public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
         #endregion

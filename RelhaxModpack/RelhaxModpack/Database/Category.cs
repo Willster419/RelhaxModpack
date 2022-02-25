@@ -108,7 +108,7 @@ namespace RelhaxModpack.Database
         /// <param name="valueOfProperty">The current value of the property in the object. For example, this would be the list object of the "Packages" list property.</param>
         /// <param name="elementOfProperty">The xml element entry of the property being loaded. For example, the "Packages" xml entry.</param>
         /// <param name="continueProcessingProperty">A flag used back in XmlComponent if the current xml element to load (like "Packages") should continue to be loaded by XmlComponent.</param>
-        /// <seealso cref="XmlComponent"/>
+        /// <seealso cref="XmlComponent.OnParsingPropertyToXmlElement(XmlDatabaseProperty, XElement, string, PropertyInfo, object, XElement, out bool)"/>
         protected override void OnParsingPropertyToXmlElement(XmlDatabaseProperty thisPropertyXml, XElement propertyXmlElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
         {
             continueProcessingProperty = true;
@@ -149,7 +149,7 @@ namespace RelhaxModpack.Database
         /// <param name="valueOfProperty">The current value of the property in the object. For example, this would be the list object of the "Packages" list property.</param>
         /// <param name="elementOfProperty">The xml element entry of the property being saved. For example, the "Packages" xml entry.</param>
         /// <param name="continueProcessingProperty">A flag used back in XmlComponent if the current xml element to save (like "Packages") should continue to be saved by XmlComponent.</param>
-        /// <seealso cref="XmlComponent"/>
+        /// <seealso cref="XmlComponent.OnParsingPropertyFromXmlElement(XmlDatabaseProperty, XElement, string, PropertyInfo, object, XElement, out bool)"/>
         protected override void OnParsingPropertyFromXmlElement(XmlDatabaseProperty thisPropertyXml, XElement propertyXmlElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
         {
             continueProcessingProperty = true;

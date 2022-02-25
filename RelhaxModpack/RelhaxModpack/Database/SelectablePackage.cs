@@ -12,12 +12,12 @@ using System.Xml.Linq;
 namespace RelhaxModpack.Database
 {
     /// <summary>
-    /// A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
+    /// A SelectablePackage is a package that can be checked by the user for installation during package selection.
     /// </summary>
     public class SelectablePackage : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
         /// <summary>
-        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
+        /// Create an instance of the SelectablePackage class.
         /// </summary>
         public SelectablePackage() : base()
         {
@@ -25,10 +25,10 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
+        /// Create an instance of the SelectablePackage class, while using values provided for copy objects.
         /// </summary>
-        /// <param name="packageToCopyFrom">The package to copy the information from</param>
-        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
+        /// <param name="packageToCopyFrom">The package to copy the information from.</param>
+        /// <param name="deep">Set to true to copy list objects, false to use new lists.</param>
         public SelectablePackage(DatabasePackage packageToCopyFrom, bool deep) : base(packageToCopyFrom)
         {
             if (deep && packageToCopyFrom is Dependency dependnecy)
@@ -60,6 +60,9 @@ namespace RelhaxModpack.Database
             }
         }
 
+        /// <summary>
+        /// Called from the constructor, handles any object initialization that should be done.
+        /// </summary>
         protected override void InitComponent()
         {
             base.InitComponent();
@@ -69,20 +72,20 @@ namespace RelhaxModpack.Database
 
         #region Xml serialization V1
         /// <summary>
-        /// Defines a list of properties in the class to be serialized into xml attributes
+        /// Defines a list of properties in the class to be serialized into xml attributes.
         /// </summary>
-        /// <returns>A list of string property names</returns>
-        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public override string[] PropertiesForSerializationAttributes()
         {
             return base.PropertiesForSerializationAttributes().Concat(SelectablePackagePropertiesToXmlParseAttributes.ToArray()).ToArray();
         }
 
         /// <summary>
-        /// Defines a list of properties in the class to be serialized into xml elements
+        /// Defines a list of properties in the class to be serialized into xml elements.
         /// </summary>
-        /// <returns>A list of string property names</returns>
-        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public override string[] PropertiesForSerializationElements()
         {
             return base.PropertiesForSerializationElements().Concat(SelectablePackagePropertiesToXmlParseElements.ToArray()).ToArray();
@@ -196,6 +199,11 @@ namespace RelhaxModpack.Database
             return xmlDatabaseProperties;
         }
 
+        /// <summary>
+        /// A hook from XmlComponent for when an xml entry is finished being loaded into an object.
+        /// </summary>
+        /// <param name="propertyElement">The xml element of the entry being loaded. For example, the "SelectablePackage" xml element.</param>
+        /// <param name="loadStatus">The status of the loading of this object, if all properties of it were previously loaded correctly.</param>
         protected override void OnFinishedLoadingFromXml(XElement propertyElement, bool loadStatus)
         {
             base.OnFinishedLoadingFromXml(propertyElement, loadStatus);
@@ -228,6 +236,11 @@ namespace RelhaxModpack.Database
                 media.SelectablePackageParent = this;
         }
 
+        /// <summary>
+        /// A hook from XmlComponent for when an xml entry is started being saved to an xml document object.
+        /// </summary>
+        /// <param name="propertyElement">The xml element of the entry being saved (for example, the "SelectablePackage" element).</param>
+        /// <param name="targetSchemaVersion">The schema version being used to save.</param>
         protected override void OnStartedSavingToXml(XElement propertyElement, string targetSchemaVersion)
         {
             base.OnStartedSavingToXml(propertyElement, targetSchemaVersion);
@@ -261,9 +274,9 @@ namespace RelhaxModpack.Database
         };
 
         /// <summary>
-        /// Defines a list of properties in the class to be serialized into xml attributes for selection files
+        /// Defines a list of properties in the class to be serialized into xml attributes for selection files.
         /// </summary>
-        /// <returns>The base array, with SelectablePackage options concatenated</returns>
+        /// <returns>The base array, with SelectablePackage options concatenated.</returns>
         public override string[] AttributesToXmlParseSelectionFiles()
         {
             return base.AttributesToXmlParseSelectionFiles().Concat(SelectablePackagePropertiesToSaveForSelectionFile.ToArray()).ToArray();
@@ -272,12 +285,12 @@ namespace RelhaxModpack.Database
 
         #region Database Properties
         /// <summary>
-        /// The display name of the package
+        /// The display name of the package.
         /// </summary>
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// The name of the package with the version macro replaced for use display
+        /// The name of the package with the version macro replaced for use display.
         /// </summary>
         public string NameFormatted
         {
@@ -290,37 +303,37 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// The Category object reference
+        /// The Category object reference.
         /// </summary>
         public Category ParentCategory { get; set; } = null;
 
         /// <summary>
-        /// The type of selectable package logic to follow (see SelectionTypes enumeration for options)
+        /// The type of selectable package logic to follow (see SelectionTypes enumeration for options).
         /// </summary>
         public SelectionTypes Type { get; set; } = SelectionTypes.none;
 
         /// <summary>
-        /// The reference for the direct parent of this package
+        /// The reference for the direct parent of this package.
         /// </summary>
         public SelectablePackage Parent { get; set; } = null;
 
         /// <summary>
-        /// The reference for the absolute top of the package tree
+        /// The reference for the absolute top of the package tree.
         /// </summary>
         public SelectablePackage TopParent { get; set; } = null;
 
         /// <summary>
-        /// A flag to determine whether or not the mod should be shown in UI
+        /// A flag to determine whether or not the mod should be shown in UI.
         /// </summary>
         public bool Visible { get; set; } = false;
 
         /// <summary>
-        /// Update comments of the package
+        /// Update comments of the package.
         /// </summary>
         public string UpdateComment { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets an escaped version of the UpdateComment property, replacing literal '\n' with special character '\n', for example
+        /// Gets an escaped version of the UpdateComment property, replacing literal '\n' with special character '\n', for example.
         /// </summary>
         /// <seealso cref="UpdateComment"/>
         public string UpdateCommentEscaped
@@ -329,7 +342,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Gets a user display formatted version of the UpdateCommentEscaped property, with a time stamp (if available). If no comment, a translated 'noComment' entry is returned
+        /// Gets a user display formatted version of the UpdateCommentEscaped property, with a time stamp (if available). If no comment, a translated 'noComment' entry is returned.
         /// </summary>
         /// <seealso cref="UpdateCommentEscaped"/>
         /// <seealso cref="UpdateComment"/>
@@ -344,12 +357,12 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// description of the package
+        /// description of the package.
         /// </summary>
         public string Description { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets an escaped version of the Description property, replacing literal '\n' with special character '\n', for example
+        /// Gets an escaped version of the Description property, replacing literal '\n' with special character '\n', for example.
         /// </summary>
         /// <seealso cref="Description"/>
         public string DescriptionEscaped
@@ -359,7 +372,7 @@ namespace RelhaxModpack.Database
 
         /// <summary>
         /// Gets a user display formatted version of the UpdateCommentEscaped property. Additionally could contain an encrypted, controversial or popular entry.
-        /// If no description, a translated 'noDescription' entry is returned
+        /// If no description, a translated 'noDescription' entry is returned.
         /// </summary>
         /// <seealso cref="DescriptionEscaped"/>
         /// <seealso cref="Description"/>
@@ -389,42 +402,42 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Flag to determine if the package is popular
+        /// Flag to determine if the package is popular.
         /// </summary>
         public bool PopularMod { get; set; } = false;
 
         /// <summary>
-        /// Flag to determine if the package is of controversial nature
+        /// Flag to determine if the package is of controversial nature.
         /// </summary>
         public bool GreyAreaMod { get; set; } = false;
 
         /// <summary>
-        /// Flag to determine if the package is obfuscated/encrypted and can't be checked for viruses or malware
+        /// Flag to determine if the package is obfuscated/encrypted and can't be checked for viruses or malware.
         /// </summary>
         public bool ObfuscatedMod { get; set; } = false;
 
         /// <summary>
-        /// Flag to determine if the package is from the offical WoT mod portal
+        /// Flag to determine if the package is from the official WoT mod portal.
         /// </summary>
         public bool FromWGmods { get; set; } = false;
 
         /// <summary>
-        /// Flag to determine any packages of this package should be sorted (by name)
+        /// Flag to determine any packages of this package should be sorted (by name).
         /// </summary>
         public bool SortChildPackages { get; set; } = false;
 
         /// <summary>
-        /// Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
+        /// Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection.
         /// </summary>
         public bool FlagForSelectionSave { get; set; } = false;
 
         /// <summary>
-        /// Field for whether the package is selected to install
+        /// Field for whether the package is selected to install.
         /// </summary>
         protected internal bool _Checked = false;
 
         /// <summary>
-        /// Property for if the package is selected by the user to install. handles all color change and single_dropdown updating code
+        /// Property for if the package is selected by the user to install. handles all color change and single_dropdown updating code.
         /// </summary>
         public bool Checked
         {
@@ -484,27 +497,27 @@ namespace RelhaxModpack.Database
 
         /// <summary>
         /// The level in the database tree where the package resides.
-        /// Category header is -1, each child is +1 from there
         /// </summary>
+        /// <remarks>A level of -2 implies that the value has not been set.</remarks>
         public int Level { get; set; } = -2;
 
         /// <summary>
-        /// The list of cache files that should be backed up before wiping the directory
+        /// The list of cache files that should be backed up before wiping the directory.
         /// </summary>
         public List<UserFile> UserFiles { get; set; } = new List<UserFile>();
 
         /// <summary>
-        /// The list of child SelectablePackage entries in this instance of SelectablePackages
+        /// The list of child SelectablePackage entries in this instance of SelectablePackages.
         /// </summary>
         public List<SelectablePackage> Packages { get; set; } = new List<SelectablePackage>();
 
         /// <summary>
-        /// List of media preview items associated with this package, shown in the preview window on right click of component
+        /// List of media preview items associated with this package, shown in the preview window on right click of component.
         /// </summary>
         public List<Media> Medias { get; set; } = new List<Media>();
 
         /// <summary>
-        /// A list of packages (from dependencies list) that this package is dependent on in order to be installed
+        /// A list of packages (from dependencies list) that this package is dependent on in order to be installed.
         /// </summary>
         public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
 
@@ -528,96 +541,111 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Toggle if the package should appear in the search list
+        /// Toggle if the package should appear in the search list.
         /// </summary>
         public bool ShowInSearchList { get; set; } = true;
         #endregion
 
         #region UI Properties Shared
         /// <summary>
-        /// The UI element reference for this package
+        /// The UI element reference for this package.
         /// </summary>
         public IPackageUIComponent UIComponent;
 
         /// <summary>
-        /// The UI element reference for the direct parent of this package
+        /// The UI element reference for the direct parent of this package.
         /// </summary>
         public IPackageUIComponent ParentUIComponent;
 
         /// <summary>
-        /// The UI element reference for the absolute top of the package tree
+        /// The UI element reference for the absolute top of the package tree.
         /// </summary>
         public IPackageUIComponent TopParentUIComponent;
 
         /// <summary>
-        /// The list of WPF combo boxes for each combobox type
+        /// The list of WPF combo boxes for each combobox type.
         /// </summary>
         public RelhaxWPFComboBox[] RelhaxWPFComboBoxList;
 
         /// <summary>
-        /// The border for the legacy view to allow for putting all children in the border. sits inside TreeViewItem. WPF component
+        /// The border for the legacy view to allow for putting all children in the border. sits inside TreeViewItem.
         /// </summary>
         public RelhaxBorder ChildBorder;
 
         /// <summary>
-        /// The StackPanel to allow the child TreeViewItems to stack upon each other. sits inside the border. WPF component
+        /// The StackPanel to allow the child TreeViewItems to stack upon each other. sits inside the border.
         /// </summary>
         public StackPanel ChildStackPanel;
 
         /// <summary>
-        /// The border that this component is in. WPF component
+        /// The border that this component is in.
         /// </summary>
         public RelhaxBorder ParentBorder;
 
         /// <summary>
-        /// The StackPanel that this item is inside. WPF component
+        /// The StackPanel that this item is inside.
         /// </summary>
         public StackPanel ParentStackPanel;
 
         /// <summary>
-        /// Gets or sets if the UI background components of this package should change color when the checked value changes
+        /// Gets or sets if the UI background components of this package should change color when the checked value changes.
         /// </summary>
         public bool ChangeColorOnValueChecked { get; set; } = false;
 
         /// <summary>
-        /// The TabItem UI reference
+        /// The TabItem UI reference.
         /// </summary>
         public SelectionListTabItem TabIndex;
 
+        /// <summary>
+        /// The selection view that, when loading into the package selection list, the user selected for viewing packages.
+        /// </summary>
+        /// <remarks>This value is copied from the modpack settings.</remarks>
+        /// <seealso cref="ModpackSettings"/>
         public SelectionView ModSelectionView { get; set; }
 
+        /// <summary>
+        /// If this package should be forced visible in a selection view.
+        /// </summary>
+        /// <remarks>This value is copied from the modpack settings.</remarks>
+        /// <seealso cref="ModpackSettings"/>
         public bool ForceVisible { get; set; }
 
+        /// <summary>
+        /// If this package should be forced enabled in a selection view.
+        /// </summary>
+        /// <remarks>This value is copied from the modpack settings.</remarks>
+        /// <seealso cref="ModpackSettings"/>
         public bool ForceEnabled { get; set; }
         #endregion
 
         #region UI Properties Default View
         /// <summary>
-        /// ContentControl item to allow for right-clicking of disabled components. defaultv2 WPF component
+        /// ContentControl item to allow for right-clicking of disabled components.
         /// </summary>
         public ContentControl @ContentControl;
 
         /// <summary>
-        /// Component used only in the top SelectablePackage to allow for scrolling of the package lists for each category
+        /// Component used only in the top SelectablePackage to allow for scrolling of the package lists for each category.
         /// </summary>
         public ScrollViewer @ScrollViewer;
         #endregion
 
         #region UI Properties OMC Legacy View
         /// <summary>
-        /// The TreeViewItem that corresponds to this package. legacy WPF component
+        /// The TreeViewItem that corresponds to this package.
         /// </summary>
         public StretchingTreeViewItem @TreeViewItem;
 
         /// <summary>
-        /// The TreeView that this package is in. legacy WPF component
+        /// The TreeView that this package is in.
         /// </summary>
         public StretchingTreeView @TreeView;
         #endregion
 
         #region Other Properties and Methods
         /// <summary>
-        /// The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level
+        /// The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         public override int InstallGroupWithOffset
@@ -640,7 +668,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Provides a complete path of the name fields from the top package down to where this package is located in the tree
+        /// Provides a complete path of the name fields from the top package down to where this package is located in the tree.
         /// </summary>
         public override string CompletePath
         {
@@ -665,7 +693,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Provides a complete path of the packageName fields from the top package down to where this package is located in the tree
+        /// Provides a complete path of the packageName fields from the top package down to where this package is located in the tree.
         /// </summary>
         public override string CompletePackageNamePath
         {
@@ -689,7 +717,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Provides a complete tree style path to the package using its UID, starting with the category
+        /// Provides a complete tree style path to the package using its UID, starting with the category.
         /// </summary>
         public override string CompleteUIDPath
         {
@@ -741,7 +769,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Determines if all parent packages leading to this package are enabled. In other words, it checks if the path to this package is enabled
+        /// Determines if all parent packages leading to this package are enabled. In other words, it checks if the path to this package is enabled.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         public bool IsStructureEnabled
@@ -768,7 +796,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Returns the display name of the package for the UI, with version macros replaced and any other statuses appended
+        /// Returns the display name of the package for the UI, with version macros replaced and any other statuses appended.
         /// </summary>
         public string NameDisplay
         {
@@ -796,7 +824,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Returns a string representation of the timestamp of when the zip file of this package was last modified
+        /// Returns a string representation of the time stamp of when the zip file of this package was last modified.
         /// </summary>
         public string TimeStampString
         {
@@ -807,7 +835,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Returns the display tool tip string, or the translation string for "no description"
+        /// Returns the display tool tip string, or the translation string for "no description".
         /// </summary>
         public string ToolTipString
         {
@@ -821,40 +849,40 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Alphabetical sorting of packages by PackageName property at this level (not recursive)
+        /// Alphabetical sorting of packages by PackageName property at this level (not recursive).
         /// </summary>
-        /// <param name="x">First package to compare</param>
-        /// <param name="y">Second package to compare</param>
-        /// <returns></returns>
+        /// <param name="x">First package to compare.</param>
+        /// <param name="y">Second package to compare.</param>
+        /// <returns>1 or -1 if the package isn't equal, 0 if it is equal.</returns>
         public static int CompareModsPackageName(SelectablePackage x, SelectablePackage y)
         {
             return x.PackageName.CompareTo(y.PackageName);
         }
 
         /// <summary>
-        /// Alphabetical sorting of packages by NameFormatted property at this level (not recursive)
+        /// Alphabetical sorting of packages by NameFormatted property at this level (not recursive).
         /// </summary>
-        /// <param name="x">First package to compare</param>
-        /// <param name="y">Second package to compare</param>
-        /// <returns></returns>
+        /// <param name="x">First package to compare.</param>
+        /// <param name="y">Second package to compare.</param>
+        /// <returns>1 or -1 if the package isn't equal, 0 if it is equal.</returns>
         public static int CompareModsName(SelectablePackage x, SelectablePackage y)
         {
             return x.NameFormatted.CompareTo(y.NameFormatted);
         }
 
         /// <summary>
-        /// Allows for display in a combobox and when debugging
+        /// Allows for display in a combobox and when debugging.
         /// </summary>
-        /// <returns>The nameFormatted property of the package</returns>
+        /// <returns>The nameFormatted property of the package.</returns>
         public override string ToString()
         {
             return NameFormatted;
         }
 
         /// <summary>
-        /// Check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
+        /// Check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked.
         /// </summary>
-        /// <returns>True if another package at this level is checked and enabled, false otherwise</returns>
+        /// <returns>True if another package at this level is checked and enabled, false otherwise.</returns>
         public bool AnyPackagesChecked()
         {
             foreach (SelectablePackage sp in Parent.Packages)
@@ -868,9 +896,9 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Returns true if the structure above and below this package is valid (all mandatory child options checked, parent checked), false otherwise
+        /// Returns true if the structure above and below this package is valid (all mandatory child options checked, parent checked), false otherwise.
         /// </summary>
-        /// <remarks>This assumes that the database linking/reference code has been run, otherwise a null exception will occur</remarks>
+        /// <remarks>This assumes that the database linking/reference code has been run, otherwise a null exception will occur.</remarks>
         public bool IsStructureValid
         {
             get
@@ -930,6 +958,10 @@ namespace RelhaxModpack.Database
             }
         }
 
+        /// <summary>
+        /// Determine if any packages that are listed as a conflict of this package are currently enabled and checked.
+        /// </summary>
+        /// <returns>True if there is at least conflicting package found, false if none are found.</returns>
         public bool AnyConflictingPackages()
         {
             foreach (SelectablePackage conflictingPackage in GetConflictingPackages())
@@ -943,6 +975,10 @@ namespace RelhaxModpack.Database
             return false;
         }
 
+        /// <summary>
+        /// Get a list of packages that conflict with other packages up and down the selection tree.
+        /// </summary>
+        /// <returns>The list of packages that conflict.</returns>
         public List<SelectablePackage> GetConflictingPackages()
         {
             List<SelectablePackage> conflictingPackages = new List<SelectablePackage>();
@@ -981,11 +1017,13 @@ namespace RelhaxModpack.Database
             return conflictingPackages;
         }
 
-        public void UncheckConflictingPackages(bool forced)
+        /// <summary>
+        /// Unchecks any packages that conflict with this package.
+        /// </summary>
+        public void UncheckConflictingPackages()
         {
-            if (GetConflictingPackages() == null && !forced)
+            if (GetConflictingPackages() == null)
             {
-                Logging.Warning(LogOptions.MethodName, "No conflicting packages to process (is this intended)?");
                 return;
             }
 
@@ -999,9 +1037,12 @@ namespace RelhaxModpack.Database
             }
         }
 
+        /// <summary>
+        /// Force checks this package by un-checking any conflicting packages of this package.
+        /// </summary>
         public void ForceCheckPackage()
         {
-            UncheckConflictingPackages(true);
+            UncheckConflictingPackages();
             this.Checked = true;
         }
         #endregion

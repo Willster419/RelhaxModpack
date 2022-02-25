@@ -5,15 +5,22 @@ using System.Collections.Generic;
 namespace RelhaxModpack.Database
 {
     /// <summary>
-    /// A media object is a preview-able component stored in a list in SelectablePackages
+    /// A media object is a preview-able component stored in a list in SelectablePackages.
     /// </summary>
     public class Media : XmlComponent, IXmlSerializable
     {
+        /// <summary>
+        /// Create an instance of the Media class.
+        /// </summary>
         public Media() : base()
         {
 
         }
 
+        /// <summary>
+        /// Create an instance of the Media class, by copying values from a given Media object.
+        /// </summary>
+        /// <param name="mediaToCopy">The Media object to copy values from.</param>
         public Media(Media mediaToCopy) : base(mediaToCopy)
         {
             this.URL = mediaToCopy.URL;
@@ -22,20 +29,20 @@ namespace RelhaxModpack.Database
 
         #region Xml serialization V1
         /// <summary>
-        /// Defines a list of properties in the class to be serialized into xml attributes
+        /// Defines a list of properties in the class to be serialized into xml attributes.
         /// </summary>
-        /// <returns>A list of string property names</returns>
-        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public string[] PropertiesForSerializationAttributes()
         {
             return new string[] { nameof(URL), nameof(MediaType) };
         }
 
         /// <summary>
-        /// Defines a list of properties in the class to be serialized into xml elements
+        /// Defines a list of properties in the class to be serialized into xml elements.
         /// </summary>
-        /// <returns>A list of string property names</returns>
-        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public string[] PropertiesForSerializationElements()
         {
             return new string[] { };
@@ -90,26 +97,26 @@ namespace RelhaxModpack.Database
         #endregion
 
         /// <summary>
-        /// For direct link types, the URL to the element or resource
+        /// For direct link types, the URL to the element or resource.
         /// </summary>
-        /// <remarks>HTTP and HTTPS links work for this property</remarks>
+        /// <remarks>HTTP and HTTPS links work for this property.</remarks>
         public string URL { get; set; } = string.Empty;
 
         /// <summary>
-        /// The type of media for the URL to be interpreted as
+        /// The type of media for the URL to be interpreted as.
         /// </summary>
         public MediaType MediaType { get; set; } = MediaType.Picture;
 
         /// <summary>
-        /// Gets or sets the SelectablePackage parent of the media item
+        /// Gets or sets the SelectablePackage parent of the media item.
         /// </summary>
-        /// <remarks>This is used in the preview window to get the name to display in the title</remarks>
+        /// <remarks>This is used in the preview window to get the name to display in the title.</remarks>
         public SelectablePackage SelectablePackageParent { get; set; } = null;
 
         /// <summary>
-        /// The string properties of the object
+        /// The string properties of the object.
         /// </summary>
-        /// <returns>The integer code of the MediaType and the first 80 characters of the URL</returns>
+        /// <returns>The integer code of the MediaType and the first 80 characters of the URL.</returns>
         public override string ToString()
         {
             if(URL.Length > 79)
@@ -119,10 +126,10 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Create a copy of the Media object
+        /// Create a copy of the Media object.
         /// </summary>
-        /// <param name="mediaToCopy">The object to copy</param>
-        /// <returns>A new Media object with the same values</returns>
+        /// <param name="mediaToCopy">The object to copy.</param>
+        /// <returns>A new Media object with the same values.</returns>
         public static Media Copy(Media mediaToCopy)
         {
             return new Media(mediaToCopy);
