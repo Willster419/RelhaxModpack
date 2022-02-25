@@ -35,7 +35,7 @@ namespace RelhaxModpack.Shortcuts
             Logging.Info("ShortcutPath={0}", shortcutPath);
             if (!File.Exists(target))
             {
-                Logging.Warning("Target does not exist, skipping shortcut", target);
+                Logging.Warning(LogOptions.ClassName, "Target does not exist, skipping shortcut", target);
                 return;
             }
 
@@ -94,6 +94,7 @@ namespace RelhaxModpack.Shortcuts
         #endregion
 
         #region Gross shortcut stuff
+#pragma warning disable CS1591
         // needed for CreateShortcut
         [ComImport]
         [Guid("00021401-0000-0000-C000-000000000046")]
@@ -190,6 +191,7 @@ namespace RelhaxModpack.Shortcuts
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 14)]
             public string cAlternateFileName;
         }
+#pragma warning restore CS1591
         #endregion
     }
 }
