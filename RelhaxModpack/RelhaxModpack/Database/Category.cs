@@ -242,11 +242,6 @@ namespace RelhaxModpack.Database
         /// The package created at selection list building that represents the header of this category.
         /// </summary>
         public SelectablePackage CategoryHeader { get; set; } = null;
-
-        /// <summary>
-        /// Reference for the UI element of this package in the database editor.
-        /// </summary>
-        public TreeViewItem EditorTreeViewItem { get; set; } = null;
         #endregion
 
         #region Other Properties and Methods
