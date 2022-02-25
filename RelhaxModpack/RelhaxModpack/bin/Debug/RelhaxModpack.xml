@@ -3799,15 +3799,87 @@
             </summary>
             <returns>The string representing object properties.</returns>
         </member>
+        <member name="T:RelhaxModpack.Installer.Instruction">
+            <summary>
+            An Instruction is a task to be performed by the installer after packages are extracted.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Installer.Instruction.#ctor">
+            <summary>
+            Create an instance of the Instruction class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Installer.Instruction.#ctor(RelhaxModpack.Installer.Instruction)">
+            <summary>
+            Create an instance of the Instruction class, making a copy of a given Instruction.
+            </summary>
+            <param name="instructionToCopy">The Instruction whose values to copy.</param>
+        </member>
+        <member name="M:RelhaxModpack.Installer.Instruction.PropertiesToSerialize">
+            <summary>
+            Creates a string array of properties in the class to serialize for loading to and from an xml document.
+            </summary>
+            <returns>The string array of properties to serialize between xml document and class values.</returns>
+            <remarks>This is only used in InstructionLoader, to load documents of instructions. Now, instructions are saved directly in the packages class.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Installer.Instruction.RootObjectPath">
+            <summary>
+            The xpath to use to get a list of xml element objects that represent each instruction to serialize.
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Installer.Instruction.NativeProcessingFile">
             <summary>
-            A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
+            A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation).
             </summary>
         </member>
         <member name="P:RelhaxModpack.Installer.Instruction.ActualPatchName">
             <summary>
-            the actual name of the original patch before processed
+            the actual name of the original patch before processed.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Installer.Instruction.Package">
+            <summary>
+            Get or set the DatabasePackage that this instruction belongs to.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Installer.Instruction.DumpInfoToLog">
+            <summary>
+            Gets a log formatted string for debugging.
+            </summary>
+            <remarks>If debug output is enabled for the log file during an installation, then each instruction will have it's DumpInfoToLog property called.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Installer.Instruction.InstructionsEqual(RelhaxModpack.Installer.Instruction)">
+            <summary>
+            Compares two instructions to determine if their values are equal.
+            </summary>
+            <param name="instructionToCompare">The instruction to compare against.</param>
+            <returns>True if the compared values are equal, false otherwise.</returns>
+        </member>
+        <member name="T:RelhaxModpack.Installer.InstructionLoader">
+            <summary>
+            The instructionLoader class is for loading instructions from legacy style individual xml documents into a list of Instruction objects.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Installer.InstructionLoader.CreateInstructionsList(System.String,RelhaxModpack.Utilities.Enums.InstructionsType,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Create a list of instructions from xml files in a directory.
+            </summary>
+            <param name="folderPath">The directory path to the location of xml files.</param>
+            <param name="instructionsType">The type of instructions to load.</param>
+            <param name="xmlSearchpath">The xml xpath to use to get the list of xml objects of each instruction xml.</param>
+            <param name="originalPatchNames">A dictionary to serve as a map for each original filename of each xml document.</param>
+            <returns>The loaded list of instructions, or an empty list if no instructions loaded.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Installer.InstructionLoader.AddInstructionObjectsToList(System.String,System.Collections.Generic.List{RelhaxModpack.Installer.Instruction},RelhaxModpack.Utilities.Enums.InstructionsType,System.String)">
+            <summary>
+            Adds instructions to a given Instruction list.
+            </summary>
+            <param name="file">The file that contains instructions to load.</param>
+            <param name="instructions">The instructions list to add loaded instructions to.</param>
+            <param name="instructionsType">The type of instructions to load.</param>
+            <param name="xmlSearchpath">The xml xpath to use to get the list of xml objects of each instruction xml.</param>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.InstructionsType"/>
+            <seealso cref="T:RelhaxModpack.Installer.Instruction"/>
         </member>
         <member name="T:RelhaxModpack.Settings.AutomationRunnerSettings">
             <summary>
@@ -9243,8 +9315,9 @@
             Initialize the logging system for the application
             </summary>
             <param name="logfile">The log file to initialize</param>
-            <param name="verbose">Flag if the logfile will be outputting diagnostic info</param>
+            <param name="verbose">Flag if the logfile will be outputting diagnostic info (only used if beta or alpha build)</param>
             <param name="logfilePath">The custom path of where to initialize the file</param>
+            <param name="logInitFail">If true, show an error message box if the log file fails to initialize.</param>
             <returns>True if successful initialization, false otherwise</returns>
             <remarks>The verbose value will be ignored if the Application is not a beta or alpha build.</remarks>
         </member>
@@ -9347,18 +9420,52 @@
         </member>
         <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.Utilities.Enums.LogOptions,System.String)">
             <summary>
-            Writes an debug level message to the application log
+            Writes a debug level message to the application log
             </summary>
             <param name="options">Log append options to include class name, method name, or both</param>
             <param name="message">The formatted string to be passed into the string.Format() method</param>
         </member>
         <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.Utilities.Enums.LogOptions,System.String,System.Object[])">
             <summary>
-            Writes an debug (info) level message to the application log
+            Writes a debug (info) level message to the application log
             </summary>
             <param name="options">Log append options to include class name, method name, or both</param>
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.Utilities.Enums.Logfiles,System.String)">
+            <summary>
+            Writes a debug level message to a logfile instance.
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="message">The message to write</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.Utilities.Enums.Logfiles,System.String,System.Object[])">
+            <summary>
+            Writes a debug level message to a logfile instance.
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="message">The message to write</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogOptions,System.String)">
+            <summary>
+            Writes a debug level message to a logfile instance.
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="options">The log message options to include with the message.</param>
+            <param name="message">The message to write</param>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.LogOptions"/>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes a debug level message to a logfile instance.
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="options">The log message options to include with the message.</param>
+            <param name="message">The message to write</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.LogOptions"/>
         </member>
         <member name="M:RelhaxModpack.Logging.Info(System.String)">
             <summary>
@@ -9388,6 +9495,40 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
+        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.Utilities.Enums.Logfiles,System.String)">
+            <summary>
+            Writes an information (info) level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="message">The message to write</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.Utilities.Enums.Logfiles,System.String,System.Object[])">
+            <summary>
+            Writes an information (info) level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="message">The message to write</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogOptions,System.String)">
+            <summary>
+            Writes an information (info) level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="options">The log message options to include with the message.</param>
+            <param name="message">The message to write</param>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.LogOptions"/>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes an information (info) level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="options">The log message options to include with the message.</param>
+            <param name="message">The message to write</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.LogOptions"/>
+        </member>
         <member name="M:RelhaxModpack.Logging.Warning(System.String)">
             <summary>
             Writes a warning level message to the application log
@@ -9416,6 +9557,40 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
+        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.Utilities.Enums.Logfiles,System.String)">
+            <summary>
+            Writes a warning level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="message">The message to write</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.Utilities.Enums.Logfiles,System.String,System.Object[])">
+            <summary>
+            Writes a warning level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="message">The message to write</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogOptions,System.String)">
+            <summary>
+            Writes a warning level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="options">The log message options to include with the message.</param>
+            <param name="message">The message to write</param>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.LogOptions"/>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes a warning level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="options">The log message options to include with the message.</param>
+            <param name="message">The message to write</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.LogOptions"/>
+        </member>
         <member name="M:RelhaxModpack.Logging.Error(System.String)">
             <summary>
             Writes an error level message to the application log
@@ -9443,6 +9618,40 @@
             <param name="options">Log append options to include class name, method name, or both</param>
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.Utilities.Enums.Logfiles,System.String)">
+            <summary>
+            Writes an error level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="message">The message to write</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.Utilities.Enums.Logfiles,System.String,System.Object[])">
+            <summary>
+            Writes an error level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="message">The message to write</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogOptions,System.String)">
+            <summary>
+            Writes an error level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="options">The log message options to include with the message.</param>
+            <param name="message">The message to write</param>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.LogOptions"/>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes an error level message to the application log
+            </summary>
+            <param name="logfile">The logfile to write to.</param>
+            <param name="options">The log message options to include with the message.</param>
+            <param name="message">The message to write</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.LogOptions"/>
         </member>
         <member name="M:RelhaxModpack.Logging.Exception(System.String)">
             <summary>
