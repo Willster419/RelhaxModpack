@@ -34,7 +34,6 @@ namespace RelhaxModpack
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     public partial class MainWindow : RelhaxWindow
     {
         #region Variables
@@ -2623,6 +2622,9 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Applies the given FontFamily font type to the window. If the DefaultFontFamily property is null, then the current default value is captured for use in other windows.
+        /// </summary>
         protected override void ApplyFontToWindow()
         {
             if (DefaultFontFamily == null)

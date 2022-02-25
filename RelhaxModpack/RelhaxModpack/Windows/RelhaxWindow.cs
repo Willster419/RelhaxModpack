@@ -56,14 +56,23 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public CommandLineSettings CommandLineSettings { get; set; }
 
+        /// <summary>
+        /// Get or set the default font to use in this window.
+        /// </summary>
         protected FontFamily DefaultFontFamily
         {
             get { return (Application.Current as App).DefaultFontFamily; }
             set { (Application.Current as App).DefaultFontFamily = value; }
         }
 
+        /// <summary>
+        /// Get or set the selected font to use in this window.
+        /// </summary>
         protected FontFamily SelectedFontFamily { get; set; }
 
+        /// <summary>
+        /// Get a list of fonts installed on the system for this window to use.
+        /// </summary>
         protected List<FontFamily> FontList
         { 
             get { return (Application.Current as App).Fonts; }
@@ -187,7 +196,7 @@ namespace RelhaxModpack.Windows
 
         #region Dark theme done in a way that's actually good
         /// <summary>
-        /// Toggle if the application should present in dark theme
+        /// Toggle if the application should use dark theme styles.
         /// </summary>
         public bool DarkTheme
         {
@@ -199,8 +208,23 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        /// <summary>
+        /// Occurs after a property that uses OnPropertyChanged has been set.
+        /// </summary>
+        /// <remarks>At the time of this writing, the only property in RelhaxWindow to use this is the DarkTheme property.</remarks>
+        /// <seealso cref="OnPropertyChanged(string)"/>
+        /// <seealso cref="INotifyPropertyChanged"/>
+        /// <seealso cref="DarkTheme"/>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Called from a property in this class that wants to tell PropertyChanged listeners that it has changed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that has changed.</param>
+        /// <remarks>At the time of this writing, the only property in RelhaxWindow to use this is the DarkTheme property.</remarks>
+        /// <seealso cref="PropertyChanged"/>
+        /// <seealso cref="INotifyPropertyChanged"/>
+        /// <seealso cref="DarkTheme"/>
         protected void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)

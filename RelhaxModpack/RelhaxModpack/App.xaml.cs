@@ -34,8 +34,14 @@ namespace RelhaxModpack
         /// </summary>
         public Ionic.Zip.ZipFile ManagerInfoZipfile;
 
+        /// <summary>
+        /// Get or set the default font to the application to use.
+        /// </summary>
         public FontFamily DefaultFontFamily = null;
 
+        /// <summary>
+        /// Get or set a list of fonts installed on the system for the application to use.
+        /// </summary>
         public List<FontFamily> Fonts = new List<FontFamily>();
 
         //when application is closing (cannot be stopped)
