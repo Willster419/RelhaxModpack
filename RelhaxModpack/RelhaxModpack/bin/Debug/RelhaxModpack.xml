@@ -1458,22 +1458,33 @@
         </member>
         <member name="T:RelhaxModpack.Database.Category">
             <summary>
-            a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
+            a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages.
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.Category.#ctor">
+            <summary>
+            Create an instance of the Category class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.Category.#ctor(RelhaxModpack.Database.Category)">
+            <summary>
+            Create an instance of the Category class, copying the name and OffsetInstallGroups properties.
+            </summary>
+            <param name="categoryToCopy">The category to copy from.</param>
         </member>
         <member name="M:RelhaxModpack.Database.Category.PropertiesForSerializationAttributes">
             <summary>
-            Defines a list of properties in the class to be serialized into xml attributes
+            Defines a list of properties in the class to be serialized into xml attributes.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.Category.PropertiesForSerializationElements">
             <summary>
-            Defines a list of properties in the class to be serialized into xml elements
+            Defines a list of properties in the class to be serialized into xml elements.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.Category.GetXmlDatabasePropertiesV1Dot0">
             <summary>
@@ -1499,86 +1510,147 @@
             <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
             <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
+        <member name="M:RelhaxModpack.Database.Category.OnParsingPropertyToXmlElement(RelhaxModpack.Database.XmlDatabaseProperty,System.Xml.Linq.XElement,System.String,System.Reflection.PropertyInfo,System.Object,System.Xml.Linq.XElement,System.Boolean@)">
+            <summary>
+            A hook from XmlComponent for when an xml entry is being loaded. This can be used to handle custom or one-off conversions to manage any legacy serialization issues (for example, old database formats never had a wrapping "Packages" element).
+            </summary>
+            <param name="thisPropertyXml">The xml database property entry being loaded. For example, the "Packages" list entry.</param>
+            <param name="propertyXmlElement">The xml element entry of the current object being loaded. For example, the "Category" element.</param>
+            <param name="schemaVersion">The version of the schema currently being loaded.</param>
+            <param name="propertyInfo">The info meta-data about the property in the class object to be written to. For example, the "Packages" list property.</param>
+            <param name="valueOfProperty">The current value of the property in the object. For example, this would be the list object of the "Packages" list property.</param>
+            <param name="elementOfProperty">The xml element entry of the property being loaded. For example, the "Packages" xml entry.</param>
+            <param name="continueProcessingProperty">A flag used back in XmlComponent if the current xml element to load (like "Packages") should continue to be loaded by XmlComponent.</param>
+            <seealso cref="M:RelhaxModpack.Database.XmlComponent.OnParsingPropertyToXmlElement(RelhaxModpack.Database.XmlDatabaseProperty,System.Xml.Linq.XElement,System.String,System.Reflection.PropertyInfo,System.Object,System.Xml.Linq.XElement,System.Boolean@)"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.Category.OnParsingPropertyFromXmlElement(RelhaxModpack.Database.XmlDatabaseProperty,System.Xml.Linq.XElement,System.String,System.Reflection.PropertyInfo,System.Object,System.Xml.Linq.XElement,System.Boolean@)">
+            <summary>
+            A hook from XmlComponent for when an xml entry is being saved. This can be used to handle custom or one-off conversions to manage any legacy serialization issues (for example, old database formats never had a wrapping "Packages" element).
+            </summary>
+            <param name="thisPropertyXml">The xml database property entry being saved. For example, the "Packages" list entry.</param>
+            <param name="propertyXmlElement">The xml element entry of the current object being saved. For example, the "Category" element.</param>
+            <param name="schemaVersion">The version of the schema currently being saved.</param>
+            <param name="propertyInfo">The info meta-data about the property in the class object to be read from. For example, the "Packages" list property.</param>
+            <param name="valueOfProperty">The current value of the property in the object. For example, this would be the list object of the "Packages" list property.</param>
+            <param name="elementOfProperty">The xml element entry of the property being saved. For example, the "Packages" xml entry.</param>
+            <param name="continueProcessingProperty">A flag used back in XmlComponent if the current xml element to save (like "Packages") should continue to be saved by XmlComponent.</param>
+            <seealso cref="M:RelhaxModpack.Database.XmlComponent.OnParsingPropertyFromXmlElement(RelhaxModpack.Database.XmlDatabaseProperty,System.Xml.Linq.XElement,System.String,System.Reflection.PropertyInfo,System.Object,System.Xml.Linq.XElement,System.Boolean@)"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.Category.OnFinishedLoadingFromXml(System.Xml.Linq.XElement,System.Boolean)">
+            <summary>
+            A hook from XmlComponent for when an xml entry is finished being loaded into an object.
+            </summary>
+            <param name="propertyElement">The xml element of the entry being loaded. For example, the "Category" xml element.</param>
+            <param name="loadStatus">The status of the loading of this object, if all properties of it were previously loaded correctly.</param>
+        </member>
         <member name="P:RelhaxModpack.Database.Category.Name">
             <summary>
-            The category name displayed to the user in the selection list
+            The category name displayed to the user in the selection list.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Category.XmlFilename">
             <summary>
-            The xml filename of this category. Used in database structure V2
+            The xml filename of this category. Used in database structure V2.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Category.OffsetInstallGroups">
             <summary>
-            Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree
+            Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Category.Packages">
             <summary>
-            The list of packages contained in this category
+            The list of packages contained in this category.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Category.ComponentInternalName">
             <summary>
-            When a databasePackage, the internal packageName. When category, the category name
+            When a databasePackage, the internal packageName. When category, the category name.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Category.Dependencies">
             <summary>
-            List of dependencies of this category (Any package selected in this category needs these dependencies)
+            List of dependencies of this category (Any package selected in this category needs these dependencies).
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Category.TabPage">
             <summary>
-            The TabItem object reference
+            The TabItem object reference.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Category.CategoryHeader">
             <summary>
-            The package created at selection list building that represents the header of this category
+            The package created at selection list building that represents the header of this category.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Database.Category.EditorTreeViewItem">
+        <member name="P:RelhaxModpack.Database.Category.DatabaseManager">
             <summary>
-            Reference for the UI element of this package in the database editor
+            The DatabaseManager object being used to load and save the category entry.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.Category.CompareCatagories(RelhaxModpack.Database.Category,RelhaxModpack.Database.Category)">
             <summary>
             Sorts the Categories by their name property. Currently not implemented.
             </summary>
-            <param name="x">The first Category to compare</param>
-            <param name="y">The second Category to compare</param>
-            <returns>1 if y is later in the alphabet, 0 if equal, -1 else</returns>
+            <param name="x">The first Category to compare.</param>
+            <param name="y">The second Category to compare.</param>
+            <returns>1 if y is later in the alphabet, 0 if equal, -1 else.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.Category.ToString">
             <summary>
-            Output the object to a string representation
+            Output the object to a string representation.
             </summary>
-            <returns>The name of the category</returns>
+            <returns>The name of the category.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.Category.GetFlatPackageList">
             <summary>
-            Returns a single depth (flat) list of packages in the category. Leveling is preserved (a sub-package will be directly below the parent in the list)
+            Returns a single depth (flat) list of packages in the category. Leveling is preserved (a sub-package will be directly below the parent in the list).
             </summary>
-            <returns>The list of packages</returns>
+            <returns>The list of packages.</returns>
+            <remarks>Does not include getting the Category's SelectablePackage header.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.Category.AnyPackagesChecked">
             <summary>
-            Check if any packages in this category are selected for install
+            Check if any packages in this category are selected for install.
             </summary>
-            <returns>Try if any package is selected, false otherwise</returns>
+            <returns>Try if any package is selected, false otherwise.</returns>
+            <remarks>Does not include checking the Category's SelectablePackage header.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.Category.IsAnyPackageCheckedEnabled">
             <summary>
-            Returns true if at least one package is enabled and checked from the first level of packages in the category
+            Returns true if at least one package is enabled and checked from the first level of packages in the category.
             </summary>
+            <returns>True if any packages in this category are checked and enabled, false otherwise.</returns>
+            <remarks>Does not include checking the Category's SelectablePackage header.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.Category.IsAnyPackageCheckedEnabledVisible">
             <summary>
-            Returns true if at least one package is enabled and checked and visible from the first level of packages in the category
+            Returns true if at least one package is enabled and checked and visible from the first level of packages in the category.
             </summary>
+            <returns>True if at least one package is checked, enabled and visible, false otherwise.</returns>
+            <remarks>Does not include checking the Category's SelectablePackage header.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.Category.ProcessPackages">
+            <summary>
+            Performs reference linking code for each entry in the database, so that using Parent properties (for example) can allow traversal around the package tree of this category.
+            </summary>
+            <remarks>As of this writing, it links the Parent, TopParent, ParentCategory and sets the level of the package in the tree.</remarks>
+        </member>
+        <member name="T:RelhaxModpack.Database.ConflictingPackage">
+            <summary>
+            Represents an entry for a package that conflicts with another package in the database where both options cannot be selected at the same time.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.ConflictingPackage.#ctor">
+            <summary>
+            Create an instance of the ConflictingPackage class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.ConflictingPackage.#ctor(RelhaxModpack.Database.ConflictingPackage)">
+            <summary>
+            Create an instance of the ConflictingPackage class based on values from a given entry to copy.
+            </summary>
+            <param name="conflictingPackageToCopy">The entry to copy.</param>
         </member>
         <member name="M:RelhaxModpack.Database.ConflictingPackage.GetXmlDatabasePropertiesV1Dot0">
             <summary>
@@ -1604,24 +1676,63 @@
             <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
             <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
-        <member name="P:RelhaxModpack.Database.ConflictingPackage.PackageName">
+        <member name="P:RelhaxModpack.Database.ConflictingPackage.ConflictingPackageName">
             <summary>
-            The name of the package that *this* package is dependent on
+            The name of the package that conflicts with this package.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Database.ConflictingPackage.PackageUID">
+        <member name="P:RelhaxModpack.Database.ConflictingPackage.ConflictingPackageUID">
             <summary>
-            The UID of the package that *this* package is dependent on
+            The UID of the package that conflicts with this package.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.ConflictingPackage.ConflictingSelectablePackage">
+            <summary>
+            The reference to the package that conflicts with this package.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.ConflictingPackage.ParentSelectablePackage">
+            <summary>
+            The reference package that this conflicting package entry belongs to.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.ConflictingPackage.IsEqual(RelhaxModpack.Database.ConflictingPackage)">
+            <summary>
+            Determines if two entries are equal by comparing the package name and UID values.
+            </summary>
+            <param name="packageToCompare">The package to compare.</param>
+            <returns>True if the entires contain the same values, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.ConflictingPackage.ToString">
+            <summary>
+            Provide a string representation of the entry.
+            </summary>
+            <returns>The string representation of the entry, containing the entry's conflicting package name and UID</returns>
+        </member>
+        <member name="T:RelhaxModpack.Database.CoreDatabaseComponent">
+            <summary>
+            A CoreDatabaseComponent class is an XmlComponent to be saved/loaded to/from xml, but contains a list of maintainers of that component.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.CoreDatabaseComponent.#ctor">
+            <summary>
+            Create an instance of the CoreDatabaseComponent class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.CoreDatabaseComponent.#ctor(RelhaxModpack.Database.CoreDatabaseComponent)">
+            <summary>
+            Create an instance of the CoreDatabaseComponent class with copying a list of maintainers from a component to copy.
+            </summary>
+            <param name="componentToCopy">The component to copy.</param>
         </member>
         <member name="P:RelhaxModpack.Database.CoreDatabaseComponent.EditorTreeViewItem">
             <summary>
-            Reference for the UI element of this package in the database editor
+            Reference for the UI element of this package in the database editor.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.CoreDatabaseComponent.Maintainers">
             <summary>
-            A list of database managers who are known to maintain this component
+            A list of database managers who are known to maintain this component.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.CoreDatabaseComponent.ComponentInternalName">
@@ -1632,7 +1743,7 @@
         </member>
         <member name="P:RelhaxModpack.Database.CoreDatabaseComponent.MaintainersList">
             <summary>
-            Returns a list database managers who are known to maintain this component
+            Returns a list database managers who are known to maintain this component.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.CoreDatabaseComponent.GetXmlDatabasePropertiesV1Dot0">
@@ -1651,123 +1762,400 @@
             <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
             <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
+        <member name="T:RelhaxModpack.Database.DatabaseManager">
+            <summary>
+            Provides methods for loading and saving xml component objects to and from xml database files.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Database.DatabaseManager.LogicTracking">
             <summary>
-            A structure used to keep a reference of a component and a dependency that it calls
+            A structure used to keep a reference of a component and a dependency that it calls.
             </summary>
-            <remarks>This is used to determine if any packages call any dependencies who's packageName does not exist in the database</remarks>
+            <remarks>This is used to determine if any packages call any dependencies who's packageName does not exist in the database.</remarks>
         </member>
         <member name="F:RelhaxModpack.Database.DatabaseManager.LogicTracking.ComponentWithDependencies">
             <summary>
-            The database component what has dependencies
+            The database component what has dependencies.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.DatabaseManager.LogicTracking.DatabaseLogic">
             <summary>
-            The called dependency from the component
+            The called dependency from the component.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Database.DatabaseManager.DocumentVersion1V1">
+            <summary>
+            The document version 1.1 string.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Database.DatabaseManager.DocumentVersion1V2">
+            <summary>
+            The document version 1.2 string.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Database.DatabaseManager.LatestSchema">
+            <summary>
+            The current latest used schema.
+            </summary>
+            <seealso cref="F:RelhaxModpack.Database.XmlComponent.SchemaV1Dot2"/>
+        </member>
+        <member name="F:RelhaxModpack.Database.DatabaseManager.WoTClientVersionXmlString">
+            <summary>
+            The xml attribute used in the root database xml file to determine which version of WoT this database is compatible with.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Database.DatabaseManager.WoTOnlineFolderVersionXmlString">
+            <summary>
+            The xml attribute used in the root database xml file to determine which online FTP folder this database should use.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Database.DatabaseManager.DocumentVersionXmlString">
+            <summary>
+            The xml attribute used in the root database xml file to determine what version format the database is in.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Database.DatabaseManager.SchemaVersionXmlString">
+            <summary>
+            The xml attribute used in the root database xml file to determine what schema version the database is using for each xml component.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseManager.ParsedCategoryList">
             <summary>
-            The list of categories
+            The list of categories.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseManager.GlobalDependencies">
             <summary>
-            The list of global dependencies
+            The list of global dependencies.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseManager.Dependencies">
             <summary>
-            The list of dependencies
+            The list of dependencies.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.DatabaseRootXmlDocument">
+            <summary>
+            The reference to the loaded root document object of the database.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.WoTClientVersion">
+            <summary>
+            The parsed version of the WoT client that this database is compatible with.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.WoTOnlineFolderVersion">
+            <summary>
+            The parsed name of the online folder that this database should use for downloading packages.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.DocumentVersion">
+            <summary>
+            The parsed version format of the database xml.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.SchemaVersion">
+            <summary>
+            The parsed schema version format of the database xml.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseManager.ModpackSettings">
             <summary>
-            A reference to the modpack settings window configuration class
+            A reference to the modpack settings window configuration class.
             </summary>
+            <remarks>This is used for determining the version of the database to load (stable or beta), and if beta, the branch to use for loading it.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.CommandLineSettings">
+            <summary>
+            A reference to the command line settings configuration class.
+            </summary>
+            <remarks>This is used for determining if the database to be loaded is in 'test mode'.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.ManagerInfoZipfile">
+            <summary>
+            The manager info data file downloaded on application startup.
+            </summary>
+            <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.ManagerVersion"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.DatabaseDistroToLoad">
+            <summary>
+            The version of the database to load, or has been loaded.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.DependenciesToInstall">
+            <summary>
+            The list of dependencies calculated to install.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.PackagesToInstall">
+            <summary>
+            The list of packages to install, including dependencies and user selected packages, and excluding packages if a minimal install is set from ModpackSettings.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.SelectablePackagesToInstall">
+            <summary>
+            The list of user selected packages to install, including dependencies and user selected packages, and excluding packages if a minimal install is set from ModpackSettings.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.PackagesToInstallWithZipFile">
+            <summary>
+            The list of packages to install that have a zip file.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
+            <seealso cref="P:RelhaxModpack.Database.DatabaseManager.PackagesToInstall"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.SelectablePackagesToInstallWithZipFiles">
+            <summary>
+            The list of user selected packages to install that have a zip file.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
+            <seealso cref="P:RelhaxModpack.Database.DatabaseManager.SelectablePackagesToInstall"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.PackagesToDownload">
+            <summary>
+            The list of packages to install that have zip files, that need to be downloaded.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
+            <seealso cref="P:RelhaxModpack.Database.DatabaseManager.PackagesToInstallWithZipFile"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.PackagesToInstallByInstallGroup">
+            <summary>
+            The list of packages to install (that is, those with zip files), sorted into their install groups.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.PackagesToInstallWithTriggers">
+            <summary>
+            The list of packages to install that have triggers.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
+            <seealso cref="P:RelhaxModpack.Database.DatabaseManager.PackagesToInstall"/>
+            <seealso cref="T:RelhaxModpack.Database.Trigger"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.PatchesToInstall">
+            <summary>
+            The list of patch operations to perform after package extraction and xml unpack operations.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.XmlUnpacksToInstall">
+            <summary>
+            The list of xml unpack operations to perform after package extraction.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.ShortcutsToInstall">
+            <summary>
+            The list of shortcuts creation operations to perform after package extraction.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.AtlasesToInstall">
+            <summary>
+            The list of atlas creation operations to perform after package extraction.
+            </summary>
+            <remarks>This is done by running the method to calculate what packages need to be installed.</remarks>
+            <seealso cref="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)"/>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
-            Creates an instance of the RelhaxWindow class
+            Creates an instance of the DatabaseManager class.
             </summary>
+            <param name="modpackSettings">The reference to the modpack settings class.</param>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Settings.CommandLineSettings)">
             <summary>
-            Creates an instance of the RelhaxWindow class
+            Creates an instance of the DatabaseManager class.
             </summary>
+            <param name="modpackSettings">The reference to the modpack settings class.</param>
+            <param name="commandLineSettings">The reference to the command line settings class.</param>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.#ctor">
             <summary>
-            Creates an instance of the RelhaxWindow class
+            Creates an instance of the DatabaseManager class.
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.LoadDatabaseAsync(RelhaxModpack.Utilities.Enums.DatabaseVersions,System.String,System.String)">
+            <summary>
+            Loads and parses a database into the DatabaseManager.
+            </summary>
+            <param name="databaseDistroToLoad">The distribution (stable, beta or test) of the database to load.</param>
+            <param name="locationToLoadFrom">The path (url or folder) to load the database files from.</param>
+            <param name="betaDatabaseBranch">If loading the beta database, the github branch to use for loading the database.</param>
+            <returns>The status enumeration code of the operation.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.LoadDatabaseTestAsync(System.String)">
             <summary>
-            Load a test database from the specified location, including the root filename
+            Load a test database from the specified location, including the root filename.
             </summary>
-            <param name="locationToLoadFrom">The path to the root xml file</param>
-            <returns>The status enumeration code of the operation</returns>
+            <param name="locationToLoadFrom">The path to the root xml file.</param>
+            <returns>The status enumeration code of the operation.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.LoadDatabaseDistroAsync(RelhaxModpack.Utilities.Enums.DatabaseVersions)">
+            <summary>
+            Loads and parses a database into the DatabaseManager.
+            </summary>
+            <param name="databaseDistroToLoad">The distribution (stable, beta or test) of the database to load.</param>
+            <returns>The status enumeration code of the operation.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.LoadDatabaseAsync">
+            <summary>
+            Loads and parses a database into the DatabaseManager
+            </summary>
+            <returns>The status enumeration code of the operation.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.LoadDatabaseStableSpecificClientAsync(System.String)">
+            <summary>
+            Loads and parses the stable database of a specific client version to the DatabaseManager.
+            </summary>
+            <param name="clientVersion">The version of the client to try to load. This should correspond to the value of what is in the desired database's version.</param>
+            <returns>Returns DatabaseLoadFailCode.None</returns>
+            <remarks>This is used in the ModpackToolbox for getting a list of all packages that correspond to a WoT version. It shouldn't be used for any generic purpose.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.LoadDatabaseCustomFromStringsAsync(System.Xml.XmlDocument,System.String,System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Loads and parses a database from xml strings into the DatabaseManager.
+            </summary>
+            <param name="rootDocument">The xml document object of the root document.</param>
+            <param name="globalDependenciesXml">The xml string of the global dependencies document.</param>
+            <param name="dependneciesXml">The xml string of the dependencies document.</param>
+            <param name="categoriesXml">The list of xml strings of each category document</param>
+            <returns>Returns DatabaseLoadFailCode.None</returns>
+            <remarks>This is used in the ModpackToolbox for a developer purpose. It shouldn't be used for any generic purpose.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.LoadWoTVersionInfoFromXmlDocumentAsync(RelhaxModpack.Utilities.Enums.DatabaseVersions,System.String)">
+            <summary>
+            Loads the database root document into the DatabaseManager
+            </summary>
+            <param name="databaseDistroToLoad">The distribution of the database to load.</param>
+            <param name="locationToLoadFrom">If loading a test distribution, the location to the xml file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.GetBetaDatabase1V1FilesListAsync">
+            <summary>
+            Gets the direct download links to each beta database xml file from a given branch specified in the ModpackSettings instance.
+            </summary>
+            <returns>A list of direct download links for each xml document of the beta database.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.ParseDatabase1V1FromFiles">
             <summary>
-            Parse a database into the version 1.1 format from files on the disk
+            Parse a database into the version 1.1 format from files on the disk.
             </summary>
+            <returns>True if the parsing was successful, false otherwise.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.ParseDatabase1V1FromStrings(System.String,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
             <summary>
-            Parse a database into version 1.1 from string representations of the Xml files
+            Parse a database into version 1.1 from string representations of the Xml files.
             </summary>
-            <param name="globalDependenciesXml">The Xml string of the global dependencies document</param>
-            <param name="dependneciesXml">The Xml string of the dependencies document</param>
-            <param name="categoriesXml">The list of Xml strings of the categories document</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns></returns>
+            <param name="globalDependenciesXml">The Xml string of the global dependencies document.</param>
+            <param name="dependneciesXml">The Xml string of the dependencies document.</param>
+            <param name="categoriesXml">The list of Xml strings of the categories document.</param>
+            <param name="globalDependencies">The list of global dependencies.</param>
+            <param name="dependencies">The list of dependencies.</param>
+            <param name="parsedCategoryList">The list of categories.</param>
+            <returns>True if the parsing was successful, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.ParseDatabase(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Parse a database into the DatabaseManager from the xml object files.
+            </summary>
+            <param name="globalDependenciesDoc">The xml object of global dependencies.</param>
+            <param name="globalDependenciesList">The list of global dependencies to populate.</param>
+            <param name="dependenciesDoc">The xml object of dependencies.</param>
+            <param name="dependenciesList">The list of dependencies to populate.</param>
+            <param name="categoryDocuments">The list of xml objects of each category.</param>
+            <param name="parsedCategoryList">The list of categories to populate.</param>
+            <returns>True if the parsing was successful, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.ParseDatabase1V2(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Parse a database of format v1.2 into the DatabaseManager from the xml object files.
+            </summary>
+            <param name="globalDependenciesDoc">The xml object of global dependencies.</param>
+            <param name="globalDependenciesList">The list of global dependencies to populate.</param>
+            <param name="dependenciesDoc">The xml object of dependencies.</param>
+            <param name="dependenciesList">The list of dependencies to populate.</param>
+            <param name="categoryDocuments">The list of xml objects of each category.</param>
+            <param name="parsedCategoryList">The list of categories to populate.</param>
+            <returns>True if the parsing was successful, false otherwise.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.ParseDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
             <summary>
-            Parse a database into version 1.1 from XDocument objects
+            Parse a database of format 1.1 into the DatabaseManager from the xml object files.
             </summary>
-            <param name="globalDependenciesDoc">The Xml document of global dependencies</param>
-            <param name="globalDependenciesList">The list of global dependencies</param>
-            <param name="dependenciesDoc">The Xml document of dependencies</param>
-            <param name="dependenciesList">The list of dependencies</param>
-            <param name="categoryDocuments">The list of xml documents of the category Xml documents</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns></returns>
+            <param name="globalDependenciesDoc">The xml object of global dependencies.</param>
+            <param name="globalDependenciesList">The list of global dependencies to populate.</param>
+            <param name="dependenciesDoc">The xml object of dependencies.</param>
+            <param name="dependenciesList">The list of dependencies to populate.</param>
+            <param name="categoryDocuments">The list of xml objects of each category.</param>
+            <param name="parsedCategoryList">The list of categories to populate.</param>
+            <returns>True if the parsing was successful, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabase(System.String,System.String,System.String)">
+            <summary>
+            Save the database to a given location on disk.
+            </summary>
+            <param name="saveLocation">The folder path to save the xml documents to.</param>
+            <param name="documentVersion">The version format of the xml documents to save.</param>
+            <param name="schemaVersion">The schema version format (if the document version supports it) of the properties of xml documents to save.</param>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabase(System.String,System.String)">
             <summary>
-            Save the database to an Xml version format
+            Save the database to an Xml version format.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabase1V1(System.String)">
             <summary>
-            Save the database to the Xml version 1.1 standard
+            Save the database to the Xml version 1.1 standard.
             </summary>
-            <param name="savePath">The path to save all the xml files to</param>
+            <param name="savePath">The path to save all the xml files to.</param>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabaseList1V1(System.Collections.IList,System.Xml.XmlElement,System.Xml.XmlDocument,System.String)">
             <summary>
-            Saves a list of packages to a document
+            Saves a list of packages to a document using the document format version 1.1
             </summary>
             <param name="packagesToSave">The generic list of packages to save</param>
             <param name="documentRootElement">The element that will be holding this list</param>
             <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
             <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
         </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessDatabase">
+            <summary>
+            Perform any database post-load processing (such as performing reference linking of packages, conflicts, etc).
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessDependencyPackageRefrences">
             <summary>
             Links the databasePackage objects with dependencies objects to have those objects link references to the parent and the dependency object
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.CalculateInstallLists(System.Boolean,System.Boolean)">
+            <summary>
+            Run calculations on package list components to determine what packages, features, etc get included for an installation operation.
+            </summary>
+            <param name="suppressFrequentDependencyCalculationMessages">If true, will suppress some dependency calculation messages.</param>
+            <param name="showDependencyCalculationErrorMessages">If true, will show some dependency error calculation messages (some are always shown).</param>
+        </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.CalculateDependencies(System.Boolean,System.Boolean)">
             <summary>
-            Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
+            Calculates what dependencies should be installed given a user's selection (and other recursive dependency calculations).
             </summary>
-            <param name="suppressSomeLogging">Flag for it some of the more verbose logging should be suppressed</param>
+            <param name="suppressSomeLogging">If true, will suppress some dependency calculation messages.</param>
+            <param name="showDependencyCalculationErrorMessages">If true, will show some dependency error calculation messages (some are always shown).</param>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.CreateOrderedInstallList(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage})">
             <summary>
@@ -1775,6 +2163,20 @@
             </summary>
             <param name="packagesToInstallWithZipfile"></param>
             <returns>The array of DatabasePackage lists</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.GetSelectablePackageByUid(System.String)">
+            <summary>
+            Find a SelectablePackage in the list of loaded packages by searching for its UID.
+            </summary>
+            <param name="targetUid">The UID of the package to find.</param>
+            <returns>The package if found, otherwise null.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.GetSelectablePackageByPackageName(System.String)">
+            <summary>
+            Find a SelectablePackage in the list of loaded packages by searching for its package name (PackageName, not user display name).
+            </summary>
+            <param name="targetPackageName">The package name of the package to find.</param>
+            <returns>The package if found, otherwise null.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.GetMaxInstallGroupNumber">
             <summary>
@@ -1847,22 +2249,22 @@
         </member>
         <member name="T:RelhaxModpack.Database.IDatabaseComponent">
             <summary>
-            An interface for all components in the database
+            An interface for all components in the database.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.IDatabaseComponent.EditorTreeViewItem">
             <summary>
-            Reference for the UI element of this package in the database editor
+            Reference for the UI element of this package in the database editor.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.IDatabaseComponent.Maintainers">
             <summary>
-            A list of database managers who are known to maintain this component
+            A list of database managers who are known to maintain this component.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.IDatabaseComponent.MaintainersList">
             <summary>
-            Returns a list of database managers who are known to maintain this component
+            Returns a list of database managers who are known to maintain this component.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Database.Logic">
@@ -1885,19 +2287,36 @@
             Used for database dependency calculation. Determines what dependent packages use the package that this object is attached to
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Database.DatabaseLogic.#ctor">
+            <summary>
+            Create an instance of the DatabaseLogic class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseLogic.#ctor(RelhaxModpack.Database.DatabaseLogic)">
+            <summary>
+            Create an instance of the DatabaseLogic class, copying values from a given DatabaseLogic object.
+            </summary>
+            <param name="databaseLogicToCopy">The DatabaseLogic object to copy values from</param>
+        </member>
         <member name="M:RelhaxModpack.Database.DatabaseLogic.PropertiesForSerializationAttributes">
             <summary>
-            Defines a list of properties in the class to be serialized into xml attributes
+            Defines a list of properties in the class to be serialized into xml attributes.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseLogic.PropertiesForSerializationElements">
             <summary>
-            Defines a list of properties in the class to be serialized into xml elements
+            Defines a list of properties in the class to be serialized into xml elements.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Database.DatabaseLogic.XmlElementName">
+            <summary>
+            For some xml schema versions, the actual name of the xml entry used for this property.
+            </summary>
+            <remarks>A DatabaseLogic is used for dependency calculation to determine based on what the user selected for packages to install, what dependent packages also need to be installed.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseLogic.GetXmlDatabasePropertiesV1Dot0">
             <summary>
@@ -1923,65 +2342,72 @@
             <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
             <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
+        <member name="M:RelhaxModpack.Database.DatabaseLogic.GetXmlElementName(System.String)">
+            <summary>
+            Gets the xml element name that should be used for saving and loading this component, based on the schema to load/save.
+            </summary>
+            <param name="schemaVersion">The schema version to load/save.</param>
+            <returns>The name of the xml element to use for saving/loading this component.</returns>
+        </member>
         <member name="P:RelhaxModpack.Database.DatabaseLogic.PackageName">
             <summary>
-            The name of the package that *this* package is dependent on
+            The name of the package that *this* package is dependent on.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseLogic.PackageUID">
             <summary>
-            The UID of the package that *this* package is dependent on
+            The UID of the package that *this* package is dependent on.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseLogic.WillBeInstalled">
             <summary>
-            Flag to determine if this package will be installed
+            Flag to determine if this package will be installed.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseLogic.NotFlag">
             <summary>
-            Flag for negating the "AND" and "OR" logic (Creates "NAND" and "NOR") of how to install the attach object
+            Flag for negating the "AND" and "OR" logic (Creates "NAND" and "NOR") of how to install the attach object.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseLogic.Logic">
             <summary>
-            The logic type to use for this package definition
+            The logic type to use for this package definition.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseLogic.RefrenceLinked">
             <summary>
-            A flag for dependency calculation for when the application has linked the dependnecy refrence
+            A flag for dependency calculation for when the application has linked the dependency reference
             </summary>
-            <remarks>During dependnecy calcuation, the application will 'link' the refrenced dependencies in a package
-            to the refrenced dependency. This allows for the application to process dependency calcuation logic in a dynamic
-            AND and OR system. Having the flag can help to determine if a refrence does not exist</remarks>
+            <remarks>During dependency calculation, the application will 'link' the referenced dependencies in a package
+            to the referenced dependency. This allows for the application to process dependency calculation logic in a dynamic
+            AND and OR system. Having the flag can help to determine if a reference does not exist</remarks>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseLogic.ParentPackageRefrence">
             <summary>
-            Gets or sets a refrence to the parent package this dependency came from
+            Gets or sets a reference to the parent package this dependency came from.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseLogic.DependencyPackageRefrence">
             <summary>
-            Gets or sets a reference to the dependency object that this databaseLogic object links to
+            Gets or sets a reference to the dependency object that this databaseLogic object links to.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseLogic.ToString">
             <summary>
-            String representation of the object
+            String representation of the object.
             </summary>
-            <returns>The name of the package this object attaches to</returns>
+            <returns>The name of the package this object attaches to.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseLogic.Copy(RelhaxModpack.Database.DatabaseLogic)">
             <summary>
-            Create a copy of the given DatabaseLogic object
+            Create a copy of the given DatabaseLogic object.
             </summary>
-            <param name="databaseLogicToCopy">The object to copy</param>
-            <returns>A new DatabaseLogic object with the same values</returns>
+            <param name="databaseLogicToCopy">The object to copy.</param>
+            <returns>A new DatabaseLogic object with the same values.</returns>
         </member>
         <member name="T:RelhaxModpack.Database.DatabasePackage">
             <summary>
-            A database component is the base class for all other packages
+            A database component is the base class (that can be instanced) for all other packages. It represents an object in the database..
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.DatabasePackage.#ctor">
@@ -1991,23 +2417,33 @@
         </member>
         <member name="M:RelhaxModpack.Database.DatabasePackage.#ctor(RelhaxModpack.Database.DatabasePackage)">
             <summary>
-            Creates an instance of the DatabasePackage class based on the provided DatabasePackage
+            Creates an instance of the DatabasePackage class based on the provided DatabasePackage.
             </summary>
-            <param name="packageToCopy">The package to copy the information from</param>
+            <param name="packageToCopy">The package to copy the information from.</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.InitComponent">
+            <summary>
+            Called from the constructor, handles any object initialization that should be done.
+            </summary>
         </member>
         <member name="M:RelhaxModpack.Database.DatabasePackage.PropertiesForSerializationAttributes">
             <summary>
-            Defines a list of properties in the class to be serialized into xml attributes
+            Defines a list of properties in the class to be serialized into xml attributes.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.DatabasePackage.PropertiesForSerializationElements">
             <summary>
-            Defines a list of properties in the class to be serialized into xml elements
+            Defines a list of properties in the class to be serialized into xml elements.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Database.DatabasePackage.XmlElementName">
+            <summary>
+            For some xml schema versions, the actual name of the xml entry used for this property.
+            </summary>
         </member>
         <member name="M:RelhaxModpack.Database.DatabasePackage.GetXmlDatabasePropertiesV1Dot0">
             <summary>
@@ -2033,15 +2469,29 @@
             <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
             <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.GetXmlElementName(System.String)">
+            <summary>
+            Gets the xml element name that should be used for saving and loading this component, based on the schema to load/save.
+            </summary>
+            <param name="schemaVersion">The schema version to load/save.</param>
+            <returns>The name of the xml element to use for saving/loading this component.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.OnFinishedLoadingFromXml(System.Xml.Linq.XElement,System.Boolean)">
+            <summary>
+            A hook from XmlComponent for when an xml entry is finished being loaded into an object.
+            </summary>
+            <param name="propertyElement">The xml element of the entry being loaded. For example, the "DatabasePackage" xml element.</param>
+            <param name="loadStatus">The status of the loading of this object, if all properties of it were previously loaded correctly.</param>
+        </member>
         <member name="M:RelhaxModpack.Database.DatabasePackage.AttributesToXmlParseSelectionFiles">
             <summary>
-            Gets a list of property names that are used for saving/loading the selection V3 file format
+            Gets a list of property names that are used for saving/loading the selection V3 file format.
             </summary>
-            <returns></returns>
+            <returns>The string array of property attributes to save for a v3 selection file.</returns>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.PackageName">
             <summary>
-            A unique identifier for each component in the database. No two components will have the same PackageName
+            A unique identifier for each component in the database. No two components will have the same PackageName.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.UID">
@@ -2053,103 +2503,103 @@
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.Version">
             <summary>
-            A method to keep track of the version of the package
+            A method to keep track of the version of the package.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.Timestamp">
             <summary>
-            Used to determine when the package entry was last modified
+            Used to determine when the package entry was last modified.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.LastUpdateCheck">
             <summary>
-            Used to determine when the last automation or human check for an update was completed
+            Used to determine when the last automation or human check for an update was completed.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.Size">
             <summary>
-            Size of the zip file
+            Size of the zip file.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.ZipFile">
             <summary>
-            The zip file to extract (can be empty string)
+            The zip file to extract (can be empty string).
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.DatabasePackage._Enabled">
             <summary>
-            Internal field for Enabled property
+            Internal field for Enabled property.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.Enabled">
             <summary>
-            Determines if the component is enabled or disabled
+            Determines if the component is enabled or disabled.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.CRC">
             <summary>
-            The crc checksum of the zipfile
+            The crc checksum of the zipfile.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.DownloadFlag">
             <summary>
-            Determine at install time if the package needs to be downloaded
+            Determine at install time if the package needs to be downloaded.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.ReadyForInstall">
             <summary>
-            Determine if the mod has been downloaded and is ready for installation
+            Determine if the mod has been downloaded and is ready for installation.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.LogAtInstall">
             <summary>
-            Determine if the files from the package should be logged for un-installation
-            only set this to false if absolutely necessary!
+            Determine if the files from the package should be logged for un-installation.
             </summary>
+            <remarks>Only set this to false if absolutely necessary!</remarks>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.Triggers">
             <summary>
-            The list of triggers that this package can start (list of triggers that apply to this package)
+            The list of triggers that this package can start (list of triggers that apply to this package).
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.TriggersList">
             <summary>
-            Returns a list of triggers that this component can start
+            Returns a list of triggers that this component can start.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.DevURL">
             <summary>
-            The URL link of where you can view the web page of the mod
+            The URL link of where you can view the web page of the package.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.DevURLList">
             <summary>
-            Gets an array of dev URLs, separated by the newline character
+            Gets an array of dev URLs, separated by the newline character.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.InstallGroup">
             <summary>
-            The level at which this package can be installed. It will be installed with other packages of the same install group at the same time
+            The level at which this package can be installed. It will be installed with other packages of the same install group at the same time.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.InstallGroupWithOffset">
             <summary>
-            The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level
+            The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.PatchGroup">
             <summary>
-            The level at which the patches for this package can be installed. Patches will be executed with other patches of the same patch group
+            The level at which the patches for this package can be installed. Patches will be executed with other patches of the same patch group.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.InternalNotes">
             <summary>
-            Internal instructions for updating the mod for database managers
+            Internal instructions for updating the mod for database managers.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.InternalNotesEscaped">
             <summary>
-            An escaped version of the internal notes. Replaces '\n' literal with '\n' special
+            An escaped version of the internal notes. Replaces '\n' literal with '\n' special.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.Author">
@@ -2159,7 +2609,7 @@
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.Tags">
             <summary>
-            The list of tags that this package contains (like patches, scripts, etc)
+            The list of tags that this package contains (like patches, scripts, etc).
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.Deprecated">
@@ -2173,73 +2623,119 @@
             </summary>
             <seealso cref="F:RelhaxModpack.Settings.ModpackSettings.MinimalistMode"/>
         </member>
-        <member name="P:RelhaxModpack.Database.DatabasePackage.EditorTreeViewItem">
+        <member name="P:RelhaxModpack.Database.DatabasePackage.Patches">
             <summary>
-            Reference for the UI element of this package in the database editor
+            Get or set a list of patch instructions to perform after extraction of this package.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabasePackage.XmlUnpacks">
+            <summary>
+            Get or set a list of xml unpack instructions to perform after extraction of this package.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabasePackage.Atlases">
+            <summary>
+            Get or set a list of atlas creation instructions to perform after extraction of this package.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabasePackage.Shortcuts">
+            <summary>
+            Get or set a list of shortcut creation instructions to perform after extraction of this package.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.ComponentInternalName">
             <summary>
-            When a databasePackage, the internal packageName. When category, the category name
+            When a databasePackage, the internal packageName. When category, the category name.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.DatabasePackage.ToString">
             <summary>
-            String representation of the object
+            String representation of the object.
             </summary>
-            <returns>The PackageName of the package</returns>
+            <returns>The PackageName of the package.</returns>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.CompletePath">
             <summary>
-            Provides a complete tree style path to the package using its UI name, starting with the category
+            Provides a complete tree style path to the package using its UI name, starting with the category.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.CompletePackageNamePath">
             <summary>
-            Provides a complete tree style path to the package using its internal packageName, starting with the category
+            Provides a complete tree style path to the package using its internal packageName, starting with the category.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.CompleteUIDPath">
             <summary>
-            Provides a complete tree style path to the package using its UID, starting with the category
+            Provides a complete tree style path to the package using its UID, starting with the category.
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.UpdateZipfile(System.String)">
+            <summary>
+            Updates the zip file entry of this package, as well as setting time stamp and md5 values.
+            </summary>
+            <param name="newZipfile">The new name of the zip file.</param>
+            <remarks>When a zip file is updated, it means a file on the FTP server has been created or updated. When that happens, the md5 hash entry and other time stamp information about the package should be updated.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.ToAutomationElement">
+            <summary>
+            Returns an xml element representation of what this package's entry should be in the automation root xml file.
+            </summary>
+            <returns>The xml element representation.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.GetInstructions(RelhaxModpack.Utilities.Enums.InstructionsType)">
+            <summary>
+            Returns the list of instructions associated with this package based on the requested instruction enumeration.
+            </summary>
+            <param name="instructionsType">The type of instructions to return.</param>
+            <returns>The list of instructions, or an empty list of none of that type exist.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.GetInstructions">
+            <summary>
+            Returns a list of all instructions associated with this package.
+            </summary>
+            <returns>The list of instructions, or an empty list if no instructions in this package exist.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.DatabasePackage.ProcessInstructions">
             <summary>
-            Add this package reference to each instruction entry
+            Add this package reference to each instruction entry.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Database.Dependency">
             <summary>
             Represents a package with logical calculations. A dependency is only installed when a selectable package is checked
-            for installation and is dependent on the dependency i.e. 6th sense sound and icon mods require the 6th sense script dependency
+            for installation and is dependent on the dependency i.e. 6th sense sound and icon mods require the 6th sense script dependency.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.Dependency.#ctor">
             <summary>
-            Create an instance of the Dependency class and over-ride DatabasePackage default values
+            Create an instance of the Dependency class and over-ride DatabasePackage default values.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.Dependency.#ctor(RelhaxModpack.Database.DatabasePackage,System.Boolean)">
             <summary>
-            Create an instance of the Dependency class and over-ride DatabasePackage default values, while using values provided for copy objects
+            Create an instance of the Dependency class and over-ride DatabasePackage default values, while using values provided for copy objects.
             </summary>
-            <param name="packageToCopyFrom">The package to copy the information from</param>
-            <param name="deep">Set to true to copy list objects, false to use new lists</param>
+            <param name="packageToCopyFrom">The package to copy the information from.</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists.</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.Dependency.InitComponent">
+            <summary>
+            Called from the constructor, handle any object initialization that should be done.
+            </summary>
         </member>
         <member name="M:RelhaxModpack.Database.Dependency.PropertiesForSerializationAttributes">
             <summary>
-            Defines a list of properties in the class to be serialized into xml attributes
+            Defines a list of properties in the class to be serialized into xml attributes.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.Dependency.PropertiesForSerializationElements">
             <summary>
-            Defines a list of properties in the class to be serialized into xml elements
+            Defines a list of properties in the class to be serialized into xml elements.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.Dependency.GetXmlDatabasePropertiesV1Dot0">
             <summary>
@@ -2259,62 +2755,74 @@
         </member>
         <member name="P:RelhaxModpack.Database.Dependency.DatabasePackageLogic">
             <summary>
-            List of linked mods and configs that use this dependency at install time
+            List of linked packages that use this dependency at install time.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Dependency.Dependencies">
             <summary>
-            List of dependencies this dependency calls on
+            List of dependencies this dependency calls on.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Database.IComponentWithDependencies">
             <summary>
-            Provides an interface for Categories and packages to share commonality since they both can have dependencies
+            Provides an interface for Categories and packages to share commonality since they both can have dependencies.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.IComponentWithDependencies.Dependencies">
             <summary>
-            The property wrapper of the Dependencies field
+            The property wrapper of the Dependencies field.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Database.IXmlSerializable">
             <summary>
             Represents an interface that when implemented, will specify which properties of a class
-            get serialized into xml attributes and elements
+            get serialized into xml attributes and elements.
             </summary>
+            <remarks>This is also referenced as "Xml serialization V1".</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.IXmlSerializable.PropertiesForSerializationAttributes">
             <summary>
-            Defines a list of properties in the class to be serialized into xml attributes
+            Defines a list of properties in the class to be serialized into xml attributes.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.IXmlSerializable.PropertiesForSerializationElements">
             <summary>
-            Defines a list of properties in the class to be serialized into xml elements
+            Defines a list of properties in the class to be serialized into xml elements.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="T:RelhaxModpack.Database.Media">
             <summary>
-            A media object is a preview-able component stored in a list in SelectablePackages
+            A media object is a preview-able component stored in a list in SelectablePackages.
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.Media.#ctor">
+            <summary>
+            Create an instance of the Media class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.Media.#ctor(RelhaxModpack.Database.Media)">
+            <summary>
+            Create an instance of the Media class, by copying values from a given Media object.
+            </summary>
+            <param name="mediaToCopy">The Media object to copy values from.</param>
         </member>
         <member name="M:RelhaxModpack.Database.Media.PropertiesForSerializationAttributes">
             <summary>
-            Defines a list of properties in the class to be serialized into xml attributes
+            Defines a list of properties in the class to be serialized into xml attributes.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.Media.PropertiesForSerializationElements">
             <summary>
-            Defines a list of properties in the class to be serialized into xml elements
+            Defines a list of properties in the class to be serialized into xml elements.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.Media.GetXmlDatabasePropertiesV1Dot0">
             <summary>
@@ -2342,53 +2850,53 @@
         </member>
         <member name="P:RelhaxModpack.Database.Media.URL">
             <summary>
-            For direct link types, the URL to the element or resource
+            For direct link types, the URL to the element or resource.
             </summary>
-            <remarks>HTTP and HTTPS links work for this property</remarks>
+            <remarks>HTTP and HTTPS links work for this property.</remarks>
         </member>
         <member name="P:RelhaxModpack.Database.Media.MediaType">
             <summary>
-            The type of media for the URL to be interpreted as
+            The type of media for the URL to be interpreted as.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Media.SelectablePackageParent">
             <summary>
-            Gets or sets the SelectablePackage parent of the media item
+            Gets or sets the SelectablePackage parent of the media item.
             </summary>
-            <remarks>This is used in the preview window to get the name to display in the title</remarks>
+            <remarks>This is used in the preview window to get the name to display in the title.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.Media.ToString">
             <summary>
-            The string properties of the object
+            The string properties of the object.
             </summary>
-            <returns>The integer code of the MediaType and the first 80 characters of the URL</returns>
+            <returns>The integer code of the MediaType and the first 80 characters of the URL.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.Media.Copy(RelhaxModpack.Database.Media)">
             <summary>
-            Create a copy of the Media object
+            Create a copy of the Media object.
             </summary>
-            <param name="mediaToCopy">The object to copy</param>
-            <returns>A new Media object with the same values</returns>
+            <param name="mediaToCopy">The object to copy.</param>
+            <returns>A new Media object with the same values.</returns>
         </member>
         <member name="T:RelhaxModpack.Database.PackageComparerByPackageName">
             <summary>
-            Enables comparison of Packages by their PackageName property
+            Enables comparison of Packages by their PackageName property.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.PackageComparerByPackageName.Equals(RelhaxModpack.Database.DatabasePackage,RelhaxModpack.Database.DatabasePackage)">
             <summary>
-            Determines if PackageName of package x is before or after PackageName of Package y
+            Determines if PackageName of package x is before or after PackageName of Package y.
             </summary>
-            <param name="x">The first package</param>
-            <param name="y">The second package</param>
-            <returns>1,0,-1 from string PackageName comparison</returns>
+            <param name="x">The first package.</param>
+            <param name="y">The second package.</param>
+            <returns>1,0,-1 from string PackageName comparison.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.PackageComparerByPackageName.GetHashCode(RelhaxModpack.Database.DatabasePackage)">
             <summary>
-            Returns the hash code of the PackageName of the Package
+            Returns the hash code of the PackageName of the Package.
             </summary>
-            <param name="package">The package to get the hash code</param>
-            <returns>The hash code of the PackageName of the Package</returns>
+            <param name="package">The package to get the hash code.</param>
+            <returns>The hash code of the PackageName of the Package.</returns>
         </member>
         <member name="T:RelhaxModpack.Database.PackageComparerByDisplayName">
             <summary>
@@ -2397,38 +2905,54 @@
         </member>
         <member name="M:RelhaxModpack.Database.PackageComparerByDisplayName.Equals(RelhaxModpack.Database.SelectablePackage,RelhaxModpack.Database.SelectablePackage)">
             <summary>
-            Determines if Name of package x is before or after Name of Package y
+            Determines if Name of package x is before or after Name of Package y.
             </summary>
-            <param name="x">The first package</param>
-            <param name="y">The second package</param>
-            <returns>1,0,-1 from string Name comparison</returns>
+            <param name="x">The first package.</param>
+            <param name="y">The second package.</param>
+            <returns>1,0,-1 from string Name comparison.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.PackageComparerByDisplayName.GetHashCode(RelhaxModpack.Database.SelectablePackage)">
             <summary>
-            Returns the hash code of the Name of the Package
+            Returns the hash code of the Name of the Package.
             </summary>
-            <param name="package">The package to get the hash code</param>
-            <returns>The hash code of the Name of the Package</returns>
+            <param name="package">The package to get the hash code.</param>
+            <returns>The hash code of the Name of the Package.</returns>
         </member>
         <member name="T:RelhaxModpack.Database.PackageComparerByUID">
             <summary>
-            Enables comparison of Packages by their Unique ID (UID) property
+            Enables comparison of Packages by their Unique ID (UID) property.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.PackageComparerByUID.Equals(RelhaxModpack.Database.DatabasePackage,RelhaxModpack.Database.DatabasePackage)">
             <summary>
-            Determines if PackageName of package x is before or after PackageName of Package y
+            Determines if PackageName of package x is before or after PackageName of Package y.
             </summary>
-            <param name="x">The first package</param>
-            <param name="y">The second package</param>
-            <returns>1,0,-1 from string PackageName comparison</returns>
+            <param name="x">The first package.</param>
+            <param name="y">The second package.</param>
+            <returns>1,0,-1 from string PackageName comparison.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.PackageComparerByUID.GetHashCode(RelhaxModpack.Database.DatabasePackage)">
             <summary>
-            Returns the hash code of the PackageName of the Package
+            Returns the hash code of the PackageName of the Package.
             </summary>
-            <param name="package">The package to get the hash code</param>
-            <returns>The hash code of the PackageName of the Package</returns>
+            <param name="package">The package to get the hash code.</param>
+            <returns>The hash code of the PackageName of the Package.</returns>
+        </member>
+        <member name="T:RelhaxModpack.Database.PackageExtractInstruction">
+            <summary>
+            A PackageExtractInstruction is a type of Instruction that requires either extracting a file entry from a zip file or copying a file from one location to another.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.PackageExtractInstruction.#ctor">
+            <summary>
+            Create an instance of a parent class of PackageExtractInstruction.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.PackageExtractInstruction.#ctor(RelhaxModpack.Database.PackageExtractInstruction)">
+            <summary>
+            Create an instance of a parent class of PackageExtractInstruction, copying values from a given PackageExtractInstruction.
+            </summary>
+            <param name="packageExtractInstructionToCopyFrom">The PackageExtractInstruction to copy values from.</param>
         </member>
         <member name="M:RelhaxModpack.Database.PackageExtractInstruction.GetXmlDatabasePropertiesV1Dot0">
             <summary>
@@ -2448,91 +2972,108 @@
         </member>
         <member name="P:RelhaxModpack.Database.PackageExtractInstruction.Pkg">
             <summary>
-            Complete path to the package file
+            Complete path to the package file.
             </summary>
-            <remarks>This is loaded from the xml file. The package itself is a non-compressed zip file</remarks>
+            <remarks>This is loaded from the xml file. The package itself is a zip file.</remarks>
         </member>
         <member name="P:RelhaxModpack.Database.PackageExtractInstruction.DirectoryInArchive">
             <summary>
-            Path inside the pkg file to the filename to process. If Pkg is empty, this is the path to the atlas and map file
+            Path inside the pkg file to the filename to process. If Pkg is empty, this is the path to the atlas and map file.
             </summary>
-            <remarks>This is loaded from the xml file</remarks>
+            <remarks>This is loaded from the xml file.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.PackageExtractInstruction.InstructionsEqual(RelhaxModpack.Installer.Instruction)">
+            <summary>
+            Compares two Instruction objects's values to determine if they are equal.
+            </summary>
+            <param name="instructionToCompare">The instruction to compare against.</param>
+            <returns>True if the instructions are equal, false otherwise.</returns>
+        </member>
+        <member name="P:RelhaxModpack.Database.PackageExtractInstruction.DumpInfoToLog">
+            <summary>
+            Returns a string representation of the object used for the log file.
+            </summary>
         </member>
         <member name="T:RelhaxModpack.Database.PackageTagsList">
             <summary>
-            A PackageTagsList class is a child class of List of type PackageTags enum. Allows for string representation for database serialization
+            A PackageTagsList class is a child class of List of type PackageTags enumeration. Allows for string representation for database serialization.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.PackageTagsList.#ctor">
             <summary>
-            Creates a PackageTagsList object
+            Creates a PackageTagsList object.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.PackageTagsList.#ctor(System.Collections.Generic.List{RelhaxModpack.Utilities.Enums.PackageTags})">
             <summary>
-            Creates a PackageTagsList object with the given list of type PackageTags
+            Creates a PackageTagsList object with the given list of type PackageTags.
             </summary>
-            <param name="packageTags">The list with elements to add from</param>
+            <param name="packageTags">The list with elements to add from.</param>
         </member>
         <member name="M:RelhaxModpack.Database.PackageTagsList.ToString">
             <summary>
-            Create a string representation of the enumerations from the list
+            Create a string representation of the enumerations from the list.
             </summary>
-            <returns>A comma separated list of the string names of the enumerations</returns>
+            <returns>A comma separated list of the string names of the enumerations.</returns>
         </member>
         <member name="T:RelhaxModpack.Database.PackageTagsListConverter">
             <summary>
-            Allows conversion of a string representation of PackageTagsList
+            Allows conversion of a string representation of PackageTagsList.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.PackageTagsListConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
             <summary>
-            Determines if this converter can convert the supplied type
+            Determines if this converter can convert the supplied type.
             </summary>
-            <param name="context">The container property and descriptor. Can be null if unknown</param>
-            <param name="sourceType">The type of source to convert from</param>
-            <returns>True is the type is of string or can be converted from base, false otherwise</returns>
+            <param name="context">The container property and descriptor. Can be null if unknown.</param>
+            <param name="sourceType">The type of source to convert from.</param>
+            <returns>True is the type is of string or can be converted from base, false otherwise.</returns>
             <remarks>See https://www.cyotek.com/blog/creating-a-custom-typeconverter-part-1 </remarks>
         </member>
         <member name="M:RelhaxModpack.Database.PackageTagsListConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
             <summary>
-            Converts the string representation of a PackageTagsList to a PackageTagsList
+            Converts the string representation of a PackageTagsList to a PackageTagsList.
             </summary>
-            <param name="context">The container property and descriptor. Can be null if unknown</param>
-            <param name="culture">The culture to account for when converting, like including the location of where this program is being run</param>
-            <param name="value">The string value of PackageTagsList</param>
+            <param name="context">The container property and descriptor. Can be null if unknown.</param>
+            <param name="culture">The culture to account for when converting, like including the location of where this program is being run.</param>
+            <param name="value">The string value of PackageTagsList.</param>
             <returns></returns>
         </member>
         <member name="T:RelhaxModpack.Database.SelectablePackage">
             <summary>
-            A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
+            A SelectablePackage is a package that can be checked by the user for installation during package selection.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.#ctor">
             <summary>
-            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
+            Create an instance of the SelectablePackage class.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.#ctor(RelhaxModpack.Database.DatabasePackage,System.Boolean)">
             <summary>
-            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
+            Create an instance of the SelectablePackage class, while using values provided for copy objects.
             </summary>
-            <param name="packageToCopyFrom">The package to copy the information from</param>
-            <param name="deep">Set to true to copy list objects, false to use new lists</param>
+            <param name="packageToCopyFrom">The package to copy the information from.</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists.</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.InitComponent">
+            <summary>
+            Called from the constructor, handles any object initialization that should be done.
+            </summary>
         </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.PropertiesForSerializationAttributes">
             <summary>
-            Defines a list of properties in the class to be serialized into xml attributes
+            Defines a list of properties in the class to be serialized into xml attributes.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.PropertiesForSerializationElements">
             <summary>
-            Defines a list of properties in the class to be serialized into xml elements
+            Defines a list of properties in the class to be serialized into xml elements.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.GetXmlDatabasePropertiesV1Dot0">
             <summary>
@@ -2558,122 +3099,136 @@
             <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
             <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
         </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.OnFinishedLoadingFromXml(System.Xml.Linq.XElement,System.Boolean)">
+            <summary>
+            A hook from XmlComponent for when an xml entry is finished being loaded into an object.
+            </summary>
+            <param name="propertyElement">The xml element of the entry being loaded. For example, the "SelectablePackage" xml element.</param>
+            <param name="loadStatus">The status of the loading of this object, if all properties of it were previously loaded correctly.</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.OnStartedSavingToXml(System.Xml.Linq.XElement,System.String)">
+            <summary>
+            A hook from XmlComponent for when an xml entry is started being saved to an xml document object.
+            </summary>
+            <param name="propertyElement">The xml element of the entry being saved (for example, the "SelectablePackage" element).</param>
+            <param name="targetSchemaVersion">The schema version being used to save.</param>
+        </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.AttributesToXmlParseSelectionFiles">
             <summary>
-            Defines a list of properties in the class to be serialized into xml attributes for selection files
+            Defines a list of properties in the class to be serialized into xml attributes for selection files.
             </summary>
-            <returns>The base array, with SelectablePackage options concatenated</returns>
+            <returns>The base array, with SelectablePackage options concatenated.</returns>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.Name">
             <summary>
-            The display name of the package
+            The display name of the package.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.NameFormatted">
             <summary>
-            The name of the package with the version macro replaced for use display
+            The name of the package with the version macro replaced for use display.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.ParentCategory">
             <summary>
-            The Category object reference
+            The Category object reference.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.Type">
             <summary>
-            The type of selectable package logic to follow (see SelectionTypes enumeration for options)
+            The type of selectable package logic to follow (see SelectionTypes enumeration for options).
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.Parent">
             <summary>
-            The reference for the direct parent of this package
+            The reference for the direct parent of this package.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.TopParent">
             <summary>
-            The reference for the absolute top of the package tree
+            The reference for the absolute top of the package tree.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.Visible">
             <summary>
-            A flag to determine whether or not the mod should be shown in UI
+            A flag to determine whether or not the mod should be shown in UI.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.UpdateComment">
             <summary>
-            Update comments of the package
+            Update comments of the package.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.UpdateCommentEscaped">
             <summary>
-            Gets an escaped version of the UpdateComment property, replacing literal '\n' with special character '\n', for example
+            Gets an escaped version of the UpdateComment property, replacing literal '\n' with special character '\n', for example.
             </summary>
             <seealso cref="P:RelhaxModpack.Database.SelectablePackage.UpdateComment"/>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.UpdateCommentFormatted">
             <summary>
-            Gets a user display formatted version of the UpdateCommentEscaped property, with a time stamp (if available). If no comment, a translated 'noComment' entry is returned
+            Gets a user display formatted version of the UpdateCommentEscaped property, with a time stamp (if available). If no comment, a translated 'noComment' entry is returned.
             </summary>
             <seealso cref="P:RelhaxModpack.Database.SelectablePackage.UpdateCommentEscaped"/>
             <seealso cref="P:RelhaxModpack.Database.SelectablePackage.UpdateComment"/>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.Description">
             <summary>
-            description of the package
+            description of the package.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.DescriptionEscaped">
             <summary>
-            Gets an escaped version of the Description property, replacing literal '\n' with special character '\n', for example
+            Gets an escaped version of the Description property, replacing literal '\n' with special character '\n', for example.
             </summary>
             <seealso cref="P:RelhaxModpack.Database.SelectablePackage.Description"/>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.DescriptionFormatted">
             <summary>
             Gets a user display formatted version of the UpdateCommentEscaped property. Additionally could contain an encrypted, controversial or popular entry.
-            If no description, a translated 'noDescription' entry is returned
+            If no description, a translated 'noDescription' entry is returned.
             </summary>
             <seealso cref="P:RelhaxModpack.Database.SelectablePackage.DescriptionEscaped"/>
             <seealso cref="P:RelhaxModpack.Database.SelectablePackage.Description"/>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.PopularMod">
             <summary>
-            Flag to determine if the package is popular
+            Flag to determine if the package is popular.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.GreyAreaMod">
             <summary>
-            Flag to determine if the package is of controversial nature
+            Flag to determine if the package is of controversial nature.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.ObfuscatedMod">
             <summary>
-            Flag to determine if the package is obfuscated/encrypted and can't be checked for viruses or malware
+            Flag to determine if the package is obfuscated/encrypted and can't be checked for viruses or malware.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.FromWGmods">
             <summary>
-            Flag to determine if the package is from the offical WoT mod portal
+            Flag to determine if the package is from the official WoT mod portal.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.SortChildPackages">
             <summary>
-            Flag to determine any packages of this package should be sorted (by name)
+            Flag to determine any packages of this package should be sorted (by name).
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.FlagForSelectionSave">
             <summary>
-            Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
+            Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage._Checked">
             <summary>
-            Field for whether the package is selected to install
+            Field for whether the package is selected to install.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.Checked">
             <summary>
-            Property for if the package is selected by the user to install. handles all color change and single_dropdown updating code
+            Property for if the package is selected by the user to install. handles all color change and single_dropdown updating code.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.Enabled">
@@ -2685,27 +3240,27 @@
         <member name="P:RelhaxModpack.Database.SelectablePackage.Level">
             <summary>
             The level in the database tree where the package resides.
-            Category header is -1, each child is +1 from there
             </summary>
+            <remarks>A level of -2 implies that the value has not been set.</remarks>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.UserFiles">
             <summary>
-            The list of cache files that should be backed up before wiping the directory
+            The list of cache files that should be backed up before wiping the directory.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.Packages">
             <summary>
-            The list of child SelectablePackage entries in this instance of SelectablePackages
+            The list of child SelectablePackage entries in this instance of SelectablePackages.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.Medias">
             <summary>
-            List of media preview items associated with this package, shown in the preview window on right click of component
+            List of media preview items associated with this package, shown in the preview window on right click of component.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.Dependencies">
             <summary>
-            A list of packages (from dependencies list) that this package is dependent on in order to be installed
+            A list of packages (from dependencies list) that this package is dependent on in order to be installed.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.ConflictingPackages">
@@ -2716,97 +3271,118 @@
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.ShowInSearchList">
             <summary>
-            Toggle if the package should appear in the search list
+            Toggle if the package should appear in the search list.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.UIComponent">
             <summary>
-            The UI element reference for this package
+            The UI element reference for this package.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.ParentUIComponent">
             <summary>
-            The UI element reference for the direct parent of this package
+            The UI element reference for the direct parent of this package.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.TopParentUIComponent">
             <summary>
-            The UI element reference for the absolute top of the package tree
+            The UI element reference for the absolute top of the package tree.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.RelhaxWPFComboBoxList">
             <summary>
-            The list of WPF combo boxes for each combobox type
+            The list of WPF combo boxes for each combobox type.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.ChildBorder">
             <summary>
-            The border for the legacy view to allow for putting all children in the border. sits inside TreeViewItem. WPF component
+            The border for the legacy view to allow for putting all children in the border. sits inside TreeViewItem.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.ChildStackPanel">
             <summary>
-            The StackPanel to allow the child TreeViewItems to stack upon each other. sits inside the border. WPF component
+            The StackPanel to allow the child TreeViewItems to stack upon each other. sits inside the border.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.ParentBorder">
             <summary>
-            The border that this component is in. WPF component
+            The border that this component is in.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.ParentStackPanel">
             <summary>
-            The StackPanel that this item is inside. WPF component
+            The StackPanel that this item is inside.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.ChangeColorOnValueChecked">
             <summary>
-            Gets or sets if the UI background components of this package should change color when the checked value changes
+            Gets or sets if the UI background components of this package should change color when the checked value changes.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.TabIndex">
             <summary>
-            The TabItem UI reference
+            The TabItem UI reference.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.SelectablePackage.ModSelectionView">
+            <summary>
+            The selection view that, when loading into the package selection list, the user selected for viewing packages.
+            </summary>
+            <remarks>This value is copied from the modpack settings.</remarks>
+            <seealso cref="T:RelhaxModpack.Settings.ModpackSettings"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.SelectablePackage.ForceVisible">
+            <summary>
+            If this package should be forced visible in a selection view.
+            </summary>
+            <remarks>This value is copied from the modpack settings.</remarks>
+            <seealso cref="T:RelhaxModpack.Settings.ModpackSettings"/>
+        </member>
+        <member name="P:RelhaxModpack.Database.SelectablePackage.ForceEnabled">
+            <summary>
+            If this package should be forced enabled in a selection view.
+            </summary>
+            <remarks>This value is copied from the modpack settings.</remarks>
+            <seealso cref="T:RelhaxModpack.Settings.ModpackSettings"/>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.ContentControl">
             <summary>
-            ContentControl item to allow for right-clicking of disabled components. defaultv2 WPF component
+            ContentControl item to allow for right-clicking of disabled components.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.ScrollViewer">
             <summary>
-            Component used only in the top SelectablePackage to allow for scrolling of the package lists for each category
+            Component used only in the top SelectablePackage to allow for scrolling of the package lists for each category.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.TreeViewItem">
             <summary>
-            The TreeViewItem that corresponds to this package. legacy WPF component
+            The TreeViewItem that corresponds to this package.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.TreeView">
             <summary>
-            The TreeView that this package is in. legacy WPF component
+            The TreeView that this package is in.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.InstallGroupWithOffset">
             <summary>
-            The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level
+            The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.CompletePath">
             <summary>
-            Provides a complete path of the name fields from the top package down to where this package is located in the tree
+            Provides a complete path of the name fields from the top package down to where this package is located in the tree.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.CompletePackageNamePath">
             <summary>
-            Provides a complete path of the packageName fields from the top package down to where this package is located in the tree
+            Provides a complete path of the packageName fields from the top package down to where this package is located in the tree.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.CompleteUIDPath">
             <summary>
-            Provides a complete tree style path to the package using its UID, starting with the category
+            Provides a complete tree style path to the package using its UID, starting with the category.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.IsStructureVisible">
@@ -2816,123 +3392,180 @@
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.IsStructureEnabled">
             <summary>
-            Determines if all parent packages leading to this package are enabled. In other words, it checks if the path to this package is enabled
+            Determines if all parent packages leading to this package are enabled. In other words, it checks if the path to this package is enabled.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.NameDisplay">
             <summary>
-            Returns the display name of the package for the UI, with version macros replaced and any other statuses appended
+            Returns the display name of the package for the UI, with version macros replaced and any other statuses appended.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.TimeStampString">
             <summary>
-            Returns a string representation of the timestamp of when the zip file of this package was last modified
+            Returns a string representation of the time stamp of when the zip file of this package was last modified.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.ToolTipString">
             <summary>
-            Returns the display tool tip string, or the translation string for "no description"
+            Returns the display tool tip string, or the translation string for "no description".
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.CompareModsPackageName(RelhaxModpack.Database.SelectablePackage,RelhaxModpack.Database.SelectablePackage)">
             <summary>
-            Alphabetical sorting of packages by PackageName property at this level (not recursive)
+            Alphabetical sorting of packages by PackageName property at this level (not recursive).
             </summary>
-            <param name="x">First package to compare</param>
-            <param name="y">Second package to compare</param>
-            <returns></returns>
+            <param name="x">First package to compare.</param>
+            <param name="y">Second package to compare.</param>
+            <returns>1 or -1 if the package isn't equal, 0 if it is equal.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.CompareModsName(RelhaxModpack.Database.SelectablePackage,RelhaxModpack.Database.SelectablePackage)">
             <summary>
-            Alphabetical sorting of packages by NameFormatted property at this level (not recursive)
+            Alphabetical sorting of packages by NameFormatted property at this level (not recursive).
             </summary>
-            <param name="x">First package to compare</param>
-            <param name="y">Second package to compare</param>
-            <returns></returns>
+            <param name="x">First package to compare.</param>
+            <param name="y">Second package to compare.</param>
+            <returns>1 or -1 if the package isn't equal, 0 if it is equal.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.ToString">
             <summary>
-            Allows for display in a combobox and when debugging
+            Allows for display in a combobox and when debugging.
             </summary>
-            <returns>The nameFormatted property of the package</returns>
+            <returns>The nameFormatted property of the package.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.AnyPackagesChecked">
             <summary>
-            Check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
+            Check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked.
             </summary>
-            <returns>True if another package at this level is checked and enabled, false otherwise</returns>
+            <returns>True if another package at this level is checked and enabled, false otherwise.</returns>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.IsStructureValid">
             <summary>
-            Returns true if the structure above and below this package is valid (all mandatory child options checked, parent checked), false otherwise
+            Returns true if the structure above and below this package is valid (all mandatory child options checked, parent checked), false otherwise.
             </summary>
-            <remarks>This assumes that the database linking/reference code has been run, otherwise a null exception will occur</remarks>
+            <remarks>This assumes that the database linking/reference code has been run, otherwise a null exception will occur.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.AnyConflictingPackages">
+            <summary>
+            Determine if any packages that are listed as a conflict of this package are currently enabled and checked.
+            </summary>
+            <returns>True if there is at least conflicting package found, false if none are found.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.GetConflictingPackages">
+            <summary>
+            Get a list of packages that conflict with other packages up and down the selection tree.
+            </summary>
+            <returns>The list of packages that conflict.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.UncheckConflictingPackages">
+            <summary>
+            Unchecks any packages that conflict with this package.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.ForceCheckPackage">
+            <summary>
+            Force checks this package by un-checking any conflicting packages of this package.
+            </summary>
         </member>
         <member name="T:RelhaxModpack.Database.Trigger">
             <summary>
             Represents a trigger object used in the installer as an event starter.
-            For example, a contour icon trigger exists to start the building of contour icons
+            For example, a contour icon trigger exists to start the building of contour icons.
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.Trigger.#ctor">
+            <summary>
+            Create an instance of a Trigger object.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.Trigger.#ctor(RelhaxModpack.Database.Trigger)">
+            <summary>
+            Create an instance of a trigger object, copying from a given trigger.
+            </summary>
+            <param name="triggerToCopy">The trigger to copy.</param>
         </member>
         <member name="P:RelhaxModpack.Database.Trigger.Name">
             <summary>
-            The name of the trigger
+            The name of the trigger.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Trigger.Total">
             <summary>
-            The total number of instances that this trigger exists in the selected packages to install
+            The total number of instances that this trigger exists in the selected packages to install.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Trigger.NumberProcessed">
             <summary>
-            The number of processed triggers for this trigger type. Prevents the trigger from firing early
+            The number of processed triggers for this trigger type. Prevents the trigger from firing early.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.Trigger.Fired">
             <summary>
-            Flag to determine if the trigger task has started
+            Flag to determine if the trigger task has started.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Database.UserDataFile">
             <summary>
             A structure that is used to track the relative path of a user file (like session stats),
-            and the root path between the installer and WoT directory
+            and the root path between the installer and WoT directory.
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.UserDataFile.#ctor(RelhaxModpack.Database.UserDataFile)">
+            <summary>
+            Create an instance of the UserDataFile struct.
+            </summary>
+            <param name="dataFileToCopy">The UserDataFile struct to copy.</param>
         </member>
         <member name="F:RelhaxModpack.Database.UserDataFile.WoTRoot">
             <summary>
-            The WoT root directory where the UserDataFile is from
+            The WoT root directory where the UserDataFile is from.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.UserDataFile.TempSaveRoot">
             <summary>
-            The directory path to the Relhax installer temporary folder for holding user files during an installation
+            The directory path to the installer's temporary folder for holding user files during an installation.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Database.UserDataFile.FilePath">
             <summary>
-            The relative path of the user file
+            The relative path of the user file.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Database.UserFile">
             <summary>
-            An object that represents cache files generated by mods that should be backed up and restored as to not loose cache data (like session stats or auto equip data)
+            An object that represents cache files generated by mods that should be backed up and restored as to not loose cache data (like session stats or auto equip data).
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.UserFile.#ctor">
+            <summary>
+            Create an instance of the UserFile class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.UserFile.#ctor(RelhaxModpack.Database.UserFile)">
+            <summary>
+            Create an instance of the UserFile class, copying values from a given UserFile object.
+            </summary>
+            <param name="userfileToCopy">The UserFile instance to copy from.</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.UserFile.#ctor(RelhaxModpack.Database.UserFile,System.Boolean)">
+            <summary>
+            Create an instance of the UserFile class, copying values and list contents from a given UserFile object.
+            </summary>
+            <param name="userfileToCopy">The UserFile instance to copy from.</param>
+            <param name="deep">If true, copy the list of files saved.</param>
         </member>
         <member name="M:RelhaxModpack.Database.UserFile.PropertiesForSerializationAttributes">
             <summary>
-            Defines a list of properties in the class to be serialized into xml attributes
+            Defines a list of properties in the class to be serialized into xml attributes.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.UserFile.PropertiesForSerializationElements">
             <summary>
-            Defines a list of properties in the class to be serialized into xml elements
+            Defines a list of properties in the class to be serialized into xml elements.
             </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         </member>
         <member name="M:RelhaxModpack.Database.UserFile.GetXmlDatabasePropertiesV1Dot0">
             <summary>
@@ -2960,7 +3593,7 @@
         </member>
         <member name="P:RelhaxModpack.Database.UserFile.Pattern">
             <summary>
-            The path or pattern to a file or files to backup to a temporary directory
+            The path or pattern to a file or files to backup to a temporary directory.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.UserFile.FilesSaved">
@@ -2970,23 +3603,66 @@
         </member>
         <member name="M:RelhaxModpack.Database.UserFile.ToString">
             <summary>
-            The string representation of the UserFile object
+            The string representation of the UserFile object.
             </summary>
-            <returns>The string pattern</returns>
+            <returns>The string pattern.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.UserFile.Copy(RelhaxModpack.Database.UserFile)">
             <summary>
-            Create a copy of the UserFile object
+            Create a copy of the UserFile object.
             </summary>
-            <param name="userFileToCopy">The object to copy</param>
-            <returns>A new UserFile object with the same values</returns>
+            <param name="userFileToCopy">The object to copy.</param>
+            <returns>A new UserFile object with the same values.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.UserFile.DeepCopy(RelhaxModpack.Database.UserFile)">
             <summary>
-            Create a deep copy of the UserFile object
+            Create a deep copy of the UserFile object.
             </summary>
-            <param name="userFileToCopy">The object to copy</param>
-            <returns>A new UserFile object with the same values and new list elements with the same values</returns>
+            <param name="userFileToCopy">The object to copy.</param>
+            <returns>A new UserFile object with the same values and new list elements with the same values.</returns>
+        </member>
+        <member name="T:RelhaxModpack.Database.XmlComponent">
+            <summary>
+            An XmlComponent is a base class of a database object that can be serialized to and from memory and xml documents.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Database.XmlComponent.SchemaV1Dot0">
+            <summary>
+            The string to represent the xml schema 1.0.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Database.XmlComponent.SchemaV1Dot1">
+            <summary>
+            The string to represent the xml schema 1.1.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Database.XmlComponent.SchemaV1Dot2">
+            <summary>
+            The string to represent the xml schema 1.2.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.XmlComponent.LoadedSchemaVersion">
+            <summary>
+            Get or set the schema version that this object was loaded from.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.#ctor">
+            <summary>
+            Create an instance of a parent class of XmlComponent.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.#ctor(RelhaxModpack.Database.XmlComponent)">
+            <summary>
+            Create an instance of a a parent class of XmlComponent, copying values from another instance.
+            </summary>
+            <param name="componentToCopyFrom">The instance to copy from.</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.GetXmlDatabaseProperties(System.String)">
+            <summary>
+            Gets a list of all properties of a class that are mapped to xml attributes or elements, based on a given schema version.
+            </summary>
+            <param name="schemaVersion">The schema version to get the list of properties from.</param>
+            <returns>The list of properties mapped to xml attributes or elements.</returns>
         </member>
         <member name="M:RelhaxModpack.Database.XmlComponent.GetXmlDatabasePropertiesV1Dot0">
             <summary>
@@ -3011,6 +3687,117 @@
             <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
             <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
             <seealso cref="T:RelhaxModpack.Database.XmlDatabaseProperty"/>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.GetXmlElementName(System.String)">
+            <summary>
+            Gets the name of the xml element that this type of component is going to be named as, based on the schema version.
+            </summary>
+            <param name="schemaVersion">The schema version to get the list of properties from.</param>
+            <returns>The expected xml element name for the component.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.ToXml(System.Xml.Linq.XElement,System.String)">
+            <summary>
+            Saves a component to an xml object representing an xml element.
+            </summary>
+            <param name="propertyElement">The xml object of the element to save.</param>
+            <param name="schemaVersion">The schema version to save the element as.</param>
+            <returns>True if the save operation was successful, false if errors occurred.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.FromXml(System.Xml.Linq.XElement,System.String)">
+            <summary>
+            Loads a component from an xml object representing an xml element.
+            </summary>
+            <param name="propertyElement">The xml object of the element to load from.</param>
+            <param name="schemaVersion">The schema version to load the element as.</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.UpdatePropertyValue(System.Object,System.Xml.Linq.XObject,System.Reflection.PropertyInfo,System.String)">
+            <summary>
+            Attempts to update a property's value if the current value does not match.
+            </summary>
+            <param name="valueOfProperty">The current value of the property.</param>
+            <param name="xmlObject">The xml object that represents the container of this element. Only used for logging.</param>
+            <param name="propertyInfo">The property metadata object of the target property to update.</param>
+            <param name="xmlValue">The value from the xml element or attribute.</param>
+            <returns>True if the value is up to date or updated, false if the value was unable to be updated.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.OnParsingPropertyToXmlElement(RelhaxModpack.Database.XmlDatabaseProperty,System.Xml.Linq.XElement,System.String,System.Reflection.PropertyInfo,System.Object,System.Xml.Linq.XElement,System.Boolean@)">
+            <summary>
+            A hook for when an xml entry is being loaded. This can be used to handle custom or one-off conversions or implementations to manage any legacy serialization issues (for example, old database formats never had a wrapping "Packages" element).
+            </summary>
+            <param name="thisPropertyXml">The xml database property entry being loaded. For example, the "Packages" list entry.</param>
+            <param name="propertyXmlElement">The xml element entry of the current object being loaded. For example, the "Category" element.</param>
+            <param name="schemaVersion">The version of the schema currently being loaded.</param>
+            <param name="propertyInfo">The info meta-data about the property in the class object to be written to. For example, the "Packages" list property.</param>
+            <param name="valueOfProperty">The current value of the property in the object. For example, this would be the list object of the "Packages" list property.</param>
+            <param name="elementOfProperty">The xml element entry of the property being loaded. For example, the "Packages" xml entry.</param>
+            <param name="continueProcessingProperty">A flag used back in XmlComponent if the current xml element to load (like "Packages") should continue to be loaded by XmlComponent.</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.OnParsingPropertyFromXmlElement(RelhaxModpack.Database.XmlDatabaseProperty,System.Xml.Linq.XElement,System.String,System.Reflection.PropertyInfo,System.Object,System.Xml.Linq.XElement,System.Boolean@)">
+            <summary>
+            A hook for when an xml entry is being saved. This can be used to handle custom or one-off conversions to manage any legacy serialization issues (for example, old database formats never had a wrapping "Packages" element).
+            </summary>
+            <param name="thisPropertyXml">The xml database property entry being saved. For example, the "Packages" list entry.</param>
+            <param name="propertyXmlElement">The xml element entry of the current object being saved. For example, the "Category" element.</param>
+            <param name="schemaVersion">The version of the schema currently being saved.</param>
+            <param name="propertyInfo">The info meta-data about the property in the class object to be read from. For example, the "Packages" list property.</param>
+            <param name="valueOfProperty">The current value of the property in the object. For example, this would be the list object of the "Packages" list property.</param>
+            <param name="elementOfProperty">The xml element entry of the property being saved. For example, the "Packages" xml entry.</param>
+            <param name="continueProcessingProperty">A flag used back in XmlComponent if the current xml element to save (like "Packages") should continue to be saved by XmlComponent.</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.OnStartedLoadingFromXml(System.Xml.Linq.XElement)">
+            <summary>
+            A hook from XmlComponent for when an xml entry is started being loaded into an object.
+            </summary>
+            <param name="propertyElement">The xml element of the entry being loaded.</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.OnFinishedLoadingFromXml(System.Xml.Linq.XElement,System.Boolean)">
+            <summary>
+            A hook from XmlComponent for when an xml entry is finished being loaded into an object.
+            </summary>
+            <param name="propertyElement">The xml element of the entry being loaded.</param>
+            <param name="loadStatus">The status of the loading of this object, if all properties of it were previously loaded correctly.</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.OnStartedSavingToXml(System.Xml.Linq.XElement,System.String)">
+            <summary>
+            A hook from XmlComponent for when an xml entry is started being saved to an xml document object.
+            </summary>
+            <param name="propertyElement">The xml element of the entry being saved.</param>
+            <param name="targetSchemaVersion">The schema version being used to save.</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlComponent.OnFinishedSavingToXml(System.Xml.Linq.XElement,System.String,System.Boolean)">
+            <summary>
+            A hook from XmlComponent for when an xml entry is finished being saved to an xml document object.
+            </summary>
+            <param name="propertyElement">The xml element of the entry being saved.</param>
+            <param name="targetSchemaVersion">The schema version being used to save.</param>
+            <param name="saveStatus">The status of the saving of this object, if all properties of it were previously saved correctly.</param>
+        </member>
+        <member name="T:RelhaxModpack.Database.XmlDatabaseProperty">
+            <summary>
+            An XmlDatabaseProperty object is a mapping of an xml attribute or element to a property in a class object for serialization.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.XmlDatabaseProperty.XmlName">
+            <summary>
+            Get or set the name of the xml element or attribute.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.XmlDatabaseProperty.XmlEntryType">
+            <summary>
+            Get or set the type of xml entry.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.XmlDatabaseProperty.PropertyName">
+            <summary>
+            Get or set the name of the class property name.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.XmlDatabaseProperty.ToString">
+            <summary>
+            A string representation of the object to display its property information.
+            </summary>
+            <returns>The string representing object properties.</returns>
         </member>
         <member name="P:RelhaxModpack.Installer.Instruction.NativeProcessingFile">
             <summary>
