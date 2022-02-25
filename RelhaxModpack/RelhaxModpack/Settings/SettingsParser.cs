@@ -114,11 +114,20 @@ namespace RelhaxModpack.Settings
             }
         }
 
+        /// <summary>
+        /// Save the settings object to a custom location.
+        /// </summary>
+        /// <param name="settingsFile">The settings object to save to xml</param>
+        /// <param name="customSettingsPath">The custom path to save the settings xml document to</param>
         public void SaveSettings(ISettingsFile settingsFile, string customSettingsPath)
         {
             SaveSettings(settingsFile, new XmlDocument(), customSettingsPath);
         }
 
+        /// <summary>
+        /// Save the settings to the default location stored in the file.
+        /// </summary>
+        /// <param name="settingsFile">The settings object to save to xml</param>
         public void SaveSettings(ISettingsFile settingsFile)
         {
             SaveSettings(settingsFile, new XmlDocument(), settingsFile.Filename);
