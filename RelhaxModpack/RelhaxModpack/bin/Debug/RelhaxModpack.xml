@@ -8004,6 +8004,23 @@
             ConflictingPackageDialog
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Windows.ConflictingPackageDialog.OptionASelected">
+            <summary>
+            True if 'option a' of package conflict resolution is selected, false if 'option b' is selected.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.ConflictingPackageDialog.PackageToTryToSelect">
+            <summary>
+            The package that the user tried to select that conflicts with other already selected packages.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ConflictingPackageDialog.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Database.SelectablePackage)">
+            <summary>
+            Create an instance of the ConflictingPackageDialog class
+            </summary>
+            <param name="modpackSettings">The modpack settings object</param>
+            <param name="packageToTryToSelect">The package that the user tried to select that conflicts with other already selected packages.</param>
+        </member>
         <member name="M:RelhaxModpack.Windows.ConflictingPackageDialog.InitializeComponent">
             <summary>
             InitializeComponent
@@ -8027,6 +8044,42 @@
             The name of the logfile
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseAutomationRunner.DownloadProgressChanged">
+            <summary>
+            Event handler to use when a task is reporting download progress.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseAutomationRunner.ProgressChanged">
+            <summary>
+            Event handler to use when a task is reporting generic progress.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseAutomationRunner.DownloadDataCompleted">
+            <summary>
+            Event handler to use when a task is reporting a download has been completed.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseAutomationRunner.DownloadFileCompleted">
+            <summary>
+            Event handler to use when a task is reporting a download to a file has been completed.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseAutomationRunner.UploadProgressChanged">
+            <summary>
+            Event handler to use when a task is reporting upload progress of a file.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseAutomationRunner.UploadFileCompleted">
+            <summary>
+            Event handler to use when a task is reporting an upload of a file has been completed.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseAutomationRunner.RelhaxProgressChanged">
+            <summary>
+            Event handler to use when a task is reporting generic progress using the RelhaxProgress object.
+            </summary>
+            <seealso cref="T:RelhaxModpack.UI.RelhaxProgress"/>
+        </member>
         <member name="M:RelhaxModpack.Windows.DatabaseAutomationRunner.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Create an instance of the DatabaseAutomationRunner window
@@ -8044,6 +8097,17 @@
             <summary>
             HtmlPathSelector
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.HtmlPathSelector.HtmlDocumentTextFilename">
+            <summary>
+            The filename to write the downloaded html document to, to use for additional debugging by the user.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.HtmlPathSelector.#ctor(RelhaxModpack.Settings.ModpackSettings)">
+            <summary>
+            Create an instance of the HtmlpathSelector class window.
+            </summary>
+            <param name="modpackSettings">The modpack settings object</param>
         </member>
         <member name="M:RelhaxModpack.Windows.HtmlPathSelector.InitializeComponent">
             <summary>
@@ -8072,10 +8136,60 @@
             Controls is the application will, on startup, run a check to see if it's the latest version
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.Logfile">
+            <summary>
+            Get or (privately) set the log file enumeration to use when writing log messages in this window.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.Init">
+            <summary>
+            Flag to indicate if the window is performing initialization tasks.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Creates an instance of the RelhaxCustomFeatureWindow class
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.OnClosed(System.EventArgs)">
+            <summary>
+            Saves the settings instance used by this application to disk before the window is closed.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.OnWindowLoaded(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Loads the settings object with settings values from an xml document specified by the settings object.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.ApplyFontToWindow">
+            <summary>
+            If the default font to apply is null, it is saved from this window's default font.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.RelhaxFeatureWindowWithChanges">
+            <summary>
+            Represents a window where the user is performing operations that are logged and saved to disk (for example, database editing).
+            This class provides an implementation to handle when a user wishes to close the window while he has changes that are not yet written to disk.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.RelhaxFeatureWindowWithChanges.UnsavedChanges">
+            <summary>
+            Flag to indicate if the user has performed operations that are not yet saved to disk.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxFeatureWindowWithChanges.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Utilities.Enums.Logfiles)">
+            <summary>
+            Create an instance of a parent class, using the constructor of the RelhaxFeatureWindowWithChanges.
+            </summary>
+            <param name="modpackSettings">The modpack settings object.</param>
+            <param name="logfile">The logfile enumeration to control which logfile to write to from this window.</param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxFeatureWindowWithChanges.OnClosing(System.ComponentModel.CancelEventArgs)">
+            <summary>
+            Check if the user has unsaved changes, and if he does, confirm the user wants to close the window (without saving the changes).
+            </summary>
+            <param name="e">Provides data for a cancel-able event.</param>
         </member>
         <member name="T:RelhaxModpack.Windows.RelhaxLogViewer">
             <summary>
@@ -8084,6 +8198,36 @@
             <summary>
             RelhaxLogViewer
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxLogViewer.SuppressDebugMessages">
+            <summary>
+            If true, don't show debug level log messages in the window.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxLogViewer.#ctor(RelhaxModpack.Settings.ModpackSettings)">
+            <summary>
+            Create an instance of the RelhaxLogViewer class.
+            </summary>
+            <param name="modpackSettings">The modpack settings object.</param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxLogViewer.ClearLogWindow">
+            <summary>
+            Use the dispatcher that created this window to clear the log text display.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxLogViewer.StartLogListener">
+            <summary>
+            Use the dispatcher that created this window to start the log listener.
+            </summary>
+            <remarks>The windows's dispatcher is subscribed to the OnLogMessageWrite event, which when invoked asynchronously writes the log message to the log window.</remarks>
+            <seealso cref="M:RelhaxModpack.Windows.RelhaxLogViewer.OnLogMessageWrite(System.Object,RelhaxModpack.Utilities.ClassEventArgs.LogMessageEventArgs)"/>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxLogViewer.StopLogListener">
+            <summary>
+            Use the dispatcher that created this window to stop the log listener.
+            </summary>
+            <remarks>The window's dispatcher is un-subscribed from the OnLogMessageWriteEvent.</remarks>
+            <seealso cref="M:RelhaxModpack.Windows.RelhaxLogViewer.OnLogMessageWrite(System.Object,RelhaxModpack.Utilities.ClassEventArgs.LogMessageEventArgs)"/>
         </member>
         <member name="M:RelhaxModpack.Windows.RelhaxLogViewer.InitializeComponent">
             <summary>
@@ -8145,6 +8289,12 @@
             <summary>
             The return structure for determining the result from closing this window
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.AskCloseWoT.WoTDirectory">
+            <summary>
+            The location of the WoT installation directory parsed at installation time
+            </summary>
+            <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
         </member>
         <member name="M:RelhaxModpack.Windows.AskCloseWoT.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
@@ -8264,6 +8414,12 @@
             <summary>
             Diagnostics
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.Diagnostics.WoTDirectory">
+            <summary>
+            The location of the WoT installation directory parsed at installation time
+            </summary>
+            <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
         </member>
         <member name="F:RelhaxModpack.Windows.Diagnostics.RelhaxLogfileTrimLength">
             <summary>
@@ -8441,6 +8597,11 @@
         <member name="P:RelhaxModpack.Windows.FirstLoadAcknowledgments.UserAgreed">
             <summary>
             Gets and sets is the user has agreed to the Acknowledgments before allowing him/her to use the application
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.FirstLoadAcknowledgments.FirstLoadToV2">
+            <summary>
+            Flag used to indicate if this is the first time the user is upgrading from Relhax V1 (old application) to Relhax V2.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.FirstLoadAcknowledgments.#ctor(RelhaxModpack.Settings.ModpackSettings)">
@@ -8681,6 +8842,12 @@
             The UI Reporting object for the step of font install, trimming download cache, and cleanup
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Windows.AdvancedProgress.OnReportDownload(RelhaxModpack.UI.RelhaxDownloadProgress)">
+            <summary>
+            Report download progress of a package waiting to install.
+            </summary>
+            <param name="progress">The progress object.</param>
+        </member>
         <member name="M:RelhaxModpack.Windows.AdvancedProgress.OnReportAdvancedProgress(RelhaxModpack.UI.RelhaxInstallerProgress)">
             <summary>
             Update the advanced progress UI objects
@@ -8827,6 +8994,14 @@
             The reference to the editor settings object. Must be supplied
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Windows.DatabaseEditorTransferWindow.WoTModpackOnlineFolderVersion">
+            <summary>
+            Get or set the name of the FTP folder to use for logging reporting and user display.
+            </summary>
+            <remarks>The full path to the file on disk and on the FTP server are handled by other variables</remarks>
+            <seealso cref="F:RelhaxModpack.Windows.DatabaseEditorTransferWindow.ZipFilePathDisk"/>
+            <seealso cref="F:RelhaxModpack.Windows.DatabaseEditorTransferWindow.ZipFilePathOnline"/>
+        </member>
         <member name="M:RelhaxModpack.Windows.DatabaseEditorTransferWindow.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the DatabaseEditorDownlaod class
@@ -8903,6 +9078,12 @@
             InstallFinished
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Windows.InstallFinished.WoTDirectory">
+            <summary>
+            The location of the WoT installation directory parsed at installation time
+            </summary>
+            <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
+        </member>
         <member name="M:RelhaxModpack.Windows.InstallFinished.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the InstallFinished window
@@ -8953,6 +9134,27 @@
             Flag to determine if the current installation is started from auto install mode
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Windows.PackageSelectionList.WotClientVersion">
+            <summary>
+            The WoT client version.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.PackageSelectionList.DatabaseVersion">
+            <summary>
+            The Database version that the user is currently selecting from.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.PackageSelectionList.WoTDirectory">
+            <summary>
+            The WoT client path that the user is selecting packages to install to.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.PackageSelectionList.DatabaseManager">
+            <summary>
+            Get the database manager object to use for loading the database.
+            </summary>
+            <remarks>If it is null upon loading the window, it will be created automatically.</remarks>
+        </member>
         <member name="P:RelhaxModpack.Windows.PackageSelectionList.LoadingUI">
             <summary>
             Flag to indicate if the window is loading application specific UI
@@ -8960,8 +9162,18 @@
         </member>
         <member name="M:RelhaxModpack.Windows.PackageSelectionList.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Settings.CommandLineSettings)">
             <summary>
-            Create an instance of the ModSelectionList window
+            Create an instance of the PackageSelectionList window
             </summary>
+            <param name="modpackSettings">The modpack settings object</param>
+            <param name="commandLineSettings">The command line settings object.</param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.PackageSelectionList.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Settings.CommandLineSettings,RelhaxModpack.Database.DatabaseManager)">
+            <summary>
+            Create an instance of the PackageSelectionList window
+            </summary>
+            <param name="modpackSettings">The modpack settings object</param>
+            <param name="commandLineSettings">The command line settings object.</param>
+            <param name="manager">The database manager object to use for loading the database</param>
         </member>
         <member name="M:RelhaxModpack.Windows.PackageSelectionList.ClearSelections(System.Collections.Generic.List{RelhaxModpack.Database.SelectablePackage})">
             <summary>
@@ -10545,6 +10757,7 @@
             <summary>
             Creates the instance of the MainWindow class
             </summary>
+            <param name="modpackSettings">The modpack settings object</param>
         </member>
         <member name="M:RelhaxModpack.MainWindow.ApplyFontToWindow">
             <summary>
