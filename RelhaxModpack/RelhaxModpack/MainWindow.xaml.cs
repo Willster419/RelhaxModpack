@@ -2038,6 +2038,7 @@ namespace RelhaxModpack
             if (!File.Exists(ModpackSettings.SettingsFilename))
             {
                 Logging.Info("{0} settings file does not exist. This is a first time load, set settings application distro version to application compile ({1})", ModpackSettings.SettingsFilename, ApplicationConstants.ApplicationVersion.ToString());
+#pragma warning disable CS0162 // Unreachable code detected
                 switch (ApplicationConstants.ApplicationVersion)
                 {
                     case ApplicationVersions.Alpha:
@@ -2048,6 +2049,7 @@ namespace RelhaxModpack
                         ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
                         break;
                 }
+#pragma warning restore CS0162 // Unreachable code detected
             }
 
             //make a copy of the current application version and set it to stable if (fake) alpha
