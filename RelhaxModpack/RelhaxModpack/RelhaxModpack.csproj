@@ -298,7 +298,6 @@
     <Compile Include="Utilities\Enums\EditorTransferMode.cs" />
     <Compile Include="Utilities\Enums\DatabaseVersions.cs" />
     <Compile Include="Utilities\Enums\DatabaseXmlVersion.cs" />
-    <Compile Include="Utilities\Enums\DownloadTypes.cs" />
     <Compile Include="Utilities\Enums\FailCode.cs" />
     <Compile Include="Utilities\Enums\IERegistryVersion.cs" />
     <Compile Include="Utilities\Enums\KnownFolder.cs" />
