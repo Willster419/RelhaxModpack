@@ -5555,7 +5555,82 @@
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.AutomationExitCode">
             <summary>
-            List of possible return code error conditions that can occur when running an automation task
+            List of possible return code error conditions that can occur when running an automation task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.None">
+            <summary>
+            No error occurred, it ran correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.ExecuteException">
+            <summary>
+            There was an unhandled program exception during the task main execution method.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.ValidateCommandsFail">
+            <summary>
+            There was an error in the 'validate commands' step of the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.ProcessResultsFail">
+            <summary>
+            There was an error in the 'process results' step of the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.RunTaskFail">
+            <summary>
+            There was a general error running the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.IOFail">
+            <summary>
+            There was an IO related error running the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.ShellFail">
+            <summary>
+            There was a process execution shell related error running the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.DatabaseLoadFail">
+            <summary>
+            There was an error loading the modpack database.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.DatabaseSaveFail">
+            <summary>
+            There was an error saving the modpack database.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.FileDownloadFail">
+            <summary>
+            There was a file download related error running the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.FileUploadFail">
+            <summary>
+            There was a file upload related error running the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.ProcessMacrosFail">
+            <summary>
+            There was an error processing macros when running the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.ComparisonNoFilesToUpdate">
+            <summary>
+            There were no files found during the compare session that needed to be updated. This is no an error, but meaning there is no work to do.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.ComparisonManualFilesToUpdate">
+            <summary>
+            There were files found during the compare session that need to be manually updated.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationExitCode.Cancel">
+            <summary>
+            The task was canceled.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.AutomationCompareMode">
@@ -5577,14 +5652,89 @@
             <remarks>If the exit code associated with this enumeration occurs, then it implies that this
             file must be manually inspected and cannot be an automated change</remarks>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.BrowserSessionType">
+            <summary>
+            The type of browser engine to use when running a browser session during task execution.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.BrowserSessionType.WebClient">
+            <summary>
+            Use the WebClient implementation.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.BrowserSessionType.HttpClient">
+            <summary>
+            Use the HttpClient implementation.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.BrowserSessionType.WebBrowser">
+            <summary>
+            Use the WebBrowser (IE/Trident) implementation.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.BrowserSessionType.WebView">
+            <summary>
+            Use the WebView (Edge) implementation (v1).
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.BrowserSessionType.WebView2">
+            <summary>
+            Use the WebView (Edge) implementation (v2).
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.BrowserType">
+            <summary>
+            The type of browser engine to use when running a browser for a single task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.BrowserType.WebBrowser">
+            <summary>
+            Use the WebBrowser (IE/Trident) implementation.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.BrowserType.WebView">
+            <summary>
+            Use the WebView (Edge) implementation (v1).
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.BrowserType.WebView2">
+            <summary>
+            Use the WebView (Edge) implementation (v2).
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode">
             <summary>
-            List of possible return code error conditions that can occur when loading the database
+            List of possible return code error conditions that can occur when loading the database.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode.None">
             <summary>
-            No error occurred
+            No error occurred.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode.FailedToDownloadZipFile">
+            <summary>
+            There was an error downloading the mod info data file (zip file).
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode.FailedToExtractXmlFromZipFile">
+            <summary>
+            There was an error extracting an xml document from the mod info data file (zip file).
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode.FailedToParseXml">
+            <summary>
+            There was an error loading the xml document into an xml object for database parsing.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode.FailedToLoadXmlFromDisk">
+            <summary>
+            There was an error loading the xml document from disk to into an xml object for database parsing.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode.FailedToParseDatabase">
+            <summary>
+            There was an error parsing the xml document object into the database manager package lists.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.DownloadProgressState">
@@ -5614,12 +5764,32 @@
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode">
             <summary>
-            List of possible return code error conditions that can occur when running the htmlPath browser parser
+            List of possible return code error conditions that can occur when running the htmlPath browser parser.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode.None">
             <summary>
-            No error occurred
+            No error occurred.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode.InvalidParameters">
+            <summary>
+            There was an issue with the input parameters. Check the xpath and url.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode.ErrorHtmlText">
+            <summary>
+            There was an error with downloading the html web page to a string.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode.ErrorHtmlParsing">
+            <summary>
+            There was an error with parsing the htmlPath. Either there is a syntax error or the requested htmlNode was not found.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode.ErrorSavingToDisk">
+            <summary>
+            There was an error saving the html document to disk.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.InstallerExitCodes">
@@ -6127,6 +6297,31 @@
             The application is closing now
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.LogOptions">
+            <summary>
+            A series of additional options when writing a message to a log file.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.LogOptions.None">
+            <summary>
+            No additional options.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.LogOptions.MethodName">
+            <summary>
+            Add the method name that this log message call is called from.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.LogOptions.ClassName">
+            <summary>
+            Add the class name that this log message call is called from.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.LogOptions.MethodAndClassName">
+            <summary>
+            Add the method and class name that this log messag ecall is called from.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.MacroType">
             <summary>
             The enumeration representations of the level of where the macro is defined. Implies protection level of the macro
@@ -6434,7 +6629,62 @@
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.SequencerExitCode">
             <summary>
-            List of possible return code error conditions that can occur when running a sequence
+            List of possible return code error conditions that can occur when running a sequence.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SequencerExitCode.NotRun">
+            <summary>
+            The sequence was not run. It could mean that a previous sequence in the job list was canceled, or there was an error before the sequencer could start.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SequencerExitCode.LinkPackagesToAutomationSequencesFail">
+            <summary>
+            There was an error with linking packages to automation sequences.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SequencerExitCode.LoadAutomationSequencesXmlToRunAsyncFail">
+            <summary>
+            There was an error with loading automation sequences as defined from the automation root document.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SequencerExitCode.ParseAutomationSequencesPreRunFail">
+            <summary>
+            There was an error with parsing an automation sequence. Check xml syntax or missing task attributes.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SequencerExitCode.LoadGlobalMacrosFail">
+            <summary>
+            There was an error loading or parsing the global macros xml document.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SequencerExitCode.LoadApplicationMacrosFail">
+            <summary>
+            There was an error loading application defined macros.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SequencerExitCode.LoadLocalMacrosFail">
+            <summary>
+            There was an error loading locally defined macros in the sequence or custom defined macros from the sequencer.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SequencerExitCode.ResetApplicationMacrosFail">
+            <summary>
+            There was an error resetting application macros.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SequencerExitCode.Errors">
+            <summary>
+            There were errors running a task in a sequence.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SequencerExitCode.NoErrors">
+            <summary>
+            No errors occurred, the sequence(s) completed successfully.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SequencerExitCode.Cancel">
+            <summary>
+            The sequence run was canceled.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.UIThemes">
@@ -6495,6 +6745,21 @@
         <member name="F:RelhaxModpack.Utilities.Enums.UninstallModes.Quick">
             <summary>
             Quick uninstall method to remove 
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.XmlEntryType">
+            <summary>
+            The type of xml entry to look for
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.XmlEntryType.XmlElement">
+            <summary>
+            An xml element
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.XmlEntryType.XmlAttribute">
+            <summary>
+            An xml attribute
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.XmlLoadType">
