@@ -23,6 +23,7 @@ namespace RelhaxModpack.UI
     public partial class RelhaxWPFRadioButton : RadioButton, IPackageUIComponent, INotifyPropertyChanged
     {
         private bool iconsSet = false;
+
         /// <summary>
         /// Create an instance of the RelhaxWPFRadioButton class
         /// </summary>
@@ -36,8 +37,11 @@ namespace RelhaxModpack.UI
         /// </summary>
         public SelectablePackage Package { get; set; }
 
-        protected bool _isHighlightedForView = false;
+        private bool _isHighlightedForView = false;
 
+        /// <summary>
+        /// Gets or sets if the UI component should be highlighted in the selection view from a user search.
+        /// </summary>
         public bool IsHighlightedForView
         {
             get { return _isHighlightedForView; }
@@ -48,8 +52,19 @@ namespace RelhaxModpack.UI
             }
         }
 
+        /// <summary>
+        /// Occurs after a property that uses OnPropertyChanged has been set.
+        /// </summary>
+        /// <seealso cref="OnPropertyChanged(string)"/>
+        /// <seealso cref="INotifyPropertyChanged"/>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Called from a property in this class that wants to tell PropertyChanged listeners that it has changed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that has changed.</param>
+        /// <seealso cref="PropertyChanged"/>
+        /// <seealso cref="INotifyPropertyChanged"/>
         protected void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)

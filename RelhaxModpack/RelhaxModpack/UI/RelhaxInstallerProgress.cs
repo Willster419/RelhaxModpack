@@ -78,6 +78,9 @@ namespace RelhaxModpack.UI
         /// </summary>
         public uint TotalThreads = 0;
 
+        /// <summary>
+        /// The total number of extraction threads being used to extract this install group.
+        /// </summary>
         public uint TotalThreadsOfThisGroup = 0;
 
         /// <summary>
@@ -110,6 +113,9 @@ namespace RelhaxModpack.UI
         /// </summary>
         public bool[] WaitingOnDownloadsOfAThread;
 
+        /// <summary>
+        /// Get if all threads are currently waiting for downloads. If there is at least one thread *not* waiting for a download, this will return false.
+        /// </summary>
         public bool AllThreadsWaitingOnDownloads
         {
             get
@@ -126,6 +132,9 @@ namespace RelhaxModpack.UI
             }
         }
 
+        /// <summary>
+        /// Get if all threads remaining to complete are waiting on downloads. If there is at least one thread *not* waiting for a download, this will return false.
+        /// </summary>
         public bool AllRemainingThreadsWaitingOnDownloads
         {
             get

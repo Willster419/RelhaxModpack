@@ -4,9 +4,8 @@ using System.Windows.Media;
 namespace RelhaxModpack.UI
 {
     /// <summary>
-    /// The PackageUIComponent class acts as a handler for when the enabled and checked properties are set from the Package.
-    /// It can simplify the ModSelectionList code, clean it up, allow for uniform logic for all UI,
-    /// and allow for easy implementation of another UI.
+    /// The PackageUIComponent class acts as an implementation handler for when the enabled property is set from the Package object.
+    /// It also contains a signature for the UI component to handle when the component should be highlighted in the selection list from a user search.
     /// </summary>
     public interface IPackageUIComponent : IOnCheckedComponent
     {
@@ -16,6 +15,9 @@ namespace RelhaxModpack.UI
         /// <param name="Enabled">The value of the enabled property</param>
         void OnEnabledChanged(bool Enabled);
 
+        /// <summary>
+        /// Gets or sets if the UI component should be highlighted in the selection view from a user search.
+        /// </summary>
         bool IsHighlightedForView { get; set; }
     }
 }

@@ -15,13 +15,23 @@ using System.Windows.Shapes;
 
 namespace RelhaxModpack.UI
 {
+    /// <summary>
+    /// A SelectionListTabControl provides additional functionality that upon a selection being changed, has each SelectionListTabItem check if any packages in itself are checked.
+    /// </summary>
+    /// <seealso cref="SelectionListTabItem"/>
     public class SelectionListTabControl : TabControl
     {
+        /// <summary>
+        /// Create an instance of the SelectionListTabControl.
+        /// </summary>
         public SelectionListTabControl() : base()
         {
             
         }
 
+        /// <summary>
+        /// Including raising the SelectionChanged event, checks each SelectionListTabItem if any packages in itself are checked.
+        /// </summary>
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
