@@ -5427,6 +5427,11 @@
             If the installation should be continued or if the user canceled
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.DatabaseManager">
+            <summary>
+            The database manager object that was used for loading the selection list.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.UserMods">
             <summary>
             The list of use mods
@@ -5441,6 +5446,11 @@
             <summary>
             Flag to determine if the current installation loaded with selection file
             format V3+ is out of date with what the database has
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.WoTModpackOnlineFolderFromDB">
+            <summary>
+            The online FTP folder name that is used for downloading packages for this version of the database.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs">
@@ -6999,6 +7009,19 @@
             <returns>True if the manager string versions are the same, false otherwise</returns>
             <remarks>IsManagerUptoDate will return false if it fails to get the latest managerInfo zip file</remarks>
         </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.GetListOfGithubRepoBranchesAsync(System.String)">
+            <summary>
+            Gets the list of branches that currently exist for a github repository using it's web api.
+            </summary>
+            <param name="githubApiUrl">The repository api url to use to get the list of branches from.</param>
+            <returns>The list of branches that currently exist for the given repository</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.CheckAndEnableTLS">
+            <summary>
+            Check if the version of windows this is running on is windows 7 (NT 6.1), and if it is enable TLS versions 1.1 and 1.2.
+            </summary>
+            <remarks>This is needed for many websites that no longer support TLS 1.0 and 1.1. TLS 1.1 and 1.2 are not enabled by default when an application is running on windows 7.</remarks>
+        </member>
         <member name="M:RelhaxModpack.Utilities.CommonUtils.ParseBool(System.String,System.Boolean)">
             <summary>
             Try to parse a boolean value based on string input
@@ -7331,6 +7354,16 @@
             <param name="valueToSet">The string version of the value to set</param>
             <returns>False if the value could not be set, true otherwise</returns>
         </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetListIndexValueType(System.Collections.IList,System.Int32,System.Type,System.String)">
+            <summary>
+            Attempts to set a list's value at a given index position.
+            </summary>
+            <param name="list">The list object to set value in.</param>
+            <param name="index">The position in the list to try to set the value.</param>
+            <param name="typeToSet">The type of the value to set.</param>
+            <param name="valueToSet">The value to try to set.</param>
+            <returns>False if the value could not be set, true otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.Utilities.CommonUtils.SetObjectField(System.Object,System.Reflection.FieldInfo,System.String)">
             <summary>
             Attempts to set a field value of a class or structure object instance with the string valueToSet
@@ -7353,8 +7386,11 @@
             <summary>
             Creates all database entries in a list property, parsing each list entry object by xmlListItems
             </summary>
-            <param name="listProperty">A generic representation of a initialized, empty list</param>
-            <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
+            <param name="listProperty">A generic representation of a initialized, empty list.</param>
+            <param name="componentWithIdInternalName">The ID or internal name of the component that contains that list that we are attempting to set values on, used for debugging.</param>
+            <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder.</param>
+            <param name="customTypeAttributeName">If using custom typing, the name of the xml attribute to use for lookup of the type of the value to set.</param>
+            <param name="typeMapper">If using custom typing, a dictionary to map potential string results to type values of the value to create.</param>
         </member>
         <member name="M:RelhaxModpack.Utilities.CommonUtils.SetListEntries(RelhaxModpack.Common.IComponentWithID,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement},System.String,System.Collections.Generic.Dictionary{System.String,System.Type})">
             <summary>
@@ -7363,6 +7399,8 @@
             <param name="databasePackageObject">The database package object with the list property, for example SelectablePackage</param>
             <param name="listPropertyInfo">The property metadata/info about the list property, for example Medias</param>
             <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
+            <param name="customTypeAttributeName">If using custom typing, the name of the xml attribute to use for lookup of the type of the value to set.</param>
+            <param name="typeMapper">If using custom typing, a dictionary to map potential string results to type values of the value to create.</param>
         </member>
         <member name="M:RelhaxModpack.Utilities.CommonUtils.GetEnumList``1">
             <summary>
