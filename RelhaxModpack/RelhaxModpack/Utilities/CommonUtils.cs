@@ -175,6 +175,11 @@ namespace RelhaxModpack.Utilities
             return !outOfDate;
         }
 
+        /// <summary>
+        /// Gets the list of branches that currently exist for a github repository using it's web api.
+        /// </summary>
+        /// <param name="githubApiUrl">The repository api url to use to get the list of branches from.</param>
+        /// <returns>The list of branches that currently exist for the given repository</returns>
         public static async Task<List<string>> GetListOfGithubRepoBranchesAsync(string githubApiUrl)
         {
             //declare objects to use
@@ -203,7 +208,7 @@ namespace RelhaxModpack.Utilities
             return ParseBranchesJsonToList(jsonText);
         }
 
-        public static List<string> ParseBranchesJsonToList(string jsonText)
+        private static List<string> ParseBranchesJsonToList(string jsonText)
         {
             JArray root = null;
             List<string> branches = new List<string>
@@ -239,6 +244,10 @@ namespace RelhaxModpack.Utilities
             return branches;
         }
 
+        /// <summary>
+        /// Check if the version of windows this is running on is windows 7 (NT 6.1), and if it is enable TLS versions 1.1 and 1.2.
+        /// </summary>
+        /// <remarks>This is needed for many websites that no longer support TLS 1.0 and 1.1. TLS 1.1 and 1.2 are not enabled by default when an application is running on windows 7.</remarks>
         public static void CheckAndEnableTLS()
         {
             //if windows 7, enable TLS 1.1 and 1.2
@@ -1018,6 +1027,14 @@ namespace RelhaxModpack.Utilities
             }
         }
 
+        /// <summary>
+        /// Attempts to set a list's value at a given index position.
+        /// </summary>
+        /// <param name="list">The list object to set value in.</param>
+        /// <param name="index">The position in the list to try to set the value.</param>
+        /// <param name="typeToSet">The type of the value to set.</param>
+        /// <param name="valueToSet">The value to try to set.</param>
+        /// <returns>False if the value could not be set, true otherwise</returns>
         public static bool SetListIndexValueType(IList list, int index, Type typeToSet, string valueToSet)
         {
             try
@@ -1086,8 +1103,11 @@ namespace RelhaxModpack.Utilities
         /// <summary>
         /// Creates all database entries in a list property, parsing each list entry object by xmlListItems
         /// </summary>
-        /// <param name="listProperty">A generic representation of a initialized, empty list</param>
-        /// <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
+        /// <param name="listProperty">A generic representation of a initialized, empty list.</param>
+        /// <param name="componentWithIdInternalName">The ID or internal name of the component that contains that list that we are attempting to set values on, used for debugging.</param>
+        /// <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder.</param>
+        /// <param name="customTypeAttributeName">If using custom typing, the name of the xml attribute to use for lookup of the type of the value to set.</param>
+        /// <param name="typeMapper">If using custom typing, a dictionary to map potential string results to type values of the value to create.</param>
         public static bool SetListEntries(IList listProperty, string componentWithIdInternalName, IEnumerable<XElement> xmlListItems, string customTypeAttributeName = null, Dictionary<string, Type> typeMapper = null)
         {
             bool errorOccured = false;
@@ -1252,6 +1272,8 @@ namespace RelhaxModpack.Utilities
         /// <param name="databasePackageObject">The database package object with the list property, for example SelectablePackage</param>
         /// <param name="listPropertyInfo">The property metadata/info about the list property, for example Medias</param>
         /// <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
+        /// <param name="customTypeAttributeName">If using custom typing, the name of the xml attribute to use for lookup of the type of the value to set.</param>
+        /// <param name="typeMapper">If using custom typing, a dictionary to map potential string results to type values of the value to create.</param>
         public static bool SetListEntries(IComponentWithID databasePackageObject, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems, string customTypeAttributeName = null, Dictionary<string, Type> typeMapper = null)
         {
             bool customTyping = !(string.IsNullOrEmpty(customTypeAttributeName));
