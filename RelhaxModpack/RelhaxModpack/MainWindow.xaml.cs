@@ -975,9 +975,9 @@ namespace RelhaxModpack
             modSelectionList = new PackageSelectionList(this.ModpackSettings, this.CommandLineSettings)
             {
                 AutoInstallMode = (sender == null),
-                WotClientVersionFromMainWindow = this.WoTClientVersion,
-                DatabaseVersionFromMainWindow = this.DatabaseVersion,
-                WoTDirectoryFromMainWindow = this.WoTDirectory
+                WotClientVersion = this.WoTClientVersion,
+                DatabaseVersion = this.DatabaseVersion,
+                WoTDirectory = this.WoTDirectory
             };
 
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c

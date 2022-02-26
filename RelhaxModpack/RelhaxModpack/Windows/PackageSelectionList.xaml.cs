@@ -67,17 +67,17 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// The WoT client version.
         /// </summary>
-        public string WotClientVersionFromMainWindow { get; set; }
+        public string WotClientVersion { get; set; }
 
         /// <summary>
         /// The Database version that the user is currently selecting from.
         /// </summary>
-        public string DatabaseVersionFromMainWindow { get; set; }
+        public string DatabaseVersion { get; set; }
 
         /// <summary>
         /// The WoT client path that the user is selecting packages to install to.
         /// </summary>
-        public string WoTDirectoryFromMainWindow { get; set; }
+        public string WoTDirectory { get; set; }
 
         /// <summary>
         /// Get the database manager object to use for loading the database.
@@ -453,8 +453,8 @@ namespace RelhaxModpack.Windows
 
             //update text boxes and other text properties (~2ms)
             //UI THREAD REQUIRED
-            InstallingTo.Text = string.Format(Translations.GetTranslatedString(InstallingTo.Name), WoTDirectoryFromMainWindow);
-            InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString(InstallingAsWoTVersion.Name), WotClientVersionFromMainWindow);
+            InstallingTo.Text = string.Format(Translations.GetTranslatedString(InstallingTo.Name), WoTDirectory);
+            InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString(InstallingAsWoTVersion.Name), WotClientVersion);
             SearchCB.Text = Translations.GetTranslatedString("searchComboBoxInitMessage");
             string databaseSubversionInfo = string.Empty;
             switch (ModpackSettings.DatabaseDistroVersion)
@@ -466,7 +466,7 @@ namespace RelhaxModpack.Windows
                     databaseSubversionInfo = ModpackSettings.BetaDatabaseSelectedBranch;
                     break;
                 case DatabaseVersions.Stable:
-                    databaseSubversionInfo = DatabaseVersionFromMainWindow;
+                    databaseSubversionInfo = DatabaseVersion;
                     break;
             }
             UsingDatabaseVersion.Text = string.Format(Translations.GetTranslatedString(UsingDatabaseVersion.Name), ModpackSettings.DatabaseDistroVersion.ToString(), databaseSubversionInfo);
@@ -2462,7 +2462,7 @@ namespace RelhaxModpack.Windows
                 new XElement("mods", new XAttribute("ver", ApplicationConstants.ConfigFileVersion2V0),
                 new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", DatabaseVersionFromMainWindow),
+                new XAttribute("dbVersion", DatabaseVersion),
                 new XAttribute("dbDistro", databaseManager.DatabaseDistroToLoad.ToString())));
 
             //relhax mods root
@@ -2521,7 +2521,7 @@ namespace RelhaxModpack.Windows
                 new XAttribute("ver", ApplicationConstants.ConfigFileVersion3V0),
                 new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", DatabaseVersionFromMainWindow),
+                new XAttribute("dbVersion", DatabaseVersion),
                 new XAttribute("dbDistro", databaseManager.DatabaseDistroToLoad.ToString()));
 
             doc.Add(packagesRoot);

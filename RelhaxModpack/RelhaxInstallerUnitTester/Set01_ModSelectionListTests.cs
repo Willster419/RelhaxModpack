@@ -127,13 +127,13 @@ namespace RelhaxInstallerUnitTester
                     OriginalWidth = 1280.0,
 
                     //WotClientVersionFromMainWindow is for UI display only
-                    WotClientVersionFromMainWindow = "TESTING",
+                    WotClientVersion = "TESTING",
 
                     //WoTDirectoryFromMainWindow is for UI display only
-                    WoTDirectoryFromMainWindow = "TESTING",
+                    WoTDirectory = "TESTING",
 
                     //DatabaseVersionFromMainWindow is for UI display and when saving a selection
-                    DatabaseVersionFromMainWindow = "TESTING"
+                    DatabaseVersion = "TESTING"
                 };
 
                 selectionList.Closed += (sender, e) => selectionList.Dispatcher.BeginInvokeShutdown(DispatcherPriority.ApplicationIdle);
