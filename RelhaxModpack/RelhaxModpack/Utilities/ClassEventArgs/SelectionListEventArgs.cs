@@ -18,6 +18,9 @@ namespace RelhaxModpack.Utilities.ClassEventArgs
         /// </summary>
         public bool ContinueInstallation = false;
 
+        /// <summary>
+        /// The database manager object that was used for loading the selection list.
+        /// </summary>
         public DatabaseManager DatabaseManager;
 
         /// <summary>
@@ -36,6 +39,9 @@ namespace RelhaxModpack.Utilities.ClassEventArgs
         /// </summary>
         public bool IsSelectionOutOfDate = false;
 
+        /// <summary>
+        /// The online FTP folder name that is used for downloading packages for this version of the database.
+        /// </summary>
         public string WoTModpackOnlineFolderFromDB = string.Empty;
     }
 }
