@@ -6830,6 +6830,17 @@
             <param name="credentials">The FTP server credentials</param>
             <returns>The size of the file in bytes</returns>
         </member>
+        <member name="M:RelhaxModpack.Utilities.FtpUtils.TriggerMirrorSyncAsync">
+            <summary>
+            Trigger an Rsync update of our download mirror(s) to get the latest versions of our zip files from our main download mirror.
+            </summary>
+            <returns>True if the triggering of an rsync update was successful, fail otherwise.</returns>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Structs.VersionInfos">
+            <summary>
+            A structure to hold the version of a WoT client and it's corresponding online FTP folder name that a database who's client is using.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Utilities.Structs.VersionInfos.WoTClientVersion">
             <summary>
             The WoT client version e.g. 1.5.1.3
@@ -6911,7 +6922,12 @@
         </member>
         <member name="F:RelhaxModpack.Utilities.RegistryUtils.IE_BROWSER_EMULATION_REGPATH_32">
             <summary>
-            The registry location, within CURRENT_USER, of where to specify the version of IE to use for embedded application browser usage
+            The registry location, within CURRENT_USER, of where to specify the version of IE to use for embedded application browser usage (32bit entry)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.RegistryUtils.IE_BROWSER_EMULATION_REGPATH_64">
+            <summary>
+            The registry location, within CURRENT_USER, of where to specify the version of IE to use for embedded application browser usage (64bit entry)
             </summary>
         </member>
         <member name="M:RelhaxModpack.Utilities.RegistryUtils.AutoFindWoTDirectoryFirst">
