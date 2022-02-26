@@ -35,18 +35,40 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public const string LoggingFilename = "RelhaxAutomation.log";
 
+        /// <summary>
+        /// Event handler to use when a task is reporting download progress.
+        /// </summary>
         public DownloadProgressChangedEventHandler DownloadProgressChanged = null;
 
+        /// <summary>
+        /// Event handler to use when a task is reporting generic progress.
+        /// </summary>
         public ProgressChangedEventHandler ProgressChanged = null;
 
+        /// <summary>
+        /// Event handler to use when a task is reporting a download has been completed.
+        /// </summary>
         public DownloadDataCompletedEventHandler DownloadDataCompleted = null;
 
+        /// <summary>
+        /// Event handler to use when a task is reporting a download to a file has been completed.
+        /// </summary>
         public AsyncCompletedEventHandler DownloadFileCompleted = null;
 
+        /// <summary>
+        /// Event handler to use when a task is reporting upload progress of a file.
+        /// </summary>
         public UploadProgressChangedEventHandler UploadProgressChanged = null;
 
+        /// <summary>
+        /// Event handler to use when a task is reporting an upload of a file has been completed.
+        /// </summary>
         public UploadFileCompletedEventHandler UploadFileCompleted = null;
 
+        /// <summary>
+        /// Event handler to use when a task is reporting generic progress using the RelhaxProgress object.
+        /// </summary>
+        /// <seealso cref="RelhaxProgress"/>
         public EventHandler<RelhaxProgress> RelhaxProgressChanged = null;
 
         private AutomationRunnerSettings AutomationSettings = new AutomationRunnerSettings();
@@ -328,7 +350,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Sequence move around buttons
-        public struct LocationTracker
+        private struct LocationTracker
         {
             public AutomationSequence Sequence;
             public int OldIndex;

@@ -69,6 +69,12 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public EditorSettings EditorSettings = null;
 
+        /// <summary>
+        /// Get or set the name of the FTP folder to use for logging reporting and user display.
+        /// </summary>
+        /// <remarks>The full path to the file on disk and on the FTP server are handled by other variables</remarks>
+        /// <seealso cref="ZipFilePathDisk"/>
+        /// <seealso cref="ZipFilePathOnline"/>
         public string WoTModpackOnlineFolderVersion { get; set; }
 
         private WebClient client = null;

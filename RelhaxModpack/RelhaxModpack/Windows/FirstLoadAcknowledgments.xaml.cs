@@ -15,6 +15,9 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public bool UserAgreed { get; private set; } = false;
 
+        /// <summary>
+        /// Flag used to indicate if this is the first time the user is upgrading from Relhax V1 (old application) to Relhax V2.
+        /// </summary>
         public bool FirstLoadToV2 { get; set; }
 
         /// <summary>

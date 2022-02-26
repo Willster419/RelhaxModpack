@@ -48,6 +48,10 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public AskCloseWoTResult AskCloseWoTResult { get; set; } = AskCloseWoTResult.CancelInstallation;
 
+        /// <summary>
+        /// The location of the WoT installation directory parsed at installation time
+        /// </summary>
+        /// <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
         public string WoTDirectory { get; set; }
 
         /// <summary>

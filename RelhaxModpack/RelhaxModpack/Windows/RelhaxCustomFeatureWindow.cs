@@ -33,8 +33,14 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public bool RunStandAloneUpdateCheck { get; set; }
 
+        /// <summary>
+        /// Get or (privately) set the log file enumeration to use when writing log messages in this window.
+        /// </summary>
         public Logfiles Logfile { get; protected set; }
 
+        /// <summary>
+        /// Flag to indicate if the window is performing initialization tasks.
+        /// </summary>
         public bool Init { get; protected set; } = true;
 
         /// <summary>
@@ -45,6 +51,10 @@ namespace RelhaxModpack.Windows
             Logfile = logfile;
         }
 
+        /// <summary>
+        /// Saves the settings instance used by this application to disk before the window is closed.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
@@ -56,6 +66,9 @@ namespace RelhaxModpack.Windows
                 Logging.DisposeLogging(Logfile);
         }
 
+        /// <summary>
+        /// Loads the settings object with settings values from an xml document specified by the settings object.
+        /// </summary>
         protected override void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
             SettingsParser parser = new SettingsParser();
@@ -63,7 +76,7 @@ namespace RelhaxModpack.Windows
             //if it's not launched from the main window, then the ModpackSettings object has not been parsed yet. do that now.
             if (!LaunchedFromMainWindow)
             {
-                //TODO: use hook for functions that normally happen in the MainWindow?
+                //use this hook for functions that normally happen in the MainWindow
             }
 
             //also load the feature window's custom settings file
@@ -85,6 +98,9 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        /// <summary>
+        /// If the default font to apply is null, it is saved from this window's default font.
+        /// </summary>
         protected override void ApplyFontToWindow()
         {
             if (DefaultFontFamily == null)

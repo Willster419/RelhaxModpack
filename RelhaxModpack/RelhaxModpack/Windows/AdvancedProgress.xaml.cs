@@ -84,6 +84,10 @@ namespace RelhaxModpack.Windows
 
         private RelhaxInstallerProgress lastRelhaxInstallerProgressExtraction = null;
 
+        /// <summary>
+        /// Report download progress of a package waiting to install.
+        /// </summary>
+        /// <param name="progress">The progress object.</param>
         public void OnReportDownload(RelhaxDownloadProgress progress)
         {
             if (lastRelhaxInstallerProgressExtraction.WaitingOnDownloadsOfAThread == null)

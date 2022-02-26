@@ -147,6 +147,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Creates the instance of the MainWindow class
         /// </summary>
+        /// <param name="modpackSettings">The modpack settings object</param>
         public MainWindow(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();

@@ -24,8 +24,15 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class RelhaxLogViewer : RelhaxWindow
     {
+        /// <summary>
+        /// If true, don't show debug level log messages in the window.
+        /// </summary>
         public bool SuppressDebugMessages { get; set; } = true;
 
+        /// <summary>
+        /// Create an instance of the RelhaxLogViewer class.
+        /// </summary>
+        /// <param name="modpackSettings">The modpack settings object.</param>
         public RelhaxLogViewer(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
@@ -69,9 +76,22 @@ namespace RelhaxModpack.Windows
             ToggleWordWrapCheckbox_Click(null, null);
         }
 
+        /// <summary>
+        /// Use the dispatcher that created this window to clear the log text display.
+        /// </summary>
         public void ClearLogWindow()
         {
             Dispatcher.Invoke((Action)(() => { LogTextbox.Clear(); }));
+        }
+
+        /// <summary>
+        /// Use the dispatcher that created this window to start the log listener.
+        /// </summary>
+        /// <remarks>The windows's dispatcher is subscribed to the OnLogMessageWrite event, which when invoked asynchronously writes the log message to the log window.</remarks>
+        /// <seealso cref="OnLogMessageWrite(object, LogMessageEventArgs)"/>
+        public void StartLogListener()
+        {
+            Dispatcher.Invoke(() => StartLogListener_());
         }
 
         private void StartLogListener_()
@@ -79,19 +99,19 @@ namespace RelhaxModpack.Windows
             Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite += OnLogMessageWrite;
         }
 
-        public void StartLogListener()
+        /// <summary>
+        /// Use the dispatcher that created this window to stop the log listener.
+        /// </summary>
+        /// <remarks>The window's dispatcher is un-subscribed from the OnLogMessageWriteEvent.</remarks>
+        /// <seealso cref="OnLogMessageWrite(object, LogMessageEventArgs)"/>
+        public void StopLogListener()
         {
-            Dispatcher.Invoke(() => StartLogListener_());
+            Dispatcher.Invoke(() => StopLogListener_());
         }
 
         private void StopLogListener_()
         {
             Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite -= OnLogMessageWrite;
-        }
-
-        public void StopLogListener()
-        {
-            Dispatcher.Invoke(() => StopLogListener_());
         }
     }
 }

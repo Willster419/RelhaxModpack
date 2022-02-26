@@ -64,12 +64,25 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public bool AutoInstallMode { get; set; } = false;
 
+        /// <summary>
+        /// The WoT client version.
+        /// </summary>
         public string WotClientVersionFromMainWindow { get; set; }
 
+        /// <summary>
+        /// The Database version that the user is currently selecting from.
+        /// </summary>
         public string DatabaseVersionFromMainWindow { get; set; }
 
+        /// <summary>
+        /// The WoT client path that the user is selecting packages to install to.
+        /// </summary>
         public string WoTDirectoryFromMainWindow { get; set; }
 
+        /// <summary>
+        /// Get the database manager object to use for loading the database.
+        /// </summary>
+        /// <remarks>If it is null upon loading the window, it will be created automatically.</remarks>
         public DatabaseManager DatabaseManager { get { return databaseManager; } }
 
         /// <summary>
@@ -90,13 +103,21 @@ namespace RelhaxModpack.Windows
 
         #region Boring stuff
         /// <summary>
-        /// Create an instance of the ModSelectionList window
+        /// Create an instance of the PackageSelectionList window
         /// </summary>
+        /// <param name="modpackSettings">The modpack settings object</param>
+        /// <param name="commandLineSettings">The command line settings object.</param>
         public PackageSelectionList(ModpackSettings modpackSettings, CommandLineSettings commandLineSettings) : this(modpackSettings, commandLineSettings, null)
         {
             
         }
 
+        /// <summary>
+        /// Create an instance of the PackageSelectionList window
+        /// </summary>
+        /// <param name="modpackSettings">The modpack settings object</param>
+        /// <param name="commandLineSettings">The command line settings object.</param>
+        /// <param name="manager">The database manager object to use for loading the database</param>
         public PackageSelectionList(ModpackSettings modpackSettings, CommandLineSettings commandLineSettings, DatabaseManager manager) : base(modpackSettings)
         {
             InitializeComponent();

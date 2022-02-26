@@ -26,12 +26,19 @@ namespace RelhaxModpack.Windows
     {
         private enum BrowserView { HTML, IE, EDGE }
 
+        /// <summary>
+        /// The filename to write the downloaded html document to, to use for additional debugging by the user.
+        /// </summary>
         public const string HtmlDocumentTextFilename = "HtmlOutput.html";
 
         private int waitCounts = 3;
 
         HtmlWebscrapeParser htmlXpathParser;
 
+        /// <summary>
+        /// Create an instance of the HtmlpathSelector class window.
+        /// </summary>
+        /// <param name="modpackSettings">The modpack settings object</param>
         public HtmlPathSelector(ModpackSettings modpackSettings) : base (modpackSettings)
         {
             InitializeComponent();

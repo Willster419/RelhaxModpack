@@ -21,10 +21,21 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class ConflictingPackageDialog : RelhaxWindow
     {
+        /// <summary>
+        /// True if 'option a' of package conflict resolution is selected, false if 'option b' is selected.
+        /// </summary>
         public bool OptionASelected { get; set; } = false;
 
+        /// <summary>
+        /// The package that the user tried to select that conflicts with other already selected packages.
+        /// </summary>
         public SelectablePackage PackageToTryToSelect { get; set; }
 
+        /// <summary>
+        /// Create an instance of the ConflictingPackageDialog class
+        /// </summary>
+        /// <param name="modpackSettings">The modpack settings object</param>
+        /// <param name="packageToTryToSelect">The package that the user tried to select that conflicts with other already selected packages.</param>
         public ConflictingPackageDialog(ModpackSettings modpackSettings, SelectablePackage packageToTryToSelect) : base(modpackSettings)
         {
             InitializeComponent();
