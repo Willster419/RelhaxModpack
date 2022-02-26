@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Utilities.Structs
 {
+    /// <summary>
+    /// A structure to hold the version of a WoT client and it's corresponding online FTP folder name that a database who's client is using.
+    /// </summary>
     public struct VersionInfos
     {
         /// <summary>

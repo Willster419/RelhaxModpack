@@ -30,10 +30,13 @@ namespace RelhaxModpack.Utilities
     public static class RegistryUtils
     {
         /// <summary>
-        /// The registry location, within CURRENT_USER, of where to specify the version of IE to use for embedded application browser usage
+        /// The registry location, within CURRENT_USER, of where to specify the version of IE to use for embedded application browser usage (32bit entry)
         /// </summary>
         public const string IE_BROWSER_EMULATION_REGPATH_32 = @"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
 
+        /// <summary>
+        /// The registry location, within CURRENT_USER, of where to specify the version of IE to use for embedded application browser usage (64bit entry)
+        /// </summary>
         public const string IE_BROWSER_EMULATION_REGPATH_64 = @"SOFTWARE\Wow6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
 
         /// <summary>

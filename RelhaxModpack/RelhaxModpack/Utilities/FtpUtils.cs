@@ -214,6 +214,10 @@ namespace RelhaxModpack.Utilities
             return result;
         }
 
+        /// <summary>
+        /// Trigger an Rsync update of our download mirror(s) to get the latest versions of our zip files from our main download mirror.
+        /// </summary>
+        /// <returns>True if the triggering of an rsync update was successful, fail otherwise.</returns>
         public static async Task<bool> TriggerMirrorSyncAsync()
         {
             using (PatientWebClient client = new PatientWebClient()
