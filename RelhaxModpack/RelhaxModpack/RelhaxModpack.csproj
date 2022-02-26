@@ -321,7 +321,6 @@
     <Compile Include="Utilities\Enums\UIThemes.cs" />
     <Compile Include="Utilities\Enums\UninstallerExitCodes.cs" />
     <Compile Include="Utilities\Enums\UninstallModes.cs" />
-    <Compile Include="Utilities\Enums\UpdateTypes.cs" />
     <Compile Include="Utilities\Enums\XmlEntryType.cs" />
     <Compile Include="Utilities\Enums\XmlLoadType.cs" />
     <Compile Include="Utilities\ClassEventArgs\EditorTransferEventArgs.cs" />
