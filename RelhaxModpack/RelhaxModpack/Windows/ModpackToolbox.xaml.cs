@@ -2161,7 +2161,7 @@ namespace RelhaxModpack.Windows
 
             //bulid link refrences (parent/child, levels, etc)
             databaseManager.ProcessDatabase();
-            client = new WebClient();
+            PatientWebClient patientWebClient = new PatientWebClient() { Timeout = 60 * CommonUtils.TO_SECONDS };
 
             //get an estimate count beforehand
             int numToTest = 0;
@@ -2197,7 +2197,7 @@ namespace RelhaxModpack.Windows
                         ReportProgress(string.Format("Attempt to download media {0} of {1}, package {2}, type {3}, url {4}", totalTested, numToTest, selectablePackage.PackageName, selectablePackage.Medias[i].MediaType, selectablePackage.Medias[i].URL));
                         try
                         {
-                            byte[] tempByte = await client.DownloadDataTaskAsync(selectablePackage.Medias[i].URL);
+                            byte[] tempByte = await patientWebClient.DownloadDataTaskAsync(selectablePackage.Medias[i].URL);
                             ReportProgress("Download PASS");
                         }
                         catch (WebException wex)
@@ -2227,7 +2227,7 @@ namespace RelhaxModpack.Windows
                 }
             }
 
-            client.Dispose();
+            patientWebClient.Dispose();
 
             ReportProgress(string.Format("Finished, {0} of {1} medias have problems", brokenMedias.Count, numToTest));
             foreach (MediasCleaningStruct mediasCleaningStruct in brokenMedias)
