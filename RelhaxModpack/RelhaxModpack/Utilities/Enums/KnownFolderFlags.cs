@@ -2,6 +2,7 @@
 
 namespace RelhaxModpack.Utilities.Enums
 {
+#pragma warning disable CS1591
     ///<Summary>
     /// Enums for Known Folder Flags
     ///</Summary>
@@ -19,4 +20,5 @@ namespace RelhaxModpack.Utilities.Enums
         NoAppcontainerRedirection = 0x00010000,
         AliasOnly = 0x80000000
     }
+#pragma warning restore CS1591
 }
