@@ -4622,16 +4622,91 @@
             </summary>
             <returns>True if the provided arguments will return a custom array, false otherwise</returns>
         </member>
+        <member name="T:RelhaxModpack.UI.AutomationListBoxItem">
+            <summary>
+            Allows for display (ToString) of an AutomationSequence for the automation selection list, and allows for color change of the display text based on the output code of the sequence's run.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UI.AutomationListBoxItem.DefaultForgroundBrush">
+            <summary>
+            The default color of the foreground brush when this component is loaded.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UI.AutomationListBoxItem.AutomationSequence">
+            <summary>
+            The automation sequence.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UI.AutomationListBoxItem.ToString">
+            <summary>
+            Display the AutomationSequence ToString return value.
+            </summary>
+            <returns>The value of the AutomationSequence.ToString() method.</returns>
+            <seealso cref="P:RelhaxModpack.UI.AutomationListBoxItem.AutomationSequence"/>
+        </member>
+        <member name="T:RelhaxModpack.UI.Extensions.FontExtensions">
+            <summary>
+            The FontExtensions class is a static class that enables extensions for the FontFamily class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UI.Extensions.FontExtensions.FontName(System.Windows.Media.FontFamily)">
+            <summary>
+            Gets the name of the font without the font code and the '#' symbol.
+            </summary>
+            <returns>The name of the font, removing the font code after the '#' symbol.</returns>
+        </member>
+        <member name="T:RelhaxModpack.UI.IOnCheckedComponent">
+            <summary>
+            An interface than when implemented implies that the UI component has a reference to the Package object and a method to handle when the Package object gets the Checked Property toggled.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Database.SelectablePackage.Checked"/>
+        </member>
         <member name="P:RelhaxModpack.UI.IOnCheckedComponent.Package">
             <summary>
-            The package that the UI component belongs to
+            The package associated with this UI component
             </summary>
         </member>
         <member name="M:RelhaxModpack.UI.IOnCheckedComponent.OnCheckedChanged(System.Boolean)">
             <summary>
-            Method signature for when the checked property changes
+            Method for when the checked property changes
             </summary>
             <param name="Checked">The value of the checked property</param>
+        </member>
+        <member name="T:RelhaxModpack.UI.RelhaxBorder">
+            <summary>
+            A RelhaxBorder provides additional functionality over a Border to indicate if the child packages inside this border are enabled and checked.
+            It enables highlight logic for ui interaction in the selection list.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UI.RelhaxBorder.#cctor">
+            <summary>
+            Override framework metadata from Border to this class's RelhaxBorder.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UI.RelhaxBorder.#ctor">
+            <summary>
+            Create an instance of the RelhaxBorder class.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UI.RelhaxBorder.IsChildPackageChecked">
+            <summary>
+            Get or set if this border's associated package has any child packages that are enabled and checked.
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UI.RelhaxBorder.PropertyChanged">
+            <summary>
+            Occurs after a property that uses OnPropertyChanged has been set.
+            </summary>
+            <seealso cref="M:RelhaxModpack.UI.RelhaxBorder.OnPropertyChanged(System.String)"/>
+            <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
+        </member>
+        <member name="M:RelhaxModpack.UI.RelhaxBorder.OnPropertyChanged(System.String)">
+            <summary>
+            Called from a property in this class that wants to tell PropertyChanged listeners that it has changed.
+            </summary>
+            <param name="propertyName">The name of the property that has changed.</param>
+            <seealso cref="E:RelhaxModpack.UI.RelhaxBorder.PropertyChanged"/>
+            <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
         </member>
         <member name="T:RelhaxModpack.UI.RelhaxComboBoxItem">
             <summary>
@@ -4667,6 +4742,21 @@
         <member name="M:RelhaxModpack.UI.RelhaxComboBoxItem.InitializeComponent">
             <summary>
             InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UI.RelhaxDownloadProgress">
+            <summary>
+            Allows for additional data for reporting when the DownloadManager reports download progress.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxDownloadProgress.DatabasePackage">
+            <summary>
+            The package being downloaded.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxDownloadProgress.DownloadProgressState">
+            <summary>
+            The current state of the download operation.
             </summary>
         </member>
         <member name="T:RelhaxModpack.UI.RelhaxHyperlink">
@@ -4781,6 +4871,11 @@
             The total number of extraction threads
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.TotalThreadsOfThisGroup">
+            <summary>
+            The total number of extraction threads being used to extract this install group.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.CompletedThreads">
             <summary>
             The number of completed extraction threads
@@ -4811,6 +4906,16 @@
             Flag to mark if the install engine is waiting on a package to download in a thread
             </summary>
         </member>
+        <member name="P:RelhaxModpack.UI.RelhaxInstallerProgress.AllThreadsWaitingOnDownloads">
+            <summary>
+            Get if all threads are currently waiting for downloads. If there is at least one thread *not* waiting for a download, this will return false.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UI.RelhaxInstallerProgress.AllRemainingThreadsWaitingOnDownloads">
+            <summary>
+            Get if all threads remaining to complete are waiting on downloads. If there is at least one thread *not* waiting for a download, this will return false.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.InstallStatus">
             <summary>
             The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
@@ -4820,6 +4925,69 @@
             <summary>
             The current status of the uninstaller. Also used as exit code.
             </summary>
+        </member>
+        <member name="T:RelhaxModpack.UI.SelectionListTabControl">
+            <summary>
+            A SelectionListTabControl provides additional functionality that upon a selection being changed, has each SelectionListTabItem check if any packages in itself are checked.
+            </summary>
+            <seealso cref="T:RelhaxModpack.UI.SelectionListTabItem"/>
+        </member>
+        <member name="M:RelhaxModpack.UI.SelectionListTabControl.#ctor">
+            <summary>
+            Create an instance of the SelectionListTabControl.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UI.SelectionListTabControl.OnSelectionChanged(System.Windows.Controls.SelectionChangedEventArgs)">
+            <summary>
+            Including raising the SelectionChanged event, checks each SelectionListTabItem if any packages in itself are checked.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UI.SelectionListTabItem">
+            <summary>
+            A SelectionListTabItem provides additional functionality over a TabItem to indicate if child packages inside this ui component's package are enabled and checked.
+            It enables highlight logic for ui interaction in the selection list.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UI.SelectionListTabItem.#cctor">
+            <summary>
+            Override framework metadata from TabItem to this class's SelectionlistTabItem.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UI.SelectionListTabItem.#ctor">
+            <summary>
+            Create an instance of the SelectionListTabitem class.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UI.SelectionListTabItem.Package">
+            <summary>
+            The package associated with this UI component
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UI.SelectionListTabItem.IsChildPackageChecked">
+            <summary>
+            Get or set if this component's package has any child packages that are enabled and checked.
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UI.SelectionListTabItem.PropertyChanged">
+            <summary>
+            Occurs after a property that uses OnPropertyChanged has been set.
+            </summary>
+            <seealso cref="M:RelhaxModpack.UI.SelectionListTabItem.OnPropertyChanged(System.String)"/>
+            <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
+        </member>
+        <member name="M:RelhaxModpack.UI.SelectionListTabItem.OnPropertyChanged(System.String)">
+            <summary>
+            Called from a property in this class that wants to tell PropertyChanged listeners that it has changed.
+            </summary>
+            <param name="propertyName">The name of the property that has changed.</param>
+            <seealso cref="E:RelhaxModpack.UI.SelectionListTabItem.PropertyChanged"/>
+            <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
+        </member>
+        <member name="M:RelhaxModpack.UI.SelectionListTabItem.OnCheckedChanged(System.Boolean)">
+            <summary>
+            Handles ui logic processing when the associated package's checked property is set.
+            </summary>
+            <param name="Checked">The checked value from the package.</param>
         </member>
         <member name="T:RelhaxModpack.UI.UiUtils">
             <summary>
@@ -5099,6 +5267,26 @@
             The package associated with this UI component
             </summary>
         </member>
+        <member name="P:RelhaxModpack.UI.RelhaxWPFCheckBox.IsHighlightedForView">
+            <summary>
+            Gets or sets if the UI component should be highlighted in the selection view from a user search.
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UI.RelhaxWPFCheckBox.PropertyChanged">
+            <summary>
+            Occurs after a property that uses OnPropertyChanged has been set.
+            </summary>
+            <seealso cref="M:RelhaxModpack.UI.RelhaxWPFCheckBox.OnPropertyChanged(System.String)"/>
+            <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
+        </member>
+        <member name="M:RelhaxModpack.UI.RelhaxWPFCheckBox.OnPropertyChanged(System.String)">
+            <summary>
+            Called from a property in this class that wants to tell PropertyChanged listeners that it has changed.
+            </summary>
+            <param name="propertyName">The name of the property that has changed.</param>
+            <seealso cref="E:RelhaxModpack.UI.RelhaxWPFCheckBox.PropertyChanged"/>
+            <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
+        </member>
         <member name="M:RelhaxModpack.UI.RelhaxWPFCheckBox.OnEnabledChanged(System.Boolean)">
             <summary>
             Change any UI parent class properties that depends on the enabled SelectablePackage
@@ -5190,6 +5378,26 @@
             The package associated with this UI component
             </summary>
         </member>
+        <member name="P:RelhaxModpack.UI.RelhaxWPFRadioButton.IsHighlightedForView">
+            <summary>
+            Gets or sets if the UI component should be highlighted in the selection view from a user search.
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UI.RelhaxWPFRadioButton.PropertyChanged">
+            <summary>
+            Occurs after a property that uses OnPropertyChanged has been set.
+            </summary>
+            <seealso cref="M:RelhaxModpack.UI.RelhaxWPFRadioButton.OnPropertyChanged(System.String)"/>
+            <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
+        </member>
+        <member name="M:RelhaxModpack.UI.RelhaxWPFRadioButton.OnPropertyChanged(System.String)">
+            <summary>
+            Called from a property in this class that wants to tell PropertyChanged listeners that it has changed.
+            </summary>
+            <param name="propertyName">The name of the property that has changed.</param>
+            <seealso cref="E:RelhaxModpack.UI.RelhaxWPFRadioButton.PropertyChanged"/>
+            <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
+        </member>
         <member name="M:RelhaxModpack.UI.RelhaxWPFRadioButton.OnEnabledChanged(System.Boolean)">
             <summary>
             Change any UI parent class properties that depends on the enabled SelectablePackage
@@ -5209,9 +5417,8 @@
         </member>
         <member name="T:RelhaxModpack.UI.IPackageUIComponent">
             <summary>
-            The PackageUIComponent class acts as a handler for when the enabled and checked properties are set from the Package.
-            It can simplify the ModSelectionList code, clean it up, allow for uniform logic for all UI,
-            and allow for easy implementation of another UI.
+            The PackageUIComponent class acts as an implementation handler for when the enabled property is set from the Package object.
+            It also contains a signature for the UI component to handle when the component should be highlighted in the selection list from a user search.
             </summary>
         </member>
         <member name="M:RelhaxModpack.UI.IPackageUIComponent.OnEnabledChanged(System.Boolean)">
@@ -5219,6 +5426,11 @@
             Method signature for when the enabled property changes
             </summary>
             <param name="Enabled">The value of the enabled property</param>
+        </member>
+        <member name="P:RelhaxModpack.UI.IPackageUIComponent.IsHighlightedForView">
+            <summary>
+            Gets or sets if the UI component should be highlighted in the selection view from a user search.
+            </summary>
         </member>
         <member name="T:RelhaxModpack.UI.RelhaxMediaPlayer">
             <summary>
