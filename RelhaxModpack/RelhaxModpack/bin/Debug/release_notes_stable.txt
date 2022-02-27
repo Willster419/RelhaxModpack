@@ -1,3 +1,62 @@
+# Application version 1.4.0.0 (2022-02-26)
+https://www.virustotal.com/gui/file/86ede3216074d901b87978b83c2bb02dd86601fe87e6526bea4a816220174d9a
+
+## "This is the last official planned update to the Relhax Modpack"
+
+### Automation additions and fixes
+- Added the ability for an automation sequence to run browser sessions.
+  - This provides the ability of using the same browser object, therefore allowing persistence of cookies or other login data.
+  - Useful for sites that require a user to be logged in or require certain values in requests to prevent bots (lol).
+
+- Added the ability for the user to specify 3 user macro names and values.
+
+- Added the following automation tasks:
+  - `StartBrowserSessionTask`: Starts an automation browser session.
+  - `BrowserSessionSetHeaderTask`: Sets a default request header value.
+  - `BrowserSessionRemoveHeaderTask`: Remove a request header value.
+  - `BrowserSessionPostTask`: Sends a POST request to a URL.
+  - `BrowserSessionGetTask`: Sends a GET request to a URL.
+  - `BrowserSessionDownloadFileTask`: Downloads a file form a given url to a location on disk.
+
+### "There's always time to do it right the second time"
+- Re-wrote the dark theme UI and removed the winforms approach to applying control colors.
+  - The original engine was an adaptation from our legacy WinForms application to WPF. I completely re-wrote it using design patterns for WPF that is better for performance and re-usability.
+  - Some components had colors changed to make them more darker, since changing some properties was not possible in the old system.
+  - It also frees up the use of the "Tag" property for each control of each window that should have a custom style applied to it.
+
+- Re-wrote several sections of the DatabaseManager to make loading and saving database components more object-oriented.
+  - After a database is loaded, it needs to have "post-processing" done on it's internal values (or "pre-processing" in the case of saving). This was moved into the DatabaseComponent (previously called XmlDatabaseComponent) so that any object using this load/save implementation could override and add the functionally needed.
+  - It also means that the script style approach of the DatabaseUtils class was removed.
+
+### New features!
+- The long-awaited conflicting packages was finally implemented!
+  - This means that if you try to select packages that conflict with each other (common examples being xvm vs. stand-alone features), it will inform you of the conflict and present you with a choice of which package you'd like to keep selected.
+  - In the case of conflicts in a selection file, as components are selected, any conflicting package will be un-checked (the last loaded/selected package takes priority). The selection information window will inform you of this as well.
+
+- Get #triggered with the new installation triggers system!
+  - This system allows us to perform some post-extraction tasks (like atlas creation for contour icons) as soon as all relevant packages for it are extracted.
+  - This means, continuing the contour icons example, that as soon as all contour icon packages are extracted, the atlas building process can immediately start, instead of waiting until all packages are extracted.
+  - This also applies for shortcut creation and the installation of fonts.
+  - Overall, it means that (when enabled) the installation time has been reduced by several seconds, depending on your installation selection.
+
+- Updated database to xml schema 1.2
+  - Schema 1.2 enforces that conflicting package and dependency entries contain the package internal name and UID properties for redundancy.
+
+### Other Misc changes
+- Removed the twitter and facebook buttons since we don't use those anymore.
+- Changed the url for the support button to go to the Modpack discord (we don't offer support on the modpack forums anymore).
+- Updated translations.
+- Fixed the editor's "create ftp folder" operation crashing if the folder already exits.
+- Added a couple missing translation entries and typos.
+- Added focus to the FTP folder name textbox for the "create ftp folder" window when shown.
+- Fixed the "yes" and "no" buttons in the version update window to be upper case.
+- Moved some log messages from info the debug.
+- Added a bunch of internal code documentation.
+- Added some additional debugging information to Ui components in the PackageSelection window to help determine what component is attached to what package.
+- Other misc code cleanup and optimization.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+
 # Application version 1.3.5.1 (2022-01-21)
 https://www.virustotal.com/gui/file/d220b81bc03569ff0fce2f70df233d404964cbe9fd2cc7d61fd6409bdc8f1778
 
