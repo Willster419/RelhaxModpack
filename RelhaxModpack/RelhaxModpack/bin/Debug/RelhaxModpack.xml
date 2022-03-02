@@ -638,6 +638,49 @@
             <param name="instructionToCompare">The instruction to compare against.</param>
             <returns>True if the compared values are equal, false otherwise.</returns>
         </member>
+        <member name="T:RelhaxModpack.Automation.AutomationCompare">
+            <summary>
+            An AutomationCompare object is a comparison between two different IO related sources to check if both are equal.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationCompare.#ctor(System.String,System.String,RelhaxModpack.Utilities.Enums.AutomationCompareMode)">
+            <summary>
+            Creates the abstract parts of the AutomationCompare object.
+            </summary>
+            <param name="directoryA">The path to the first directory of the IO resource to compare.</param>
+            <param name="directoryB">The path to the second directory of the IO resource to compare.</param>
+            <param name="compareMode">The comparison mode of the IO resource.</param>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationCompare.CompareResult">
+            <summary>
+            Compare if the two IO resources are equal.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationCompare.CompareAPath">
+            <summary>
+            The path to IO resource A.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationCompare.CompareBPath">
+            <summary>
+            The path to IO resource B.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationCompare.CompareMode">
+            <summary>
+            The comparison mode of the IO resource.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationCompare.AutomationTask">
+            <summary>
+            The automation task object associated with this compare operation.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationCompare.PrintToLog">
+            <summary>
+            Print information about this comparison entry to the log file for debug.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.AutomationMacro.MacroReplaceRegex">
             <summary>
             The regex string used for macro analysis and replacement
@@ -4624,7 +4667,10 @@
         </member>
         <member name="T:RelhaxModpack.UI.AutomationListBoxItem">
             <summary>
-            Allows for display (ToString) of an AutomationSequence for the automation selection list, and allows for color change of the display text based on the output code of the sequence's run.
+            Interaction logic for AutomationListBoxItem.xaml
+            </summary>
+            <summary>
+            AutomationListBoxItem
             </summary>
         </member>
         <member name="P:RelhaxModpack.UI.AutomationListBoxItem.DefaultForgroundBrush">
@@ -4637,12 +4683,22 @@
             The automation sequence.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.UI.AutomationListBoxItem.#ctor">
+            <summary>
+            Create an instance of the AutomationListBoxItem class.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.UI.AutomationListBoxItem.ToString">
             <summary>
             Display the AutomationSequence ToString return value.
             </summary>
             <returns>The value of the AutomationSequence.ToString() method.</returns>
             <seealso cref="P:RelhaxModpack.UI.AutomationListBoxItem.AutomationSequence"/>
+        </member>
+        <member name="M:RelhaxModpack.UI.AutomationListBoxItem.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
         </member>
         <member name="T:RelhaxModpack.UI.Extensions.FontExtensions">
             <summary>
