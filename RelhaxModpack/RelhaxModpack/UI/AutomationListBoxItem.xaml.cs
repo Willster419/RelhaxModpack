@@ -4,15 +4,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace RelhaxModpack.UI
 {
     /// <summary>
-    /// Allows for display (ToString) of an AutomationSequence for the automation selection list, and allows for color change of the display text based on the output code of the sequence's run.
+    /// Interaction logic for AutomationListBoxItem.xaml
     /// </summary>
-    public class AutomationListBoxItem : ListBoxItem
+    public partial class AutomationListBoxItem : ListBoxItem
     {
         /// <summary>
         /// The default color of the foreground brush when this component is loaded.
@@ -23,6 +30,14 @@ namespace RelhaxModpack.UI
         /// The automation sequence.
         /// </summary>
         public AutomationSequence AutomationSequence { get; set; }
+
+        /// <summary>
+        /// Create an instance of the AutomationListBoxItem class.
+        /// </summary>
+        public AutomationListBoxItem()
+        {
+            InitializeComponent();
+        }
 
         /// <summary>
         /// Display the AutomationSequence ToString return value.

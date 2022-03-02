@@ -262,7 +262,9 @@
     <Compile Include="Settings\ISettingsFile.cs" />
     <Compile Include="Settings\ModpackToolboxSettings.cs" />
     <Compile Include="Settings\SettingsParser.cs" />
-    <Compile Include="UI\AutomationListBoxItem.cs" />
+    <Compile Include="UI\AutomationListBoxItem.xaml.cs">
+      <DependentUpon>AutomationListBoxItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Extensions\FontExtensions.cs" />
     <Compile Include="UI\IOnCheckedComponent.cs" />
     <Compile Include="UI\RelhaxBorder.cs" />
@@ -495,6 +497,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\AutomationListBoxItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\RelhaxComboBoxItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
