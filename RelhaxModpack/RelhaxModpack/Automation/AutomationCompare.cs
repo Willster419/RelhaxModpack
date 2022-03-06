@@ -52,7 +52,7 @@ namespace RelhaxModpack.Automation
         public AutomationTask AutomationTask;
 
         /// <summary>
-        /// Print information about this comparison entry to the log file for debug.
+        /// Print information about this comparison entry to the log file.
         /// </summary>
         public abstract void PrintToLog();
     }
