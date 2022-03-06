@@ -678,8 +678,57 @@
         </member>
         <member name="M:RelhaxModpack.Automation.AutomationCompare.PrintToLog">
             <summary>
-            Print information about this comparison entry to the log file for debug.
+            Print information about this comparison entry to the log file.
             </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.AutomationCompareManager">
+            <summary>
+            The AutomationCompareManager class provides methods to add, remove and compare AutomationCompare objects to determine if the IO resources between each one has changed.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationCompareManager.AutomationCompares">
+            <summary>
+            Gets the list of AutomationCompare objects.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationCompareManager.NumMatches">
+            <summary>
+            Gets the number of AutomationCompare objects that are match results (the IO resources are equal).
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationCompareManager.NumDifferencesContinue">
+            <summary>
+            Gets the number of AutomationCompare objects where the IO resources are not equal, and the automation mode is NoMatchContinue.
+            </summary>
+            <seealso cref="F:RelhaxModpack.Utilities.Enums.AutomationCompareMode.NoMatchContinue"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationCompareManager.NumDifferencesStop">
+            <summary>
+            Gets the number of AutomationCompare objects where the IO resources are not equal, and the automation mode is NoMatchStop.
+            </summary>
+            <seealso cref="F:RelhaxModpack.Utilities.Enums.AutomationCompareMode.NoMatchStop"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationCompareManager.Matches">
+            <summary>
+            Gets the list of AutomationCompare objects that are match results (the IO resources are equal).
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationCompareManager.Differences">
+            <summary>
+            Gets the list of AutomationCompare objects that are not match results (the IO resources are not equal).
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationCompareManager.Reset">
+            <summary>
+            Clears the current list of AutomationCompare objects.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationCompareManager.AddCompare(RelhaxModpack.Automation.Tasks.AutomationTask,RelhaxModpack.Automation.AutomationCompare)">
+            <summary>
+            Add an AutomationCompare object to the manager's compare list.
+            </summary>
+            <param name="task">The task that the AutomationCompare object being added is associated with.</param>
+            <param name="compare">The AutomationCompare object to add to the manager.</param>
         </member>
         <member name="F:RelhaxModpack.Automation.AutomationMacro.MacroReplaceRegex">
             <summary>
@@ -701,6 +750,106 @@
             Load the list of branches from github
             </summary>
             <returns>A task of the asynchronous operation</returns>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.AutomationCompareDirectory">
+            <summary>
+            An AutomationCompareDirectory object is a comparison between two different directories to check if the number and name of files are equal.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationCompareDirectory.#ctor(System.String,System.String,RelhaxModpack.Utilities.Enums.AutomationCompareMode,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates an instance of the AutomationCompareDirectory class.
+            </summary>
+            <param name="directoryA">The path to the first directory to compare.</param>
+            <param name="directoryB">The path to the second directory to compare.</param>
+            <param name="compareMode">The comparison mode of the directories</param>
+            <param name="numFilesA">The number of files in directory A.</param>
+            <param name="numFilesB">The number of files in directory B.</param>
+            <param name="indexOfFilenameChange">The nth+1 file in the list of files of each directory that is a different name, if applicable. A -1 means all file names are equal.</param>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationCompareDirectory.CompareResult">
+            <summary>
+            Gets if the number or names of files are different between the two directories.
+            </summary>
+            <remarks>True means that the number and names of files are equal.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.AutomationCompareDirectory.CompareANumFiles">
+            <summary>
+            The number of files in directory A.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.AutomationCompareDirectory.CompareBNumFiles">
+            <summary>
+            The number of files in directory B.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.AutomationCompareDirectory.IndexOfFilenameChange">
+            <summary>
+            The nth+1 file in the list of files of each directory that is a different name, if applicable. A -1 means all file names are equal.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationCompareDirectory.PrintToLog">
+            <summary>
+            Print information about this comparison entry to the log file.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.AutomationCompareFile">
+            <summary>
+            An AutomationCompareFile object is a comparison between two different file sources to check if both are equal in md5 hash.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationCompareFile.#ctor(System.String,System.String,RelhaxModpack.Utilities.Enums.AutomationCompareMode,System.String,System.String,System.String,System.String)">
+            <summary>
+            Creates an instance of the AutomationCompareDirectory class.
+            </summary>
+            <param name="directoryA">The path to the first directory that contains the file to compare (file a).</param>
+            <param name="directoryB">The path to the second directory that contains the file to compare (file b).</param>
+            <param name="compareMode">The comparison mode of the directories.</param>
+            <param name="fileA">The name and extension of file a.</param>
+            <param name="fileB">The name and extension of file b.</param>
+            <param name="hashA">The md5 hash value of file a.</param>
+            <param name="hashB">The md5 hash value of file b.</param>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationCompareFile.CompareResult">
+            <summary>
+            Gets if the md5 hash values of the files are different between the two.
+            </summary>
+            <remarks>True means that the md5 hash values are equal.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.AutomationCompareFile.CompareAFile">
+            <summary>
+            The name and extension of file a.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.AutomationCompareFile.CompareBFile">
+            <summary>
+            The name and extension of file b.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.AutomationCompareFile.CompareAHash">
+            <summary>
+            The md5 hash value of file a.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.AutomationCompareFile.CompareBHash">
+            <summary>
+            The md5 hash value of file b.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationCompareFile.CompareAFilepath">
+            <summary>
+            Gets the complete path to file a.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationCompareFile.CompareBFilepath">
+            <summary>
+            Gets the complete path to file b.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationCompareFile.PrintToLog">
+            <summary>
+            Print information about this comparison entry to the log file.
+            </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ValidateCommandTrue(System.Boolean,System.String)">
             <summary>
