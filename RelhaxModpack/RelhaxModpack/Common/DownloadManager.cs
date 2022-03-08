@@ -180,7 +180,15 @@ namespace RelhaxModpack.Common
                             int totalBytesToDownload = CommonUtils.ParseInt(webClient.ResponseHeaders[HttpResponseHeader.ContentLength], 1);
                             int totalBytesDownloaded = 0;
                             downloadProgress.ChildTotal = totalBytesToDownload;
-                            Progress?.Report(downloadProgress);
+                            RelhaxDownloadProgress initProg = new RelhaxDownloadProgress()
+                            {
+                                DownloadProgressState = DownloadProgressState.OpenStreams,
+                                ParrentTotal = downloadProgress.ParrentTotal,
+                                DatabasePackage = downloadProgress.DatabasePackage,
+                                ChildCurrent = downloadProgress.ChildCurrent,
+                                ChildTotal = downloadProgress.ChildTotal,
+                            };
+                            Progress?.Report(initProg);
 
                             while (true)
                             {
