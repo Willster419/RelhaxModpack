@@ -180,7 +180,10 @@ namespace RelhaxModpack.Atlases.Packing
             //loop through each texture to copy it's data over
             foreach (Texture texture in files)
             {
-                CopyTextureIntoAtlasLock(ref atlasByte, ref texture.AtlasImage, imagePlacement[texture], atlasData.Stride);
+                lock (texture.AtlasImage)
+                {
+                    CopyTextureIntoAtlasLock(ref atlasByte, texture.AtlasImage, imagePlacement[texture], atlasData.Stride);
+                }
             }
 
             //copy back and unlock
@@ -195,7 +198,7 @@ namespace RelhaxModpack.Atlases.Packing
             return atlas;
         }
 
-        private void CopyTextureIntoAtlasLock(ref byte[] atlasByte, ref Bitmap texture, Rectangle locationOnAtlas, int atlasStride)
+        private void CopyTextureIntoAtlasLock(ref byte[] atlasByte, Bitmap texture, Rectangle locationOnAtlas, int atlasStride)
         {
             //define the area on the atlas that we actually want to copy over based on the texture (but don't copy padding)
             Rectangle actualLocationToCopyOntoAtlas = new Rectangle(locationOnAtlas.X, locationOnAtlas.Y, texture.Width, texture.Height);
