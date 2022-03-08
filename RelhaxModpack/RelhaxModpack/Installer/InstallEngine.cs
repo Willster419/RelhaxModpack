@@ -777,7 +777,7 @@ namespace RelhaxModpack
             {
                 if (!DisableTriggersForInstall && !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerCreateShortcuts)).Fired)
                 {
-                    Logging.Error($"The trigger {TriggerCreateShortcuts} was never fired during installation, firing now");
+                    Logging.Info($"The trigger {TriggerCreateShortcuts} was never fired during installation, firing now");
                 }
                 CreateShortcuts();
             }
@@ -787,7 +787,7 @@ namespace RelhaxModpack
             {
                 if (!DisableTriggersForInstall && !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerContouricons)).Fired)
                 {
-                    Logging.Error($"The trigger {TriggerContouricons} was never fired during installation, firing now");
+                    Logging.Info($"The trigger {TriggerContouricons} was never fired during installation, firing now");
                 }
                 CreateAtlases();
             }
@@ -797,7 +797,7 @@ namespace RelhaxModpack
             {
                 if (!DisableTriggersForInstall && !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerInstallFonts)).Fired)
                 {
-                    Logging.Error($"The trigger {TriggerInstallFonts} was never fired during installation, firing now");
+                    Logging.Info($"The trigger {TriggerInstallFonts} was never fired during installation, firing now");
                 }
                 InstallFonts();
             }
