@@ -272,10 +272,7 @@ namespace RelhaxModpack.Atlases
 
             //run the atlas creator program
             Logging.Info("[atlas file {0}]: Atlas image packing starting", Atlas.AtlasFile);
-            FailCode result = imagePacker.PackImage(Atlas.TextureList, Atlas.PowOf2, Atlas.Square, Atlas.FastImagePacker, Atlas.AtlasWidth, Atlas.AtlasHeight,
-#pragma warning disable IDE0068 // Use recommended dispose pattern
-                Atlas.Padding, Atlas.AtlasFile, out Bitmap outputImage, out Dictionary<string, Rectangle> outputMap);
-#pragma warning restore IDE0068 // Use recommended dispose pattern
+            FailCode result = imagePacker.PackImage(Atlas.TextureList, Atlas.PowOf2, Atlas.Square, Atlas.FastImagePacker, Atlas.AtlasWidth, Atlas.AtlasHeight, Atlas.Padding, Atlas.AtlasFile, out Bitmap outputImage, out Dictionary<string, Rectangle> outputMap);
             OnAtlasProgres?.Invoke(this, null);
             if (result != 0)
             {
