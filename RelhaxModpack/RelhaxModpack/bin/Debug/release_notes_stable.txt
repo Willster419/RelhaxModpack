@@ -8,7 +8,6 @@ https://www.virustotal.com/gui/file/79db977e31acdbf7d6ecd6c7eefd5103f4ed63072f78
 - Fixed bug of the download progress not properly reporting download speed and ETA.
 - Fixed severity of some log messages for the trigger system.
 - Other misc code optimizations.
-
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 # Application version 1.4.0.0 (2022-02-26)
