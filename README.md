@@ -1,3 +1,5 @@
+## Attention! The Relhax Modpack will be closing on April 20th, 2022. Thank you to all our volunteers and users for over 5 years of success!
+
 ##### SUPPORTED LANGUAGES: [**<ins>English</ins>**](README.md), Deutch, Polski, Français, Español, Pусский.
 
 ***
