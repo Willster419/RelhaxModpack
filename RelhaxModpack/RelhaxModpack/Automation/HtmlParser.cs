@@ -10,42 +10,87 @@ using System.Xml.XPath;
 
 namespace RelhaxModpack.Automation
 {
+    /// <summary>
+    /// An HtmlParser class enables retrieval of a string of html and parsing for specific values using HtmlPath.
+    /// </summary>
     public abstract class HtmlParser
     {
+        /// <summary>
+        /// The HtmlPath string to use for navigating the html document.
+        /// </summary>
         public string HtmlPath { get; set; }
 
+        /// <summary>
+        /// The result of the HtmlPath navigation, if there is a result. Otherwise null/empty.
+        /// </summary>
         public string ResultString { get; protected set; }
 
+        /// <summary>
+        /// Flag to determine if the HtmlParser should write the contents of the html string to disk for debug.
+        /// </summary>
         public bool WriteHtmlToDisk { get; set; }
 
+        /// <summary>
+        /// The relative or absolute IO path on disk to write the html string to disk. Must include the file name.
+        /// </summary>
         public string HtmlFilePath { get; set; }
 
+        /// <summary>
+        /// The result of the HtmlPath navigation, if there is a result. Otherwise null/empty.
+        /// </summary>
         public HtmlNodeNavigator ResultNode { get; protected set; }
 
+        /// <summary>
+        /// The retrieved html document.
+        /// </summary>
         protected string htmlText;
 
+        /// <summary>
+        /// Create an instance of the HtlmParser class.
+        /// </summary>
         public HtmlParser()
         {
 
         }
 
+        /// <summary>
+        /// Create an instance of the HtlmParser class.
+        /// </summary>
+        /// <param name="htmlpath">The HtmlPath string to use for navigating the html document.</param>
         public HtmlParser(string htmlpath)
         {
             this.HtmlPath = htmlpath;
         }
 
-        public HtmlParser(string htmlpath, bool writeHtmlToDisk, string htmlfilepath = null) : this(htmlpath)
+        /// <summary>
+        /// Create an instance of the HtlmParser class.
+        /// </summary>
+        /// <param name="htmlpath">The HtmlPath string to use for navigating the html document.</param>
+        /// <param name="writeHtmlToDisk">Determine if the HtmlParser should write the contents of the html string to disk for debug.</param>
+        /// <param name="htmlfilePath">The relative or absolute IO path on disk to write the html string to disk. Must include the file name.</param>
+        public HtmlParser(string htmlpath, bool writeHtmlToDisk, string htmlfilePath = null) : this(htmlpath)
         {
             this.WriteHtmlToDisk = writeHtmlToDisk;
-            this.HtmlFilePath = htmlfilepath;
+            this.HtmlFilePath = htmlfilePath;
         }
 
+        /// <summary>
+        /// Run the parser to retrieve the html string and navigate it via HtmlPath
+        /// </summary>
+        /// <param name="htmlPath">The HtmlPath string to use for navigating the html document.</param>
+        /// <returns>The exit code during the parsing operation.</returns>
+        /// <seealso cref="HtmlXpathParserExitCode"/>
         public virtual async Task<HtmlXpathParserExitCode> RunParserAsync(string htmlPath)
         {
             this.HtmlPath = htmlPath;
             return await RunParserAsync();
         }
 
+        /// <summary>
+        /// Run the parser to retrieve the html string and navigate it via HtmlPath
+        /// </summary>
+        /// <returns>The exit code during the parsing operation.</returns>
+        /// <seealso cref="HtmlXpathParserExitCode"/>
         public virtual async Task<HtmlXpathParserExitCode> RunParserAsync()
         {
             if (!ProcessVariables())
@@ -70,6 +115,10 @@ namespace RelhaxModpack.Automation
             return HtmlXpathParserExitCode.None;
         }
 
+        /// <summary>
+        /// Process class variables to ensure it is setup properly.
+        /// </summary>
+        /// <returns>True if variables are set and parsed correctly, false otherwise.</returns>
         protected virtual bool ProcessVariables()
         {
             if (string.IsNullOrEmpty(HtmlPath))
@@ -87,6 +136,10 @@ namespace RelhaxModpack.Automation
             return true;
         }
 
+        /// <summary>
+        /// Tries to write the html string to disk.
+        /// </summary>
+        /// <returns>True if the operation succeeds, false otherwise.</returns>
         protected bool TryWriteHtmlToDisk()
         {
             Logging.Info(LogOptions.ClassName, "Writing HTML to {0}", HtmlFilePath);
@@ -104,6 +157,10 @@ namespace RelhaxModpack.Automation
             return true;
         }
 
+        /// <summary>
+        /// Navigate the html document string with the given HtmlPath to get a result.
+        /// </summary>
+        /// <returns>True if the operation succeeds, false otherwise.</returns>
         protected bool RunHtmlPathSearch()
         {
             ResultString = string.Empty;
@@ -144,6 +201,10 @@ namespace RelhaxModpack.Automation
             }
         }
 
+        /// <summary>
+        /// Gets the html document loaded into a string variable
+        /// </summary>
+        /// <returns>True if the operation succeeds, false otherwise.</returns>
         protected abstract Task<bool> GetHtmlDocumentAsync();
     }
 }
