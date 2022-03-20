@@ -894,19 +894,359 @@
         </member>
         <member name="T:RelhaxModpack.Automation.AutomationSequence">
             <summary>
-            An AutomationSequence class is a container to store a list of Automation tasks that pertain to a package.
+            An AutomationSequence is a container to store a list of Automation tasks for updating a database package.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationSequence.AutomationSequenceMacroDefinitionsXpath">
+            <summary>
+            The Xpath in the automation sequence xml document to get the list of macros.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationSequence.AutomationSequenceTaskDefinitionsXpath">
+            <summary>
+            The Xpath in the automation sequence xml document to get the list of tasks.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.AutomationSequencer">
+            <summary>
+            Get or set the AutomationSequencer instance.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.AutomationTasks">
+            <summary>
+            Get the list of tasks to run for this automation sequence.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.AutomationComboBoxItem">
+            <summary>
+            Get or set the automation ComboBox UI element for this sequence.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.PackageLoaded">
+            <summary>
+            Gets if the database package instance has been loaded into this sequence.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.PackageUID">
+            <summary>
+            Get or set the UID of the package of this sequence. If the package is not loaded, it is stored internally.
+            </summary>
+            <remarks>When loaded, the UID internal value is used to link the sequence to the package upon parsing.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.PackageName">
+            <summary>
+            Get of set the PackageName of the package of this sequence. If the package is not loaded, it is stored internally.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.Package">
+            <summary>
+            Get or set the database package that this sequence is written for.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.SequenceDownloadUrl">
+            <summary>
+            Get or set the direct link from repository to download this sequence's xml document.
+            </summary>
+            <remarks>This is used when the "use local repository on disk" is unchecked.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.DatabaseAutomationRunner">
+            <summary>
+            Get the database automation runner window instance.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.SequenceMacros">
+            <summary>
+            Get the list of macros loaded from the sequence xml document.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.AllMacros">
+            <summary>
+            Gets a list combining all the macros into one list.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.AutomationCompareManager">
+            <summary>
+            Get the automation compare manager.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.BrowserSessionManager">
+            <summary>
+            Get the automation browser session manager.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.ExitCode">
+            <summary>
+            Gets or sets the exit code from run of tasks.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.ComponentInternalName">
+            <summary>
+            Get the internal name of the loaded database package.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.DatabasePackages">
+            <summary>
+            Get or set the list of parsed database packages.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.ApplicationMacros">
+            <summary>
+            Gets the list of application macros.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.GlobalMacros">
+            <summary>
+            Gets the list of global macros.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.UserMacros">
+            <summary>
+            Gets the list of user macros.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.AutomationRunnerSettings">
+            <summary>
+            Gets the automation runner settings instance.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequence.DatabaseManager">
+            <summary>
+            Gets the database manager instance.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.#ctor(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Automation.AutomationMacro},System.Collections.Generic.List{RelhaxModpack.Automation.AutomationMacro},System.Collections.Generic.List{RelhaxModpack.Automation.AutomationMacro},RelhaxModpack.Settings.AutomationRunnerSettings,RelhaxModpack.Database.DatabaseManager,System.Threading.CancellationToken)">
+            <summary>
+            Create an instance of the AutomationSequence class.
+            </summary>
+            <param name="databasePackages">The list of parsed database packages.</param>
+            <param name="applicationMacros">The list of parsed application macros.</param>
+            <param name="globalMacros">The list of parsed global macros.</param>
+            <param name="userMacros">The list of parsed user macros.</param>
+            <param name="automationRunnerSettings">The automation runner settings instance.</param>
+            <param name="databaseManager">The database manager instance.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.LoadAutomationXmlAsync">
+            <summary>
+            Load the automation sequence xml document info the XDocument instance.
+            </summary>
+            <returns>True if the document was loaded from xml, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.ParseAutomationTasks">
+            <summary>
+            Parse the automation xml document into the list of tasks.
+            </summary>
+            <returns>True if the parse operation was successful, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.ParseSequenceMacros">
+            <summary>
+            Parse the automation xml document into the list of sequence macros.
+            </summary>
+            <returns>True if the parse operation was successful, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.RunTasksAsync">
+            <summary>
+            Run the tasks of this sequence.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.UpdateDatabasePackageList">
+            <summary>
+            Updates the DatabasePackages property with the loaded packages from the database manager.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.UpdateCurrentDatabasePackage">
+            <summary>
+            Update the database package instance with the instance from the DatabasePackages list.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.ResetBrowserSessionManager(RelhaxModpack.Utilities.Enums.BrowserSessionType)">
+            <summary>
+            Reset the browser session manager (creates a new instance).
+            </summary>
+            <param name="type">The type of browser implementation to use.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.ClearBrowserSessionManager">
+            <summary>
+            Clear the browser session manager for a new browser session.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.Dispose">
+            <summary>
+            Dispose of the unmanaged resources used by the sequence.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.ToString">
+            <summary>
+            Returns a string representation of this sequence object.
+            </summary>
+            <returns>A string of the package name and UID for this sequence.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequence.CancelTask">
+            <summary>
+            Cancels the currently running task.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.AutomationSequencer">
+            <summary>
+            Handles the parsing, running and error management of all automation sequences loaded and set to run.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.AutomationSequencer.BranchesURL">
             <summary>
-            The API URL to return a json format document of the current branches in the automation repository
+            The API URL to return a json format document of the current branches in the automation repository.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationSequencer.AutomationXmlRepoFilebase">
+            <summary>
+            The url to the repository, macro replaced by branch, that can be used to direct download automation sequences.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationSequencer.AutomationXmlRootFilename">
+            <summary>
+            The name of the automation document that contains all sequences, templates, and macros.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationSequencer.AutomationRepoDefaultBranch">
+            <summary>
+            The default branch of the automation repository.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.ApplicationMacros">
+            <summary>
+            The list of application defined macros.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.GlobalMacros">
+            <summary>
+            The list of globally defined macros.
+            </summary>
+            <remarks>This list is defined in a global macros xml document in the automation repository.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.UserMacros">
+            <summary>
+            The list of user defined macros.
+            </summary>
+            <remarks>This list is defined in the automation runner's settings document.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.AutomationSequences">
+            <summary>
+            Get the list of automation sequences that have been parsed into the sequencer.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.UserMacrosDictionary">
+            <summary>
+            Get the list of user defined macros parsed from the automation runner's settings document.
+            </summary>
+            <remarks>This is a middle-man for loading the user macros from settings document to the UserMacros automation macro list.</remarks>
+            <seealso cref="P:RelhaxModpack.Automation.AutomationSequencer.UserMacros"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.ComponentInternalName">
+            <summary>
+            Get name used for xml serialization when loading sequences.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.DatabaseManager">
+            <summary>
+            Gets or sets the database manager instance.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.AutomationRunnerSettings">
+            <summary>
+            Gets or sets the automation runner settings class.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.NumErrors">
+            <summary>
+            Get the number of errors that occurred during a sequence run.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.DatabasePackages">
+            <summary>
+            Get the database package being currently processed in the running sequence.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.AutomationBranches">
+            <summary>
+            Get the list of source control branches that exist on the automation repository.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.DatabaseAutomationRunner">
+            <summary>
+            Get or set the automation runner window instance.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.CancellationToken">
+            <summary>
+            The token to allow user cancellation.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.WoTClientVersion">
+            <summary>
+            The parsed version of the Wot client.
+            </summary>
+            <remarks>This is loaded from the database when parsed.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationSequencer.WoTModpackOnlineFolderVersion">
+            <summary>
+            The parsed version of the online FTP folder.
+            </summary>
+            <remarks>This is loaded form the database when parsed.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequencer.#ctor">
+            <summary>
+            Create an instance of the AutomationSequencer class.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.AutomationSequencer.LoadBranchesListAsync">
             <summary>
-            Load the list of branches from github
+            Load the list of branches from the automation repository.
             </summary>
-            <returns>A task of the asynchronous operation</returns>
+            <returns>True if the branches list is loaded, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequencer.LoadRootDocumentAsync">
+            <summary>
+            Load the automation root xml document.
+            </summary>
+            <returns>True if the document was loaded, false otherwise.</returns>
+            <remarks>This loads the document into the xml document instance, but has not been parsed.</remarks>
+            <seealso cref="M:RelhaxModpack.Automation.AutomationSequencer.ParseRootDocument"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequencer.ParseRootDocument">
+            <summary>
+            Parse the root xml document.
+            </summary>
+            <returns>True if the document was successful parsed, false otherwise.</returns>
+            <remarks>The document xml instance is parsed by loading its contents into respective fields in this and other object instances.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequencer.RunSequencerAsync(System.Collections.Generic.List{RelhaxModpack.Automation.AutomationSequence})">
+            <summary>
+            Executes the tasks for each sequence to run.
+            </summary>
+            <param name="sequencesToRun">The list of sequences to run.</param>
+            <returns>The exit code of the sequence runs operation.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequencer.UpdateDatabasePackageList">
+            <summary>
+            Updates the DatabasePackages property with the loaded packages from the database manager.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequencer.CleanWorkingDirectoriesAsync(System.IProgress{RelhaxModpack.UI.RelhaxProgress},RelhaxModpack.UI.RelhaxProgress,System.Threading.CancellationToken)">
+            <summary>
+            Cleans the working directories for all sequences.
+            </summary>
+            <param name="reporter">The progress reporting provider.</param>
+            <param name="progress">The object to report progress updates.</param>
+            <param name="token">The token to allow cancellation of the operation.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequencer.CancelSequence">
+            <summary>
+            Cancel the current sequence operation.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequencer.Dispose">
+            <summary>
+            Dispose of unmanaged resources (i.e. the web client)
+            </summary>
         </member>
         <member name="T:RelhaxModpack.Automation.Tasks.AutomationCompareDirectory">
             <summary>
