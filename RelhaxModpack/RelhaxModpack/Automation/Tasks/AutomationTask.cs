@@ -92,7 +92,7 @@ namespace RelhaxModpack.Automation.Tasks
 
         public List<AutomationMacro> Macros { get { return AutomationSequence.AllMacros; } }
 
-        public AutomationCompareManager AutomationCompareTracker { get { return AutomationSequence.AutomationCompareTracker; } }
+        public AutomationCompareManager AutomationCompareTracker { get { return AutomationSequence.AutomationCompareManager; } }
 
         protected BrowserSessionManager BrowserSessionManager { get { return AutomationSequence.BrowserSessionManager; } }
 

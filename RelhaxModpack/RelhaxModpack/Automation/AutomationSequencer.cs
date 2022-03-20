@@ -21,47 +21,110 @@ using RelhaxModpack.UI;
 
 namespace RelhaxModpack.Automation
 {
+    /// <summary>
+    /// Handles the parsing, running and error management of all automation sequences loaded and set to run.
+    /// </summary>
     public class AutomationSequencer : IDisposable, IComponentWithID
     {
         /// <summary>
-        /// The API URL to return a json format document of the current branches in the automation repository
+        /// The API URL to return a json format document of the current branches in the automation repository.
         /// </summary>
         public const string BranchesURL = "https://api.github.com/repos/Relhax-Modpack-Team/DatabaseAutoUpdateScripts/branches";
 
+        /// <summary>
+        /// The url to the repository, macro replaced by branch, that can be used to direct download automation sequences.
+        /// </summary>
         public const string AutomationXmlRepoFilebase = "https://raw.githubusercontent.com/Relhax-Modpack-Team/DatabaseAutoUpdateScripts/{branch}/";
 
+        /// <summary>
+        /// The name of the automation document that contains all sequences, templates, and macros.
+        /// </summary>
         public const string AutomationXmlRootFilename = "root.xml";
 
+        /// <summary>
+        /// The default branch of the automation repository.
+        /// </summary>
         public const string AutomationRepoDefaultBranch = "master";
 
+        /// <summary>
+        /// The list of application defined macros.
+        /// </summary>
         public List<AutomationMacro> ApplicationMacros { get; } = new List<AutomationMacro>();
 
+        /// <summary>
+        /// The list of globally defined macros.
+        /// </summary>
+        /// <remarks>This list is defined in a global macros xml document in the automation repository.</remarks>
         public List<AutomationMacro> GlobalMacros { get; } = new List<AutomationMacro>();
 
+        /// <summary>
+        /// The list of user defined macros.
+        /// </summary>
+        /// <remarks>This list is defined in the automation runner's settings document.</remarks>
         private List<AutomationMacro> UserMacros { get; } = new List<AutomationMacro>();
 
+        /// <summary>
+        /// Get the list of automation sequences that have been parsed into the sequencer.
+        /// </summary>
         public List<AutomationSequence> AutomationSequences { get; } = new List<AutomationSequence>();
 
+        /// <summary>
+        /// Get the list of user defined macros parsed from the automation runner's settings document.
+        /// </summary>
+        /// <remarks>This is a middle-man for loading the user macros from settings document to the UserMacros automation macro list.</remarks>
+        /// <seealso cref="UserMacros"/>
         public Dictionary<string, string> UserMacrosDictionary { get; } = new Dictionary<string, string>();
 
+        /// <summary>
+        /// Get name used for xml serialization when loading sequences.
+        /// </summary>
         public string ComponentInternalName { get; } = "AutomationSequencer";
 
+        /// <summary>
+        /// Gets or sets the database manager instance.
+        /// </summary>
         public DatabaseManager DatabaseManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the automation runner settings class.
+        /// </summary>
         public AutomationRunnerSettings AutomationRunnerSettings { get; set; }
 
+        /// <summary>
+        /// Get the number of errors that occurred during a sequence run.
+        /// </summary>
         public int NumErrors { get; private set; }
 
+        /// <summary>
+        /// Get the database package being currently processed in the running sequence.
+        /// </summary>
         public List<DatabasePackage> DatabasePackages { get; private set; }
 
+        /// <summary>
+        /// Get the list of source control branches that exist on the automation repository.
+        /// </summary>
         public string[] AutomationBranches { get; private set; }
 
+        /// <summary>
+        /// Get or set the automation runner window instance.
+        /// </summary>
         public DatabaseAutomationRunner DatabaseAutomationRunner { get; set; } = null;
 
+        /// <summary>
+        /// The token to allow user cancellation.
+        /// </summary>
         public CancellationToken CancellationToken { get; set; }
 
+        /// <summary>
+        /// The parsed version of the Wot client.
+        /// </summary>
+        /// <remarks>This is loaded from the database when parsed.</remarks>
         public string WoTClientVersion { get; set; }
 
+        /// <summary>
+        /// The parsed version of the online FTP folder.
+        /// </summary>
+        /// <remarks>This is loaded form the database when parsed.</remarks>
         public string WoTModpackOnlineFolderVersion { get; set; }
 
         private XmlDocument RootDocument;
@@ -96,15 +159,18 @@ namespace RelhaxModpack.Automation
 
         private AutomationSequence RunningSequence;
 
+        /// <summary>
+        /// Create an instance of the AutomationSequencer class.
+        /// </summary>
         public AutomationSequencer()
         {
             WebClient = new WebClient();
         }
 
         /// <summary>
-        /// Load the list of branches from github
+        /// Load the list of branches from the automation repository.
         /// </summary>
-        /// <returns>A task of the asynchronous operation</returns>
+        /// <returns>True if the branches list is loaded, false otherwise.</returns>
         public async Task<bool> LoadBranchesListAsync()
         {
             if (AutomationRunnerSettings == null)
@@ -125,6 +191,12 @@ namespace RelhaxModpack.Automation
             return true;
         }
 
+        /// <summary>
+        /// Load the automation root xml document.
+        /// </summary>
+        /// <returns>True if the document was loaded, false otherwise.</returns>
+        /// <remarks>This loads the document into the xml document instance, but has not been parsed.</remarks>
+        /// <seealso cref="ParseRootDocument"/>
         public async Task<bool> LoadRootDocumentAsync()
         {
             if (AutomationRunnerSettings == null)
@@ -146,7 +218,12 @@ namespace RelhaxModpack.Automation
             return RootDocument != null;
         }
 
-        public bool ParseRootDocumentAsync()
+        /// <summary>
+        /// Parse the root xml document.
+        /// </summary>
+        /// <returns>True if the document was successful parsed, false otherwise.</returns>
+        /// <remarks>The document xml instance is parsed by loading its contents into respective fields in this and other object instances.</remarks>
+        public bool ParseRootDocument()
         {
             if (RootDocument == null)
                 throw new NullReferenceException();
@@ -190,6 +267,11 @@ namespace RelhaxModpack.Automation
             return true;
         }
 
+        /// <summary>
+        /// Executes the tasks for each sequence to run.
+        /// </summary>
+        /// <param name="sequencesToRun">The list of sequences to run.</param>
+        /// <returns>The exit code of the sequence runs operation.</returns>
         public async Task<SequencerExitCode> RunSequencerAsync(List<AutomationSequence> sequencesToRun)
         {
             if (RootDocument == null)
@@ -516,11 +598,20 @@ namespace RelhaxModpack.Automation
             }
         }
 
+        /// <summary>
+        /// Updates the DatabasePackages property with the loaded packages from the database manager.
+        /// </summary>
         public void UpdateDatabasePackageList()
         {
             DatabasePackages = DatabaseManager.GetFlatList();
         }
 
+        /// <summary>
+        /// Cleans the working directories for all sequences.
+        /// </summary>
+        /// <param name="reporter">The progress reporting provider.</param>
+        /// <param name="progress">The object to report progress updates.</param>
+        /// <param name="token">The token to allow cancellation of the operation.</param>
         public async Task CleanWorkingDirectoriesAsync(IProgress<RelhaxProgress> reporter, RelhaxProgress progress, CancellationToken token)
         {
             Logging.Info("Cleaning Working directories start");
@@ -585,12 +676,18 @@ namespace RelhaxModpack.Automation
             }
         }
 
+        /// <summary>
+        /// Cancel the current sequence operation.
+        /// </summary>
         public void CancelSequence()
         {
             if (RunningSequence != null)
                 RunningSequence.CancelTask();
         }
 
+        /// <summary>
+        /// Dispose of unmanaged resources (i.e. the web client)
+        /// </summary>
         public void Dispose()
         {
             ApplicationMacros.Clear();

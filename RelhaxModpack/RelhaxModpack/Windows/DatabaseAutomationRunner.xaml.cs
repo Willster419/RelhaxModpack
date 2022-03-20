@@ -176,7 +176,7 @@ namespace RelhaxModpack.Windows
 
             //parse the document now that it's loaded
             Logging.Info("Parsing sequences from root document");
-            AutomationSequencer.ParseRootDocumentAsync();
+            AutomationSequencer.ParseRootDocument();
 
             //load the sequences into the listbox view
             SequencesAvailableListBox.Items.Clear();

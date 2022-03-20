@@ -85,7 +85,7 @@ namespace RelhaxUnitTests
 
             Assert.IsTrue(await sequencer.LoadBranchesListAsync());
             Assert.IsTrue(await sequencer.LoadRootDocumentAsync());
-            Assert.IsTrue(sequencer.ParseRootDocumentAsync());
+            Assert.IsTrue(sequencer.ParseRootDocument());
         }
 
         [TestMethod]
