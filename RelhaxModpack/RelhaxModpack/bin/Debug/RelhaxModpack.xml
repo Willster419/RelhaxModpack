@@ -730,10 +730,167 @@
             <param name="task">The task that the AutomationCompare object being added is associated with.</param>
             <param name="compare">The AutomationCompare object to add to the manager.</param>
         </member>
+        <member name="T:RelhaxModpack.Automation.AutomationHttpClient">
+            <summary>
+            Provides the ability to browse web pages using the headless implementation of the HttpClient API.
+            </summary>
+            <remarks>Headless means that there is no display interface, and thus, no javascript parsing.</remarks>
+            <seealso cref="T:System.Net.Http.HttpClient"/>
+        </member>
+        <member name="E:RelhaxModpack.Automation.AutomationHttpClient.DownloadProgress">
+            <summary>
+            Occurs when download progress of a file has changed.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationHttpClient.BUFFER_SIZE">
+            <summary>
+            The maximum number of bytes to download at a time during a download operation.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationHttpClient.#ctor">
+            <summary>
+            Create an instance of the AutomationHttpClient class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationHttpClient.#ctor(System.Net.Http.HttpClientHandler)">
+            <summary>
+            Create an instance of the AutomationHttpClient class.
+            </summary>
+            <param name="httpClientHandler">The HttpClientHandler to use for web requests.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationHttpClient.#ctor(System.Net.Http.HttpClientHandler,System.Boolean)">
+            <summary>
+            Create an instance of the AutomationHttpClient class.
+            </summary>
+            <param name="httpClientHandler">The HttpClientHandler to use for web requests.</param>
+            <param name="dispose">If true, dispose the handler when disposing this resource.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationHttpClient.SetHeader(System.String,System.String)">
+            <summary>
+            Adds or updates a request header for all web requests.
+            </summary>
+            <param name="name">The name of the header.</param>
+            <param name="value">The value of the header.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationHttpClient.RemoveHeader(System.String)">
+            <summary>
+            Removes a request header from the browser implementation for all web requests.
+            </summary>
+            <param name="name">The name of the header.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationHttpClient.GetRequestStringAsync(System.String)">
+            <summary>
+            Sends an HTTP GET request to the given url.
+            </summary>
+            <param name="url">The url and GET parameters to use for the request.</param>
+            <returns>The request's html response.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationHttpClient.PostRequestStringAsync(System.String,System.String,System.String)">
+            <summary>
+            Sends an HTTP POST request to the given url.
+            </summary>
+            <param name="url">The url to send the POST request to.</param>
+            <param name="postData">The post parameters.</param>
+            <param name="contentType">The content type parameter of the post request</param>
+            <returns>The request's html response.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationHttpClient.DownloadFileAsync(System.String,System.String)">
+            <summary>
+            Downloads a web resource as a file to a given path.
+            </summary>
+            <param name="url">The url of the resource to download.</param>
+            <param name="filepath">The path to the destination file. The path can be relative or absolute.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationHttpClient.DownloadFileAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Downloads a web resource as a file to a given path.
+            </summary>
+            <param name="url">The url of the resource to download.</param>
+            <param name="filepath">The path to the destination file. The path can be relative or absolute.</param>
+            <param name="token">The cancellation token to enable cancellation of the operation.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationHttpClient.CreateDownloadProgressChangedEventArgsInstance(System.Int32,System.Object,System.Int64,System.Int64)">
+            <summary>
+            Creates an instance of the DownloadProgressChangedEventArgs class.
+            </summary>
+            <param name="progressPercentage">The percent of download progress.</param>
+            <param name="userToken">A generic object to pass to subscribing classes.</param>
+            <param name="bytesReceived">The total number of bytes that have been received so far in the download operation.</param>
+            <param name="totalBytesToReceive">The total number of bytes that will be received in the download operation.</param>
+            <returns></returns>
+            <remarks>Why Microsoft thought it was a good idea to internalize this class and prevent others from easily using it is beyond me.</remarks>
+        </member>
+        <member name="T:RelhaxModpack.Automation.AutomationMacro">
+            <summary>
+            An AutomationMacro object represents a key-value pair that allows replacement of text inside task objects with bracket notation ({}).
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationMacro.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationMacro.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
         <member name="F:RelhaxModpack.Automation.AutomationMacro.MacroReplaceRegex">
             <summary>
             The regex string used for macro analysis and replacement
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationMacro.RegexGroupInner1">
+            <summary>
+            The first level of macro detection in a string. Represents the first set of macro replacement brackets.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationMacro.RegexGroupInner2">
+            <summary>
+            The second level of macro detection in a string. Represents a macro inside a macro who's value is to be used for the name of the first level of the macro.
+            </summary>
+            <remarks>It is possible to have multiple recursive levels inside a macro. This label is 1 of 2 used for recursive macro processing.
+            See the unit tests source code for more information.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationMacro.RegexGroupInner3">
+            <summary>
+            The second level of macro detection in a string. Represents a macro inside a macro who's value is to be used for the name of the first level of the macro.
+            </summary>
+            <remarks>It is possible to have multiple recursive levels inside a macro. This label is 1 of 2 used for recursive macro processing.
+            See the unit tests source code for more information.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationMacro.Name">
+            <summary>
+            The name of macro.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationMacro.Value">
+            <summary>
+            The value of the macro.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationMacro.MacroType">
+            <summary>
+            The type of macro to determine if it can be over-written.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.AutomationMacro.MacroType"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationMacro.Copy(RelhaxModpack.Automation.AutomationMacro)">
+            <summary>
+            Create a copy of an AutomationMacro.
+            </summary>
+            <param name="macroToCopy">The AutomationMacro instance to create a copy of.</param>
+            <returns>A copy of the AutomationMacro object instance.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationMacro.ToString">
+            <summary>
+            Returns the values of this instance into a formatted string.
+            </summary>
+            <returns>The formatted string containing the names and values of the instance's properties.</returns>
         </member>
         <member name="T:RelhaxModpack.Automation.AutomationSequence">
             <summary>
@@ -886,6 +1043,1046 @@
         <member name="T:RelhaxModpack.Automation.Tasks.IDownloadTask">
             <summary>
             A task that implements this interface implies that it will always have a destination location for the resultant file
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.AutomationWebBrowser">
+            <summary>
+            Provides the ability to browse web pages using the WebBrowser (trident) API.
+            </summary>
+            <seealso cref="T:System.Windows.Forms.WebBrowser"/>
+        </member>
+        <member name="E:RelhaxModpack.Automation.AutomationWebBrowser.DownloadProgress">
+            <summary>
+            Occurs when download progress of a file has changed.
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.Automation.AutomationWebBrowser.DocumentCompleted">
+            <summary>
+            Occurs when a web page has been fully downloaded and rendered by the browser.
+            </summary>
+            <remarks>This may fire multiple times if the loaded page has dynamic content (e.g. AJAX, javascript).</remarks>
+            <seealso cref="E:RelhaxModpack.Automation.AutomationWebBrowser.NavigationCompleted"/>
+        </member>
+        <member name="E:RelhaxModpack.Automation.AutomationWebBrowser.NavigationCompleted">
+            <summary>
+            Occurs when the web browser has finished navigating to the new content. This does not mean that the new content has been fully parsed.
+            </summary>
+            <seealso cref="E:RelhaxModpack.Automation.AutomationWebBrowser.DocumentCompleted"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationWebBrowser.Browser">
+            <summary>
+            Returns this browser as a Control object.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebBrowser.#ctor">
+            <summary>
+            Creates an instance of the AutomationWebBrowser class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebBrowser.GetHtmlDocument">
+            <summary>
+            Return the currently parsed html document from the browser implementation.
+            </summary>
+            <returns>The currently parsed html document as a string.</returns>
+            <remarks>This implementation does not return the header, only the document body's outerHtml</remarks>
+            <seealso cref="P:System.Windows.Forms.WebBrowser.Document"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebBrowser.Cancel">
+            <summary>
+            Cancels the current navigation operation.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebBrowser.SetHeader(System.String,System.String)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebBrowser.RemoveHeader(System.String)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebBrowser.OnNavigated(System.Windows.Forms.WebBrowserNavigatedEventArgs)">
+            <summary>
+            Raises the NavigationCompleted event.
+            </summary>
+            <param name="e">The navigation completed event arguments.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebBrowser.OnDocumentCompleted(System.Windows.Forms.WebBrowserDocumentCompletedEventArgs)">
+            <summary>
+            Raises the DocumentCompleted event.
+            </summary>
+            <param name="e">The document completed event arguments.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebBrowser.DownloadFileAsync(System.String,System.String)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebBrowser.DownloadFileAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebBrowser.GetRequestStringAsync(System.String)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebBrowser.PostRequestStringAsync(System.String,System.String,System.String)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.AutomationWebClient">
+            <summary>
+            Provides the ability to browse web pages using the headless implementation of the WebClient API.
+            </summary>
+            <remarks>Headless means that there is no display interface, and thus, no javascript parsing.</remarks>
+            <seealso cref="T:System.Net.WebClient"/>
+        </member>
+        <member name="E:RelhaxModpack.Automation.AutomationWebClient.DownloadProgress">
+            <summary>
+            Occurs when download progress of a file has changed.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationWebClient.cancellationToken">
+            <summary>
+            The cancellation token to enable user cancellation of asynchronous operations.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationWebClient.cookieContainer">
+            <summary>
+            A cookie manager to enable sharing of cookies between operations.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebClient.GetWebRequest(System.Uri)">
+            <summary>
+            Returns an HTTPWebRequest object for the given url navigation, enabling sharing of cookies from previous requests.
+            </summary>
+            <param name="u">The url that is being navigated to.</param>
+            <returns>The HttpWebRequest object.</returns>
+            <seealso cref="T:System.Net.HttpWebRequest"/>
+            <seealso href="https://stackoverflow.com/questions/34323143/downloading-large-google-drive-files-with-webclient-in-c-sharp"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebClient.OnDownloadProgressChanged(System.Net.DownloadProgressChangedEventArgs)">
+            <summary>
+            Raises the DownloadProgress event and can throw a cancel exception if the download operation was canceled by the user.
+            </summary>
+            <param name="e">The download progress changed argument instance</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebClient.SetHeader(System.String,System.String)">
+            <summary>
+            Adds or updates a request header for all web requests.
+            </summary>
+            <param name="name">The name of the header.</param>
+            <param name="value">The value of the header.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebClient.RemoveHeader(System.String)">
+            <summary>
+            Removes a request header from the browser implementation for all web requests.
+            </summary>
+            <param name="name">The name of the header.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebClient.DownloadFileAsync(System.String,System.String)">
+            <summary>
+            Downloads a web resource as a file to a given path.
+            </summary>
+            <param name="url">The url of the resource to download.</param>
+            <param name="filepath">The path to the destination file. The path can be relative or absolute.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebClient.DownloadFileAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Downloads a web resource as a file to a given path.
+            </summary>
+            <param name="url">The url of the resource to download.</param>
+            <param name="filepath">The path to the destination file. The path can be relative or absolute.</param>
+            <param name="token">The cancellation token to enable cancellation of the operation.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebClient.GetRequestStringAsync(System.String)">
+            <summary>
+            Sends an HTTP GET request to the given url.
+            </summary>
+            <param name="url">The url and GET parameters to use for the request.</param>
+            <returns>The request's html response.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebClient.PostRequestStringAsync(System.String,System.String,System.String)">
+            <summary>
+            Sends an HTTP POST request to the given url.
+            </summary>
+            <param name="url">The url to send the POST request to.</param>
+            <param name="postData">The post parameters.</param>
+            <param name="contentType">The content type parameter of the post request</param>
+            <returns>The request's html response.</returns>
+        </member>
+        <member name="T:RelhaxModpack.Automation.AutomationWebViewWrapper">
+            <summary>
+            Provides the ability to browse web pages using the WebView browser (edge) API.
+            </summary>
+            <seealso cref="T:Microsoft.Toolkit.Forms.UI.Controls.WebView"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.AutomationWebViewWrapper.webView">
+            <summary>
+            The WebView instance.
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.Automation.AutomationWebViewWrapper.DownloadProgress">
+            <summary>
+            Occurs when download progress of a file has changed.
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.Automation.AutomationWebViewWrapper.DocumentCompleted">
+            <summary>
+            Occurs when a web page has been fully downloaded and rendered by the browser.
+            </summary>
+            <remarks>This may fire multiple times if the loaded page has dynamic content (e.g. AJAX, javascript).</remarks>
+            <seealso cref="E:RelhaxModpack.Automation.AutomationWebViewWrapper.NavigationCompleted"/>
+        </member>
+        <member name="E:RelhaxModpack.Automation.AutomationWebViewWrapper.NavigationCompleted">
+            <summary>
+            Occurs when the web browser has finished navigating to the new content. This does not mean that the new content has been fully parsed.
+            </summary>
+            <seealso cref="E:RelhaxModpack.Automation.AutomationWebViewWrapper.DocumentCompleted"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationWebViewWrapper.Browser">
+            <summary>
+            Returns the wrapped WebView instance as a Control object.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebViewWrapper.#ctor">
+            <summary>
+            Create an instance of the AutomationWebViewWrapper class.
+            </summary>
+            <remarks>When created, it is also creating the wrapped WebView instance.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationWebViewWrapper.Height">
+            <summary>
+            Get or set the height of the WebView instance.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.AutomationWebViewWrapper.Width">
+            <summary>
+            Get or set the width of the WebView instance.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebViewWrapper.GetHtmlDocument">
+            <summary>
+            Return the currently parsed html document from the WebView instance.
+            </summary>
+            <returns>The currently parsed html document as a string.</returns>
+            <remarks>This implementation does not return the header, only the document.documentElement.outerHTML</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebViewWrapper.Navigate(System.String)">
+            <summary>
+            Start a navigation to the given url.
+            </summary>
+            <param name="url">The resource to navigate to.</param>
+            <remarks>In this browser implementation, the navigation is asynchronous and must be listened for with the document and navigation completed events.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebViewWrapper.Cancel">
+            <summary>
+            Cancels navigation to a url resource.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebViewWrapper.SetHeader(System.String,System.String)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebViewWrapper.RemoveHeader(System.String)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebViewWrapper.DownloadFileAsync(System.String,System.String)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebViewWrapper.DownloadFileAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebViewWrapper.GetRequestStringAsync(System.String)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebViewWrapper.PostRequestStringAsync(System.String,System.String,System.String)">
+            <summary>
+            This has not been implemented.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationWebViewWrapper.Dispose">
+            <summary>
+            Release unmanaged resources by the WebView instance and closes all open events.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.BrowserSessionManager">
+            <summary>
+            A BrowserSessionManager provides an implementation to manage a browser of any API by providing common methods that can be mapped to automation tasks (e.g. browser_session_set_header).
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.Automation.BrowserSessionManager.DownloadProgress">
+            <summary>
+            Occurs when there is progress in the operation of downloading a file  to disk.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.BrowserSessionManager.browserSession">
+            <summary>
+            The wrapped/managed browser object.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserSessionManager.#ctor(RelhaxModpack.Utilities.Enums.BrowserSessionType)">
+            <summary>
+            Create an instance of the BrowserSessionManager class.
+            </summary>
+            <param name="sessionType">The type of browser to create (while browser API to use).</param>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.BrowserSessionType"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserSessionManager.SetHeader(System.String,System.String)">
+            <summary>
+            Adds or updates a request header for all web requests in the browser.
+            </summary>
+            <param name="name">The name of the header.</param>
+            <param name="value">The value of the header.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserSessionManager.RemoveHeader(System.String)">
+            <summary>
+            Removes a request header from the browser for all web requests.
+            </summary>
+            <param name="name">The name of the header.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserSessionManager.DownloadFileAsync(System.String,System.String)">
+            <summary>
+            Instructs the browser to download a web resource as a file to a given path.
+            </summary>
+            <param name="url">The url of the resource to download.</param>
+            <param name="filepath">The path to the destination file. The path can be relative or absolute.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserSessionManager.DownloadFileAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Instructs the browser to download a web resource as a file to a given path.
+            </summary>
+            <param name="url">The url of the resource to download.</param>
+            <param name="filepath">The path to the destination file. The path can be relative or absolute.</param>
+            <param name="token">The cancellation token to enable cancellation of the operation.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserSessionManager.GetRequestStringAsync(System.String)">
+            <summary>
+            Instructs the browser to send an HTTP GET request to the given url.
+            </summary>
+            <param name="url">The url and GET parameters to use for the request.</param>
+            <returns>The request's html response.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserSessionManager.PostRequestStringAsync(System.String,System.String,System.String)">
+            <summary>
+            Instructs the browser to send an HTTP POST request to the given url.
+            </summary>
+            <param name="url">The url to send the POST request to.</param>
+            <param name="postData">The post parameters.</param>
+            <param name="contentType">The content type parameter of the post request</param>
+            <returns>The request's html response.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserSessionManager.Dispose">
+            <summary>
+            Releases unmanaged objects from the browser.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.HtmlParser">
+            <summary>
+            An HtmlParser class enables retrieval of a string of html and parsing for specific values using HtmlPath.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlParser.HtmlPath">
+            <summary>
+            The HtmlPath string to use for navigating the html document.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlParser.ResultString">
+            <summary>
+            The result of the HtmlPath navigation, if there is a result. Otherwise null/empty.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlParser.WriteHtmlToDisk">
+            <summary>
+            Flag to determine if the HtmlParser should write the contents of the html string to disk for debug.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlParser.HtmlFilePath">
+            <summary>
+            The relative or absolute IO path on disk to write the html string to disk. Must include the file name.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlParser.ResultNode">
+            <summary>
+            The result of the HtmlPath navigation, if there is a result. Otherwise null/empty.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.HtmlParser.htmlText">
+            <summary>
+            The retrieved html document.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlParser.#ctor">
+            <summary>
+            Create an instance of the HtlmParser class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlParser.#ctor(System.String)">
+            <summary>
+            Create an instance of the HtlmParser class.
+            </summary>
+            <param name="htmlpath">The HtmlPath string to use for navigating the html document.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlParser.#ctor(System.String,System.Boolean,System.String)">
+            <summary>
+            Create an instance of the HtlmParser class.
+            </summary>
+            <param name="htmlpath">The HtmlPath string to use for navigating the html document.</param>
+            <param name="writeHtmlToDisk">Determine if the HtmlParser should write the contents of the html string to disk for debug.</param>
+            <param name="htmlfilePath">The relative or absolute IO path on disk to write the html string to disk. Must include the file name.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlParser.RunParserAsync(System.String)">
+            <summary>
+            Run the parser to retrieve the html string and navigate it via HtmlPath
+            </summary>
+            <param name="htmlPath">The HtmlPath string to use for navigating the html document.</param>
+            <returns>The exit code during the parsing operation.</returns>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlParser.RunParserAsync">
+            <summary>
+            Run the parser to retrieve the html string and navigate it via HtmlPath
+            </summary>
+            <returns>The exit code during the parsing operation.</returns>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlParser.ProcessVariables">
+            <summary>
+            Process class variables to ensure it is setup properly.
+            </summary>
+            <returns>True if variables are set and parsed correctly, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlParser.TryWriteHtmlToDisk">
+            <summary>
+            Tries to write the html string to disk.
+            </summary>
+            <returns>True if the operation succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlParser.RunHtmlPathSearch">
+            <summary>
+            Navigate the html document string with the given HtmlPath to get a result.
+            </summary>
+            <returns>True if the operation succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlParser.GetHtmlDocumentAsync">
+            <summary>
+            Gets the html document loaded into a string variable
+            </summary>
+            <returns>True if the operation succeeds, false otherwise.</returns>
+        </member>
+        <member name="T:RelhaxModpack.Automation.HtmlTextParser">
+            <summary>
+            An HtmlTextParser allows for HtmlPath navigation of an html document already loaded as a string.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlTextParser.#ctor">
+            <summary>
+            Create an instance of the HtmlTextParser class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlTextParser.#ctor(System.String)">
+            <summary>
+            Create an instance of the HtmlTextParser class.
+            </summary>
+            <param name="htmlPath">The HtmlPath string to use for navigating the html document.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlTextParser.#ctor(System.String,System.Boolean,System.String,System.String)">
+            <summary>
+            Create an instance of the HtmlTextParser class.
+            </summary>
+            <param name="htmlPath">The HtmlPath string to use for navigating the html document.</param>
+            <param name="writeHtmlToDisk">Flag to determine if the HtmlParser should write the contents of the html string to disk for debug.</param>
+            <param name="htmlText">The html document to parse.</param>
+            <param name="htmlFilepath">The relative or absolute IO path on disk to write the html string to disk. Must include the file name.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlTextParser.GetHtmlDocumentAsync">
+            <summary>
+            Ensures that the html text is already loaded into the instance.
+            </summary>
+            <returns>True if the html text is already loaded, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlTextParser.SetHtmlText(System.String)">
+            <summary>
+            Set the html document string.
+            </summary>
+            <param name="htmlText">The html document to parse.</param>
+        </member>
+        <member name="T:RelhaxModpack.Automation.IAutomationBrowser">
+            <summary>
+            Provides an interface of all commonly used functions for all browser API implementations to use when running automation tasks.
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.Automation.IAutomationBrowser.DocumentCompleted">
+            <summary>
+            Occurs when a web page has been fully downloaded and rendered by the browser.
+            </summary>
+            <remarks>This may fire multiple times if the loaded page has dynamic content (e.g. AJAX, javascript).</remarks>
+            <seealso cref="E:RelhaxModpack.Automation.IAutomationBrowser.NavigationCompleted"/>
+        </member>
+        <member name="E:RelhaxModpack.Automation.IAutomationBrowser.NavigationCompleted">
+            <summary>
+            Occurs when the web browser has finished navigating to the new content. This does not mean that the new content has been fully parsed.
+            </summary>
+            <seealso cref="E:RelhaxModpack.Automation.IAutomationBrowser.DocumentCompleted"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.IAutomationBrowser.Browser">
+            <summary>
+            Get the web browser implementation as a control object.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.IAutomationBrowser.Height">
+            <summary>
+            Gets or sets the height of the browser control.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.IAutomationBrowser.Width">
+            <summary>
+            Gets or sets the width of the browser control.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.IAutomationBrowser.GetHtmlDocument">
+            <summary>
+            Return the currently parsed html document from the browser implementation.
+            </summary>
+            <returns>The currently parsed html document as a string.</returns>
+            <remarks>Most implementations only return the document's "outer html" section, which may not include the document header.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.IAutomationBrowser.Navigate(System.String)">
+            <summary>
+            Start a navigation to the given url.
+            </summary>
+            <param name="url">The resource to navigate to.</param>
+            <remarks>In most browser implementations, the navigation is asynchronous and must be listened for with the document and navigation completed events.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.IAutomationBrowser.Cancel">
+            <summary>
+            Cancels a browser navigation operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.BrowserSessionManagerDelegate">
+            <summary>
+            Delegate for event access for when file download progress changes.
+            </summary>
+            <param name="sender">The class instance that raised the event.</param>
+            <param name="e">The download progress changed arguments to use in the consuming class.</param>
+        </member>
+        <member name="T:RelhaxModpack.Automation.IAutomationBrowserSession">
+            <summary>
+            Provides an interface of common implementation methods used for different web browser APIs
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.Automation.IAutomationBrowserSession.DownloadProgress">
+            <summary>
+            Provides event access for other classes to subscribe to when file download progress changes.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.IAutomationBrowserSession.SetHeader(System.String,System.String)">
+            <summary>
+            Adds or updates a request header for all web requests.
+            </summary>
+            <param name="name">The name of the header.</param>
+            <param name="value">The value of the header.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.IAutomationBrowserSession.RemoveHeader(System.String)">
+            <summary>
+            Removes a request header from the browser implementation for all web requests.
+            </summary>
+            <param name="name">The name of the header.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.IAutomationBrowserSession.DownloadFileAsync(System.String,System.String)">
+            <summary>
+            Downloads a web resource as a file to a given path.
+            </summary>
+            <param name="url">The url of the resource to download.</param>
+            <param name="filepath">The path to the destination file. The path can be relative or absolute.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.IAutomationBrowserSession.DownloadFileAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Downloads a web resource as a file to a given path.
+            </summary>
+            <param name="url">The url of the resource to download.</param>
+            <param name="filepath">The path to the destination file. The path can be relative or absolute.</param>
+            <param name="token">The cancellation token to enable cancellation of the operation.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.IAutomationBrowserSession.GetRequestStringAsync(System.String)">
+            <summary>
+            Sends an HTTP GET request to the given url.
+            </summary>
+            <param name="url">The url and GET parameters to use for the request.</param>
+            <returns>The request's html response.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.IAutomationBrowserSession.PostRequestStringAsync(System.String,System.String,System.String)">
+            <summary>
+            Sends an HTTP POST request to the given url.
+            </summary>
+            <param name="url">The url to send the POST request to.</param>
+            <param name="postData">The post parameters.</param>
+            <param name="contentType">The content type parameter of the post request</param>
+            <returns>The request's html response.</returns>
+        </member>
+        <member name="T:RelhaxModpack.Automation.BrowserManagerDelegate">
+            <summary>
+            The delegate to invoke when a browser event occurs.
+            </summary>
+            <param name="sender">The sending object.</param>
+            <param name="e">Event arguments.</param>
+        </member>
+        <member name="T:RelhaxModpack.Automation.BrowserManager">
+            <summary>
+            Provides a managed implementation to use a browser of any API to navigate and extract text from a web page.
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.Automation.BrowserManager.DocumentCompleted">
+            <summary>
+            Occurs when a web page has been fully downloaded and rendered by the browser.
+            </summary>
+            <remarks>This may fire multiple times if the loaded page has dynamic content (e.g. AJAX, javascript).</remarks>
+            <seealso cref="E:RelhaxModpack.Automation.BrowserManager.NavigationCompleted"/>
+        </member>
+        <member name="E:RelhaxModpack.Automation.BrowserManager.NavigationCompleted">
+            <summary>
+            Occurs when the web browser has finished navigating to the new content. This does not mean that the new content has been fully parsed.
+            </summary>
+            <seealso cref="E:RelhaxModpack.Automation.BrowserManager.DocumentCompleted"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.BrowserManager.WaitTimeMs">
+            <summary>
+            The time, in milliseconds, to wait after the first NavigationCompleted event is fired (or a previous wait).
+            </summary>
+            <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+            <seealso cref="P:RelhaxModpack.Automation.BrowserManager.WaitCounts"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.BrowserManager.WaitCounts">
+            <summary>
+            The number of times the browser manager should wait for WaitTimeMs after the first NavigationCompleted event is fired.
+            </summary>
+            <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+            <seealso cref="P:RelhaxModpack.Automation.BrowserManager.WaitTimeMs"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.BrowserManager.browser">
+            <summary>
+            Get the web browser as a control object.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.BrowserManager.browserType">
+            <summary>
+            The type of browser object that is created in this BrowserManager instance.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.BrowserManager.dispatcher">
+            <summary>
+            The dispatcher used to create and interface with the browser object.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.BrowserManager.OnCustomThread">
+            <summary>
+            Used to determine if the browser object is being managed on a thread other then the one this manager instance is using.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.BrowserManager.manualResetEvent">
+            <summary>
+            The synchronization mechanism used for waiting until a browser has finished asynchronously loading a web page. This is thread safe.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.BrowserManager.browserFinishedLoadingScriptsCounter">
+            <summary>
+            The counter for how many waits of WaitCounts have been completed.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.BrowserManager.WaitCounts"/>
+        </member>
+        <member name="E:RelhaxModpack.Automation.BrowserManager.BrowserCreated">
+            <summary>
+            Occurs when the browser object has been instanced.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserManager.#ctor(RelhaxModpack.Utilities.Enums.BrowserType,System.Windows.Threading.Dispatcher)">
+            <summary>
+            Creates an instance of the BrowserManager class.
+            </summary>
+            <param name="browserType">The type of browser to create.</param>
+            <param name="dispatcher">The dispatcher to use for creating and interfacing with the browser object.</param>
+            <remarks>If the dispatcher argument is null, then a new UI thread will be created and a dispatcher will be assigned.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.BrowserManager.BrowserType">
+            <summary>
+            Get the type of browser object that was created.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.BrowserManager.Browser">
+            <summary>
+            Get the browser as a control object.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.BrowserManager.Height">
+            <summary>
+            Gets or sets the height of the browser control.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.BrowserManager.Width">
+            <summary>
+            Gets or sets the width of the browser control.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserManager.GetHtmlDocument">
+            <summary>
+            Return the currently parsed html document from the browser object.
+            </summary>
+            <returns>The currently parsed html document as a string.</returns>
+            <remarks>Most implementations only return the document's "outer html" section, which may not include the document header.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserManager.Navigate(System.String)">
+            <summary>
+            Start a navigation to the given url.
+            </summary>
+            <param name="url">The resource to navigate to.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserManager.SetDispatcher">
+            <summary>
+            Creates a thread to be used to manage the browser object, if dispatcher is null.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserManager.NavigateWithDelayAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously tells the browser to navigate to a web page and wait for the designated amount of time and counts.
+            </summary>
+            <param name="url">The url to have the browser navigate to.</param>
+            <param name="token">The cancellation token to allow the user to cancel the web page navigation.</param>
+            <returns>True if the web navigation completed successfully, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserManager.CreateBrowser">
+            <summary>
+            Initializes the browser object.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserManager.Cancel">
+            <summary>
+            Cancels a browser navigation operation.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserManager.Dispose">
+            <summary>
+            Releases all resources used by the BrowserManger instance.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserManager.DisposeBrowser">
+            <summary>
+            Dispose of the browser object.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.BrowserManager.ShutdownDispatcher">
+            <summary>
+            Shutdown the dispatcher object.
+            </summary>
+            <remarks>This should only be called when the dispatcher has been created inside this class. Otherwise you could be invoking shutdown on the currently running dispatcher (that the application is running on).</remarks>
+        </member>
+        <member name="T:RelhaxModpack.Automation.FileHashComparer">
+            <summary>
+            The FileHashComparer class enables comparison of 2 files by calculating if the MD5 hash values are equal.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.FileHashComparer.BYTE_CHUNKS">
+            <summary>
+            The maximum number of bytes to use for each part of the MD5 calculation.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.FileHashComparer.HashAStringBuilder">
+            <summary>
+            The calculated MD5 hash of file A.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.FileHashComparer.HashBStringBuilder">
+            <summary>
+            The calculated MD5 hash of file B.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.FileHashComparer.HashACalculated">
+            <summary>
+            Get if the calculation of file A was successful.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.FileHashComparer.HashBCalculated">
+            <summary>
+            Get if the calculation of tile B was successful.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.FileHashComparer.ProgressA">
+            <summary>
+            Get or set the progress reporting object for file A.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.FileHashComparer.ProgressB">
+            <summary>
+            Get or set the progress reporting object for file B.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.FileHashComparer.CancellationTokenA">
+            <summary>
+            Get or set the operation cancellation token for file A.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.FileHashComparer.CancellationTokenB">
+            <summary>
+            Get or set the operation cancellation token for file B.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.FileHashComparer.md5HashA">
+            <summary>
+            The MD5 hash calculation objects for each file.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.FileHashComparer.md5HashB">
+            <summary>
+            The MD5 hash calculation objects for each file.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.FileHashComparer.hashProgressA">
+            <summary>
+            The progress reporting objects to use for reporting progress for each file's calculation.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.FileHashComparer.hashProgressB">
+            <summary>
+            The progress reporting objects to use for reporting progress for each file's calculation.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.FileHashComparer.#ctor">
+            <summary>
+            Create an instance of the FileHashComparer class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.FileHashComparer.ComputeHashA(System.String)">
+            <summary>
+            Compute the MD5 hash of file A from a location on disk.
+            </summary>
+            <param name="filenameA">The path to file A.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.FileHashComparer.ComputeHashA(System.IO.Stream)">
+            <summary>
+            Compute the MD5 hash of file A from a Stream object.
+            </summary>
+            <param name="streamA">The stream to access file A.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.FileHashComparer.ComputeHashB(System.String)">
+            <summary>
+            Compute the MD5 hash of file B from a location on disk.
+            </summary>
+            <param name="filenameB">The path to file B.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.FileHashComparer.ComputeHashB(System.IO.Stream)">
+            <summary>
+            Compute the MD5 hash of file B from a Stream object.
+            </summary>
+            <param name="streamB">The stream to access file B.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.FileHashComparer.ComputeHash(System.IO.Stream,System.Security.Cryptography.MD5,RelhaxModpack.UI.RelhaxProgress,System.IProgress{RelhaxModpack.UI.RelhaxProgress},System.Text.StringBuilder,System.Threading.CancellationToken)">
+            <summary>
+            Compute the MD5 hash of the given stream object and save the result to a StringBuilder.
+            </summary>
+            <param name="stream">The data stream to compute.</param>
+            <param name="md5hash">The MD5 hash implementation.</param>
+            <param name="progress">The progress object.</param>
+            <param name="Reporter">The progress reporter object.</param>
+            <param name="builder">The StringBuilder to hold the calculated hash value.</param>
+            <param name="cancellationToken">The operation cancellation token.</param>
+            <returns>True if the MD5 calculation succeeds, false otherwise.</returns>
+        </member>
+        <member name="T:RelhaxModpack.Automation.HtmlBrowserParser">
+            <summary>
+            An HtmlBrowserParser class enables retrieval of a string of html via downloading a rendered web page resource (with javascript) and parsing for specific values using HtmlPath.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlBrowserParser.WaitTimeMs">
+            <summary>
+            The time, in milliseconds, to wait after the first NavigationCompleted event is fired (or a previous wait).
+            </summary>
+            <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+            <seealso cref="P:RelhaxModpack.Automation.HtmlBrowserParser.WaitCounts"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlBrowserParser.WaitCounts">
+            <summary>
+            The number of times the browser should wait for WaitTimeMs after the first NavigationCompleted event is fired.
+            </summary>
+            <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+            <seealso cref="P:RelhaxModpack.Automation.HtmlBrowserParser.WaitTimeMs"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlBrowserParser.BrowserWidth">
+            <summary>
+            Gets or sets the height of the browser.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlBrowserParser.BrowserHeight">
+            <summary>
+            Gets or sets the width of the browser.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlBrowserParser.BrowserType">
+            <summary>
+            Get the type of browser implementation that was used inside the browser manager.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlBrowserParser.BrowserManager">
+            <summary>
+            Get the browser manager that runs the underlying browser API
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.HtmlBrowserParser.browserDispatcher">
+            <summary>
+            The dispatcher used to create and interface with the browser manager.
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.Automation.HtmlBrowserParser.BrowserCreated">
+            <summary>
+            Occurs when the browser manager's BrowserCreated event is fired.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.HtmlBrowserParser.cancellationTokenSource">
+            <summary>
+            The cancellation token to enable the user to cancel the navigation operation.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlBrowserParser.#ctor(RelhaxModpack.Utilities.Enums.BrowserType)">
+            <summary>
+            Create an instance of the HtmlBrowserParser class.
+            </summary>
+            <param name="browserType">The type of browser implementation to use for the browser manager.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlBrowserParser.#ctor(System.String,System.String,System.Int32,System.Int32,System.Boolean,System.String,RelhaxModpack.Utilities.Enums.BrowserType)">
+            <summary>
+            Create an instance of the HtmlBrowserParser class.
+            </summary>
+            <param name="htmlpath">The HtmlPath string to use for navigating the html document.</param>
+            <param name="url">The location to the web page resource to download.</param>
+            <param name="waitTimeMs">The time, in milliseconds, to wait after the first NavigationCompleted event is fired (or a previous wait).</param>
+            <param name="waitCounts">The number of times the browser should wait for WaitTimeMs after the first NavigationCompleted event is fired.</param>
+            <param name="writeHtmlToDisk">Flag to determine if the HtmlParser should write the contents of the html string to disk for debug.</param>
+            <param name="htmlFilePath">The relative or absolute IO path on disk to write the html string to disk. Must include the file name.</param>
+            <param name="browserType">The type of browser implementation to use inside the browser manager.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlBrowserParser.#ctor(System.String,System.String,System.Int32,System.Int32,System.Boolean,System.String,RelhaxModpack.Utilities.Enums.BrowserType,System.Windows.Threading.Dispatcher)">
+            <summary>
+            Create an instance of the HtmlBrowserParser class.
+            </summary>
+            <param name="htmlpath">The HtmlPath string to use for navigating the html document.</param>
+            <param name="url">The location to the web page resource to download.</param>
+            <param name="waitTimeMs">The time, in milliseconds, to wait after the first NavigationCompleted event is fired (or a previous wait).</param>
+            <param name="waitCounts">The number of times the browser should wait for WaitTimeMs after the first NavigationCompleted event is fired.</param>
+            <param name="writeHtmlToDisk">Flag to determine if the HtmlParser should write the contents of the html string to disk for debug.</param>
+            <param name="htmlFilePath">The relative or absolute IO path on disk to write the html string to disk. Must include the file name.</param>
+            <param name="browserType">The type of browser implementation to use inside the browser manager.</param>
+            <param name="browserDispatcher">The dispatcher used to create and interface with the browser manager.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlBrowserParser.GetHtmlDocumentAsync">
+            <summary>
+            Uses the browser manager to download the html document at the Url.
+            </summary>
+            <returns>True if the document was downloaded to a string, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlBrowserParser.Cancel">
+            <summary>
+            Cancels the browser's navigation operation, if one is running.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlBrowserParser.Dispose">
+            <summary>
+            Dispose of the browser manager and un-subscribe events
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.HtmlWebscrapeParser">
+            <summary>
+            An HtmlWebscrapeParser class enables retrieval of a string of html via downloading a web page resource (without javascript) and parsing for specific values using HtmlPath.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.HtmlWebscrapeParser.Url">
+            <summary>
+            The location to the web page resource to download.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.HtmlWebscrapeParser.lastUrl">
+            <summary>
+            The last downloaded web page resource.
+            </summary>
+            <remarks>If this equals the current web page to download, then the html string will be reused.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Automation.HtmlWebscrapeParser.client">
+            <summary>
+            The client to use to download the web page resource.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlWebscrapeParser.#ctor">
+            <summary>
+            Create an instance of the HtmlWebscrapeParser class.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlWebscrapeParser.#ctor(System.String,System.String)">
+            <summary>
+            Create an instance of the HtmlWebscrapeParser class.
+            </summary>
+            <param name="htmlpath">The HtmlPath string to use for navigating the html document.</param>
+            <param name="url"></param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlWebscrapeParser.#ctor(System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            Create an instance of the HtmlWebscrapeParser class.
+            </summary>
+            <param name="htmlpath">The HtmlPath string to use for navigating the html document.</param>
+            <param name="url">The location to the web page resource to download.</param>
+            <param name="writeHtmlToDisk">Determine if the HtmlParser should write the contents of the html string to disk for debug.</param>
+            <param name="htmlFilePath">The relative or absolute IO path on disk to write the html string to disk. Must include the file name.</param>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlWebscrapeParser.RunParserAsync(System.String,System.String)">
+            <summary>
+            Run the parser to retrieve the html string and navigate it via HtmlPath
+            </summary>
+            <param name="url">The location to the web page resource to download.</param>
+            <param name="htmlPath">The HtmlPath string to use for navigating the html document.</param>
+            <returns>The exit code during the parsing operation.</returns>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlWebscrapeParser.ProcessVariables">
+            <summary>
+            Process class variables to ensure it is setup properly.
+            </summary>
+            <returns>True if variables are set and parsed correctly, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlWebscrapeParser.GetHtmlDocumentAsync">
+            <summary>
+            Uses the web client to download the html document at the Url.
+            </summary>
+            <returns>True if the document was downloaded to a string, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlWebscrapeParser.UrlIsValid(System.String)">
+            <summary>
+            Ensures that the url starts with the http(s):// protocol to ensure it's a web resource to download
+            </summary>
+            <param name="url">The location to the web page resource to download.</param>
+            <returns>True if the url starts with http(s), false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.HtmlWebscrapeParser.Cancel">
+            <summary>
+            Cancels the web client's web page navigation if it's running.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.ICancelOperation">
+            <summary>
+            Provides a method to cancel a running automation task via the Cancel method.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.ICancelOperation.Cancel">
+            <summary>
+            Cancel the running automation task.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Common.ApplicationConstants">
