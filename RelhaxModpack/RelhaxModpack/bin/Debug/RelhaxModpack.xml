@@ -1348,9 +1348,134 @@
             Print information about this comparison entry to the log file.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.AutomationTask">
+            <summary>
+            An AutomationTask represents an action to occur during an automation sequence, used for checking for and updating database package entries.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.TaskTypeMapper">
+            <summary>
+            Gets a dictionary that maps a unique task command name in xml to the type of task object in the code.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.AutomationTask.AttributeNameForMapping">
+            <summary>
+            The xml attribute that is used for the dictionary type mapper for creating task instances.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.AutomationTask.SpecialCaseIgnoreMacro">
+            <summary>
+            A list of macros that should be ignored from running macro parse operations on.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.AutomationSequence">
+            <summary>
+            Gets or sets the automation sequence.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.AutomationSequencer">
+            <summary>
+            Gets the automation sequencer.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.DatabaseAutomationRunner">
+            <summary>
+            Gets the automation runner window instance.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.AutomationSettings">
+            <summary>
+            Gets the automation runner settings.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.Macros">
+            <summary>
+            Gets a list of all macros in the automation sequence instance.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.AutomationSequence.AllMacros"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.AutomationCompareManager">
+            <summary>
+            Gets the automation compare manager.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.BrowserSessionManager">
+            <summary>
+            Gets the browser session manager.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.ErrorMessage">
+            <summary>
+            Gets the error message associated with the error of executing the task.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.ExitCode">
+            <summary>
+            Gets the exit code after execution of the task.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.AutomationTask.TaskTypeMapper"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.ID">
+            <summary>
+            Get or set a unique ID tag for this task.
+            </summary>
+            <remarks>This is not required, but is useful when debugging issues during sequence execution. The ID of the task is printed in the log file.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.AutomationTask.ComponentInternalName">
+            <summary>
+            Gets the ID name of this automation task.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.AutomationTask.ID"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.EvaluateResults(System.String)">
+            <summary>
+            Evaluates the exit code after each phase of the task's execution.
+            </summary>
+            <param name="taskState">The phase/state of the task (e.g. ValidateCommands)</param>
+            <returns>True if the exit code is none, false otherwise (including if default)</returns>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ValidateCommandTrue(System.Boolean,System.String)">
             <summary>
-            "true" version means that the test being true is "bad"
+            "true" version means that the test being true is "bad".
             </summary>
             <param name="test"></param>
             <param name="formattedString"></param>
@@ -1358,15 +1483,23 @@
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ValidateCommandFalse(System.Boolean,System.String)">
             <summary>
-            "false" version means that the test being false is "bad"
+            "false" version means that the test being false is "bad".
             </summary>
             <param name="test"></param>
             <param name="formattedString"></param>
             <returns></returns>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ValidateCommandStringNullEmptyTrue(System.String,System.String)">
+            <summary>
+            Validates that the given argument string's value isn't null or empty.
+            </summary>
+            <param name="argName">The name/xml argument of the task's field.</param>
+            <param name="arg">The task argument to validate.</param>
+            <returns>True if the string is null or empty, false otherwise.</returns>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessTaskResultTrue(System.Boolean,System.String)">
             <summary>
-            "true" version means that the test being true is "bad"
+            "true" version means that the test being true is "bad".
             </summary>
             <param name="test"></param>
             <param name="formattedString"></param>
@@ -1374,15 +1507,1931 @@
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessTaskResultFalse(System.Boolean,System.String)">
             <summary>
-            "false" version means that the test being false is "bad"
+            "false" version means that the test being false is "bad".
             </summary>
             <param name="test"></param>
             <param name="formattedString"></param>
             <returns></returns>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ValidateForExitTrue(System.Boolean,RelhaxModpack.Utilities.Enums.AutomationExitCode,System.String)">
+            <summary>
+            Evaluates if a logical result is true or false. If true, an error is reported.
+            </summary>
+            <param name="test">The logic to run.</param>
+            <param name="exitCode">If the logic returns true, the exit code to set for the task.</param>
+            <param name="formattedString">If the logic returns true, the error message to set for the task.</param>
+            <returns>True if the logic result is true, false otherwise.</returns>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.AutomationExitCode"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <remarks>The method will run the following pre-defined methods:
+            ProcessMacros(), ValidateCommands(), RunTask(), ProcessTaskResults.
+            Each method, or 'phase' of the task contains a try-catch and an evaluation of the results to determine if the next phase should run.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessEscapeCharacters(System.String,System.String)">
+            <summary>
+            Process any escape characters used within the task argument.
+            </summary>
+            <param name="argName">The name of the task argument.</param>
+            <param name="arg">The value of the task argument.</param>
+            <returns>The processed argument.</returns>
+            <remarks>This currently processes escaped characters \{ and \}.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessMacro(System.String,System.String,System.Collections.Generic.List{RelhaxModpack.Automation.AutomationMacro})">
+            <summary>
+            Find and replace any macros that exist in a task argument with their macro values.
+            </summary>
+            <param name="argName">The name of the task argument.</param>
+            <param name="arg">The value task argument.</param>
+            <param name="macros">The list of macros to try to find and replace in the task argument.</param>
+            <returns>The macro replaced string.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessMacro(System.String,System.String)">
+            <summary>
+            Find and replace any macros that exist in a string with their macro values.
+            </summary>
+            <param name="argName">The name of the task argument.</param>
+            <param name="arg">The value task argument.</param>
+            <returns>The macro replaced string.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessMacro(System.String,System.String@,System.Collections.Generic.List{RelhaxModpack.Automation.AutomationMacro},System.Int32)">
+            <summary>
+            Find and replace any macros that exist in a string with their macro values.
+            </summary>
+            <param name="argName">The name of the task argument.</param>
+            <param name="arg">The value task argument.</param>
+            <param name="macros">The list of macros to try to find and replace in the task argument.</param>
+            <param name="recursionLevel">The iteration of replacing macros inside of macros. Normally this isn't set unless inside this function.</param>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionGetTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionGetTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionGetTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionGetTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionGetTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionGetTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionHeaderTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionHeaderTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionHeaderTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionMacroTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionMacroTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionMacroTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionRemoveHeaderTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionRemoveHeaderTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionRemoveHeaderTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionRemoveHeaderTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionSetHeaderTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionSetHeaderTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionSetHeaderTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionSetHeaderTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionSetHeaderTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionSetHeaderTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionUrlTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionUrlTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionUrlTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCreateTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryCreateTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCreateTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCreateTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCreateTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DatabasePackageTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DatabaseTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DatabaseTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DatabaseTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DatabaseTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDestinationTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDestinationTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDestinationTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDestinationTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectorySearchTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectorySearchTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectorySearchTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectorySearchTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectorySearchTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadStaticTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DownloadStaticTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.EndBrowserSessionTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.EndBrowserSessionTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.EndBrowserSessionTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.EndBrowserSessionTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.EndBrowserSessionTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.EndBrowserSessionTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.EndCompareTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.EndCompareTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.EndCompareTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.EndCompareTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.EndCompareTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.EndCompareTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCompareInverseTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.FileCompareInverseTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCompareInverseTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCompareInverseTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCompareInverseTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCompareInverseTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCompareTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCompareTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCompareTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCompareTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCompareTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCompareTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCopyTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.FileCopyTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCopyTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCopyTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileDeleteTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.FileDeleteTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileDeleteTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileDeleteTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileDestinationTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileDestinationTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileDestinationTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileDestinationTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileExistsTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.FileExistsTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileExistsTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileExistsTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileExistsTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileExistsTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileExistsTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileMoveTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.FileMoveTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileMoveTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileMoveTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryListTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryListTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryListTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryListTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryListTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryListTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryListTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileSourceTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileSourceTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileSourceTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Automation.Tasks.IDownloadTask">
             <summary>
             A task that implements this interface implies that it will always have a destination location for the resultant file
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroCreateTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroCreateTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroCreateTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroCreateTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroCreateTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroCreateTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroCreateTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroDeleteTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroDeleteTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroDeleteTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroDeleteTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroImportTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroImportTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.PackageDownloadTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.PackageDownloadTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageDownloadTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageDownloadTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageDownloadTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageTransferTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageTransferTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageTransferTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageTransferTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.PackageUploadTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.PackageUploadTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageUploadTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageUploadTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageUploadTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageUploadTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.SaveDatabaseTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.SaveDatabaseTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.SaveDatabaseTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.SaveDatabaseTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.SaveDatabaseTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.SaveDatabaseTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.SaveDatabaseTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ShellExecuteTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.ShellExecuteTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ShellExecuteTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ShellExecuteTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ShellExecuteTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ShellExecuteTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ShellExecuteTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.StartCompareTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.StartCompareTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.StartCompareTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.StartCompareTask.ValidateCommands">
+            <summary>
+            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.StartCompareTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.StartCompareTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.TaskImportTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.TaskImportTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.TaskCommandName">
+            <summary>
+            The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes.
+            </summary>
+            <returns>A list of string property names.</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.ProcessMacros">
+            <summary>
+            Process any macros that exist in the task's arguments.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.RunTask">
+            <summary>
+            Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.ProcessTaskResults">
+            <summary>
+            Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Automation.AutomationWebBrowser">
