@@ -19,6 +19,9 @@ namespace RelhaxModpack.Automation.Tasks
 
         public string Url { get; set; }
 
+        /// <summary>
+        /// Gets the xml name of the command to determine the task instance type.
+        /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
         protected HtmlWebscrapeParser htmlXpathParser;

@@ -16,6 +16,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public const string TaskCommandName = "browser_session_download_file";
 
+        /// <summary>
+        /// Gets the xml name of the command to determine the task instance type.
+        /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
         public string DestinationPath { get; set; } = string.Empty;

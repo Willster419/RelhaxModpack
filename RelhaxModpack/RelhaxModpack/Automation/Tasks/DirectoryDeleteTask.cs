@@ -18,6 +18,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public const string TaskCommandName = "directory_delete";
 
+        /// <summary>
+        /// Gets the xml name of the command to determine the task instance type.
+        /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
         public string IncludeRootInSearch { get; set; }

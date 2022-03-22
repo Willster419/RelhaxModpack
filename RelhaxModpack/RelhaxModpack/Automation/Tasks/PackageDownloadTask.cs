@@ -18,6 +18,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public const string TaskCommandName = "package_download";
 
+        /// <summary>
+        /// Gets the xml name of the command to determine the task instance type.
+        /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
         public override void ValidateCommands()

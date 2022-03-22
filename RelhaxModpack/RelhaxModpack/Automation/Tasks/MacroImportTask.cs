@@ -14,6 +14,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public const string TaskCommandName = "import_macro";
 
+        /// <summary>
+        /// Gets the xml name of the command to determine the task instance type.
+        /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
         protected override string XpathExpression { get { return AutomationSequence.AutomationSequenceMacroDefinitionsXpath; } }
