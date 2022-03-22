@@ -9,6 +9,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class TaskImportTask : ImportTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "import_task";
 
         public override string Command { get { return TaskCommandName; } }

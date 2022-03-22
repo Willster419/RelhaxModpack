@@ -8,6 +8,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class StartCompareTask : AutomationTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "compare_start";
 
         public override string Command { get { return TaskCommandName; } }

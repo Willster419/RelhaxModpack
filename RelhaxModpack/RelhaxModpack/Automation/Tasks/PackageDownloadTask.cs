@@ -13,6 +13,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class PackageDownloadTask : PackageTransferTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "package_download";
 
         public override string Command { get { return TaskCommandName; } }

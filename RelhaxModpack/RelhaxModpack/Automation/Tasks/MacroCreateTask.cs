@@ -9,6 +9,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class MacroCreateTask : MacroTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "macro_create";
 
         public override string Command { get { return TaskCommandName; } }
@@ -16,6 +19,11 @@ namespace RelhaxModpack.Automation.Tasks
         public string MacroValue { get; set; }
 
         #region Xml serialization
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml attributes.
+        /// </summary>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public override string[] PropertiesForSerializationAttributes()
         {
             return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(MacroValue) }).ToArray();

@@ -8,6 +8,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class MacroDeleteTask : MacroTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "macro_delete";
 
         public override string Command { get { return TaskCommandName; } }

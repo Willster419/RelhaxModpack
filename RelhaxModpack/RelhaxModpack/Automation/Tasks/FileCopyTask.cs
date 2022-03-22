@@ -11,6 +11,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class FileCopyTask : FileDestinationTask, ICancelOperation
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "file_copy";
 
         public override string Command { get { return TaskCommandName; } }

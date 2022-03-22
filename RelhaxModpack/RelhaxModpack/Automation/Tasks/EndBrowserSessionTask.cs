@@ -8,6 +8,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class EndBrowserSessionTask : AutomationTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "browser_session_end";
 
         public override string Command { get { return TaskCommandName; } }

@@ -10,6 +10,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class DirectoryCreateTask : DirectoryTask, IXmlSerializable
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "create_directory";
 
         public override string Command { get { return TaskCommandName; } }

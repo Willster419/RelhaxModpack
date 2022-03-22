@@ -8,6 +8,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class BrowserSessionGetTask : BrowserSessionParseTask, IHtmlParseTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "browser_session_get_request";
 
         public override string Command { get { return TaskCommandName; } }

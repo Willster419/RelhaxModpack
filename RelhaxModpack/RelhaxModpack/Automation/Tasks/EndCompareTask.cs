@@ -9,6 +9,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class EndCompareTask : AutomationTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "compare_end";
 
         public override string Command { get { return TaskCommandName; } }

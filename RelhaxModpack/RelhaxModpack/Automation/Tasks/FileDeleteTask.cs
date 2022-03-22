@@ -9,6 +9,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class FileDeleteTask : FileSourceTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "file_delete";
 
         public override string Command { get { return TaskCommandName; } }

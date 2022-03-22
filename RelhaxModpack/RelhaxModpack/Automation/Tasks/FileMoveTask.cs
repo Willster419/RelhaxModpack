@@ -10,6 +10,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class FileMoveTask : FileDestinationTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "file_move";
 
         public override string Command { get { return TaskCommandName; } }

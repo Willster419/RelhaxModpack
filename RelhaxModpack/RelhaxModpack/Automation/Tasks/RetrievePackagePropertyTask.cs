@@ -9,6 +9,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class RetrievePackagePropertyTask : DatabasePackagePropertyTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "retrieve_package_property";
 
         public override string Command { get { return TaskCommandName; } }
@@ -22,6 +25,11 @@ namespace RelhaxModpack.Automation.Tasks
         protected int propertyIndex;
 
         #region Xml serialization
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml attributes.
+        /// </summary>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public override string[] PropertiesForSerializationAttributes()
         {
             return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(MacroSaveName), nameof(PropertyIndex) }).ToArray();

@@ -19,6 +19,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class DownloadBrowserTask : DownloadHtmlTask, IDownloadTask, IXmlSerializable, IHtmlParseTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "download_browser";
 
         public override string Command { get { return TaskCommandName; } }
@@ -44,6 +47,11 @@ namespace RelhaxModpack.Automation.Tasks
         protected BrowserType browserEngine = BrowserType.WebBrowser;
 
         #region Xml serialization
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml attributes.
+        /// </summary>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public override string[] PropertiesForSerializationAttributes()
         {
             return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(WaitTimeMs), nameof(WaitCounts), nameof(BrowserHeight), nameof(BrowserWidth), nameof(BrowserEngine) }).ToArray();

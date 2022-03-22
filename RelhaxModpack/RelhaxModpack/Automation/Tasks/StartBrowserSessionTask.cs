@@ -9,6 +9,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class StartBrowserSessionTask : AutomationTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "browser_session_start";
 
         public override string Command { get { return TaskCommandName; } }
@@ -18,6 +21,11 @@ namespace RelhaxModpack.Automation.Tasks
         protected BrowserSessionType browserEngine = BrowserSessionType.WebClient;
 
         #region Xml serialization
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml attributes.
+        /// </summary>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public override string[] PropertiesForSerializationAttributes()
         {
             return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(Browser) }).ToArray();

@@ -8,6 +8,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class BrowserSessionRemoveHeaderTask : BrowserSessionHeaderTask
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "browser_session_remove_header";
 
         public override string Command { get { return TaskCommandName; } }

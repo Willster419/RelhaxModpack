@@ -11,6 +11,9 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class FileCompareInverseTask : FileCompareTask, IXmlSerializable
     {
+        /// <summary>
+        /// The xml name of this command.
+        /// </summary>
         public const string TaskCommandName = "file_compare_inverse";
 
         public override string Command { get { return TaskCommandName; } }
