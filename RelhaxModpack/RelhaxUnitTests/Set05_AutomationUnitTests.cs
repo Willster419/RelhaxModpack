@@ -517,7 +517,7 @@ namespace RelhaxUnitTests
 
             AutomationTask directoryCompareTask = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1];
 
-            foreach (AutomationCompare compare in directoryCompareTask.AutomationCompareTracker.AutomationCompares)
+            foreach (AutomationCompare compare in directoryCompareTask.AutomationCompareManager.AutomationCompares)
             {
                 Assert.IsTrue(compare.CompareResult);
             }
@@ -545,7 +545,7 @@ namespace RelhaxUnitTests
 
             await RunTasks(sequence, false);
 
-            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker;
+            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager;
 
             foreach (AutomationCompare compare in tracker.AutomationCompares)
             {
@@ -631,7 +631,7 @@ namespace RelhaxUnitTests
 
             await RunTasks(sequence, false);
 
-            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker;
+            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager;
 
             foreach (AutomationCompare compare in tracker.AutomationCompares)
             {
@@ -667,7 +667,7 @@ namespace RelhaxUnitTests
 
             await RunTasks(sequence, false);
 
-            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker;
+            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager;
 
             foreach (AutomationCompare compare in tracker.AutomationCompares)
             {
@@ -692,8 +692,8 @@ namespace RelhaxUnitTests
             });
 
             await RunTasks(sequence, false);
-            Assert.IsTrue(sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker.AutomationCompares.Count == 1);
-            AutomationCompareDirectory directoryCompare = (AutomationCompareDirectory)sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker.AutomationCompares[0];
+            Assert.IsTrue(sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager.AutomationCompares.Count == 1);
+            AutomationCompareDirectory directoryCompare = (AutomationCompareDirectory)sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager.AutomationCompares[0];
             Assert.IsFalse(directoryCompare.CompareResult);
         }
 
@@ -713,8 +713,8 @@ namespace RelhaxUnitTests
             });
 
             await RunTasks(sequence, false);
-            Assert.IsTrue(sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker.AutomationCompares.Count == 1);
-            AutomationCompareDirectory directoryCompare = (AutomationCompareDirectory)sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker.AutomationCompares[0];
+            Assert.IsTrue(sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager.AutomationCompares.Count == 1);
+            AutomationCompareDirectory directoryCompare = (AutomationCompareDirectory)sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager.AutomationCompares[0];
             Assert.IsFalse(directoryCompare.CompareResult);
         }
 
@@ -734,8 +734,8 @@ namespace RelhaxUnitTests
             });
 
             await RunTasks(sequence, false);
-            Assert.IsTrue(sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker.AutomationCompares.Count == 1);
-            AutomationCompareDirectory directoryCompare = (AutomationCompareDirectory)sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker.AutomationCompares[0];
+            Assert.IsTrue(sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager.AutomationCompares.Count == 1);
+            AutomationCompareDirectory directoryCompare = (AutomationCompareDirectory)sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager.AutomationCompares[0];
             Assert.IsFalse(directoryCompare.CompareResult);
         }
 
@@ -756,7 +756,7 @@ namespace RelhaxUnitTests
 
             await RunTasks(sequence, false);
 
-            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker;
+            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager;
             foreach (AutomationCompare compare in tracker.AutomationCompares)
             {
                 if (compare is AutomationCompareFile file && file.CompareBFilepath.Contains("file_2.txt"))
@@ -786,7 +786,7 @@ namespace RelhaxUnitTests
 
             await RunTasks(sequence, false);
 
-            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker;
+            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager;
 
             foreach (AutomationCompare compare in tracker.AutomationCompares)
             {
@@ -872,7 +872,7 @@ namespace RelhaxUnitTests
 
             await RunTasks(sequence, false);
 
-            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker;
+            AutomationCompareManager tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareManager;
 
             foreach (AutomationCompare compare in tracker.AutomationCompares)
             {

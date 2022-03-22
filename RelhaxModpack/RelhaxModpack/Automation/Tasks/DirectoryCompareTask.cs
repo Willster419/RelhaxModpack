@@ -125,7 +125,7 @@ namespace RelhaxModpack.Automation.Tasks
                     Logging.Debug("File A hash: {0}", fileAHash);
                     Logging.Debug("File B hash: {0}", fileBHash);
 
-                    AutomationCompareTracker.AddCompare(this,
+                    AutomationCompareManager.AddCompare(this,
                         new AutomationCompareFile(DirectoryComparePathA, DirectoryComparePathB, AutomationCompareMode.NoMatchContinue, directoryFilesA[i], fileAHash, directoryFilesB[i], fileBHash));
                     progress.ChildCurrent++;
                     (calculationProgress as IProgress<RelhaxProgress>).Report(progress);

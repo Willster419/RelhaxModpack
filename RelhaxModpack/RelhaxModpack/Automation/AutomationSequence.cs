@@ -275,7 +275,6 @@ namespace RelhaxModpack.Automation
             foreach (AutomationTask task in AutomationTasks)
             {
                 task.AutomationSequence = this;
-                task.PreProcessingHook();
                 Logging.Debug("Processed task {0}", task.ID);
             }
 

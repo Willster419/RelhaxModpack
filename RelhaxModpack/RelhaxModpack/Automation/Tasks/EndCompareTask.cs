@@ -32,7 +32,7 @@ namespace RelhaxModpack.Automation.Tasks
         {
             Logging.Info("Starting analysis of compares");
 
-            foreach (AutomationCompare automationCompare in AutomationCompareTracker.AutomationCompares)
+            foreach (AutomationCompare automationCompare in AutomationCompareManager.AutomationCompares)
             {
                 Logging.Info("Compare {0}", automationCompare.AutomationTask.ID);
                 Logging.Debug("Compare mode: {0}", automationCompare.CompareMode.ToString());
@@ -48,17 +48,17 @@ namespace RelhaxModpack.Automation.Tasks
                 }
             }
 
-            Logging.Info("Number of matching files: {0}", AutomationCompareTracker.NumMatches);
-            Logging.Info("Number of different (continue) files: {0}", AutomationCompareTracker.NumDifferencesContinue);
-            Logging.Info("Number of different (stop) files: {0}", AutomationCompareTracker.NumDifferencesStop);
+            Logging.Info("Number of matching files: {0}", AutomationCompareManager.NumMatches);
+            Logging.Info("Number of different (continue) files: {0}", AutomationCompareManager.NumDifferencesContinue);
+            Logging.Info("Number of different (stop) files: {0}", AutomationCompareManager.NumDifferencesStop);
 
-            if (ProcessTaskResultTrue(AutomationCompareTracker.NumDifferencesContinue + AutomationCompareTracker.NumMatches == 0, "The number of total compares is 0"))
+            if (ProcessTaskResultTrue(AutomationCompareManager.NumDifferencesContinue + AutomationCompareManager.NumMatches == 0, "The number of total compares is 0"))
                 return;
 
-            if (ValidateForExitTrue(AutomationCompareTracker.NumDifferencesStop != 0, AutomationExitCode.ComparisonManualFilesToUpdate, string.Format("There are {0} files that require manual updating, cannot continue execution", AutomationCompareTracker.NumDifferencesStop)))
+            if (ValidateForExitTrue(AutomationCompareManager.NumDifferencesStop != 0, AutomationExitCode.ComparisonManualFilesToUpdate, string.Format("There are {0} files that require manual updating, cannot continue execution", AutomationCompareManager.NumDifferencesStop)))
                 return;
 
-            if (ValidateForExitTrue(AutomationCompareTracker.NumDifferencesContinue == 0, AutomationExitCode.ComparisonNoFilesToUpdate, string.Format("There are no differences in files that need to be updated, no need to continue execution")))
+            if (ValidateForExitTrue(AutomationCompareManager.NumDifferencesContinue == 0, AutomationExitCode.ComparisonNoFilesToUpdate, string.Format("There are no differences in files that need to be updated, no need to continue execution")))
                 return;
         }
     }

@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// An AutomationTask represents an action to occur during an automation sequence, used for checking for and updating database package entries.
+    /// </summary>
     public abstract class AutomationTask : IXmlSerializable, IComponentWithID
     {
         #region Xml serialization
@@ -26,6 +29,9 @@ namespace RelhaxModpack.Automation.Tasks
             return new string[] { };
         }
 
+        /// <summary>
+        /// Gets a dictionary that maps a unique task command name in xml to the type of task object in the code.
+        /// </summary>
         public static Dictionary<string, Type> TaskTypeMapper { get; } = new Dictionary<string, Type>()
         {
             { DownloadStaticTask.TaskCommandName, typeof(DownloadStaticTask) },
@@ -76,55 +82,115 @@ namespace RelhaxModpack.Automation.Tasks
             { BrowserSessionDownloadFileTask.TaskCommandName, typeof(BrowserSessionDownloadFileTask) },
         };
 
+        /// <summary>
+        /// The xml attribute that is used for the dictionary type mapper for creating task instances.
+        /// </summary>
         public const string AttributeNameForMapping = "Command";
         #endregion //Xml serialization
 
+        /// <summary>
+        /// A list of macros that should be ignored from running macro parse operations on.
+        /// </summary>
         public static readonly string[] SpecialCaseIgnoreMacro = new string[]
         {
             "last_download_filename"
         };
 
+        /// <summary>
+        /// Gets or sets the automation sequence.
+        /// </summary>
         public AutomationSequence AutomationSequence { get; set; }
 
-        public DatabaseAutomationRunner DatabaseAutomationRunner { get { return AutomationSequence.DatabaseAutomationRunner; } }
+        /// <summary>
+        /// Gets the automation sequencer.
+        /// </summary>
+        public AutomationSequencer AutomationSequencer { get { return AutomationSequence?.AutomationSequencer; } }
 
-        public AutomationRunnerSettings AutomationSettings { get { return AutomationSequence.AutomationRunnerSettings; } }
+        /// <summary>
+        /// Gets the automation runner window instance.
+        /// </summary>
+        public DatabaseAutomationRunner DatabaseAutomationRunner { get { return AutomationSequence?.DatabaseAutomationRunner; } }
 
-        public List<AutomationMacro> Macros { get { return AutomationSequence.AllMacros; } }
+        /// <summary>
+        /// Gets the automation runner settings.
+        /// </summary>
+        public AutomationRunnerSettings AutomationSettings { get { return AutomationSequence?.AutomationRunnerSettings; } }
 
-        public AutomationCompareManager AutomationCompareTracker { get { return AutomationSequence.AutomationCompareManager; } }
+        /// <summary>
+        /// Gets a list of all macros in the automation sequence instance.
+        /// </summary>
+        /// <seealso cref="AutomationSequence.AllMacros"/>
+        public List<AutomationMacro> Macros { get { return AutomationSequence?.AllMacros; } }
 
-        protected BrowserSessionManager BrowserSessionManager { get { return AutomationSequence.BrowserSessionManager; } }
+        /// <summary>
+        /// Gets the automation compare manager.
+        /// </summary>
+        public AutomationCompareManager AutomationCompareManager { get { return AutomationSequence?.AutomationCompareManager; } }
 
+        /// <summary>
+        /// Gets the browser session manager.
+        /// </summary>
+        protected BrowserSessionManager BrowserSessionManager { get { return AutomationSequence?.BrowserSessionManager; } }
+
+        /// <summary>
+        /// Gets the error message associated with the error of executing the task.
+        /// </summary>
         public string ErrorMessage { get; protected set; } = string.Empty;
 
+        /// <summary>
+        /// Gets the exit code after execution of the task.
+        /// </summary>
         public AutomationExitCode ExitCode { get; protected set; } = 0;
 
+        /// <summary>
+        /// Gets the name of the command to define what type of task this object is.
+        /// </summary>
+        /// <seealso cref="TaskTypeMapper"/>
         public abstract string Command { get; }
 
+        /// <summary>
+        /// Get or set a unique ID tag for this task.
+        /// </summary>
+        /// <remarks>This is not required, but is useful when debugging issues during sequence execution. The ID of the task is printed in the log file.</remarks>
         public string ID { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets the ID name of this automation task.
+        /// </summary>
+        /// <seealso cref="ID"/>
         public string ComponentInternalName { get { return ID; } }
 
-        public virtual void PreProcessingHook()
-        {
-            //stub
-        }
-
+        /// <summary>
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// </summary>
         public abstract void ValidateCommands();
 
+        /// <summary>
+        /// Process any macros that exist in the task's arguments.
+        /// </summary>
         public abstract void ProcessMacros();
 
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public abstract Task RunTask();
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public abstract void ProcessTaskResults();
 
-        public virtual bool EvaluateResults(string state)
+        /// <summary>
+        /// Evaluates the exit code after each phase of the task's execution.
+        /// </summary>
+        /// <param name="taskState">The phase/state of the task (e.g. ValidateCommands)</param>
+        /// <returns>True if the exit code is none, false otherwise (including if default)</returns>
+        public virtual bool EvaluateResults(string taskState)
         {
             switch (ExitCode)
             {
                 case AutomationExitCode.None:
-                    Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Task: {0} ID: {1} State: {2}, ExitCode: {3}", Command, ID, state, ExitCode);
+                    Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Task: {0} ID: {1} State: {2}, ExitCode: {3}", Command, ID, taskState, ExitCode);
                     return true;
 
                 case AutomationExitCode.ComparisonNoFilesToUpdate:
@@ -138,7 +204,7 @@ namespace RelhaxModpack.Automation.Tasks
         }
 
         /// <summary>
-        /// "true" version means that the test being true is "bad"
+        /// "true" version means that the test being true is "bad".
         /// </summary>
         /// <param name="test"></param>
         /// <param name="formattedString"></param>
@@ -149,7 +215,7 @@ namespace RelhaxModpack.Automation.Tasks
         }
 
         /// <summary>
-        /// "false" version means that the test being false is "bad"
+        /// "false" version means that the test being false is "bad".
         /// </summary>
         /// <param name="test"></param>
         /// <param name="formattedString"></param>
@@ -160,13 +226,19 @@ namespace RelhaxModpack.Automation.Tasks
             return ValidateCommandTrue(test_, formattedString);
         }
 
+        /// <summary>
+        /// Validates that the given argument string's value isn't null or empty.
+        /// </summary>
+        /// <param name="argName">The name/xml argument of the task's field.</param>
+        /// <param name="arg">The task argument to validate.</param>
+        /// <returns>True if the string is null or empty, false otherwise.</returns>
         protected virtual bool ValidateCommandStringNullEmptyTrue(string argName, string arg)
         {
             return ValidateCommandTrue(string.IsNullOrEmpty(arg), string.Format("The arg {0} is empty string", nameof(argName)));
         }
 
         /// <summary>
-        /// "true" version means that the test being true is "bad"
+        /// "true" version means that the test being true is "bad".
         /// </summary>
         /// <param name="test"></param>
         /// <param name="formattedString"></param>
@@ -177,7 +249,7 @@ namespace RelhaxModpack.Automation.Tasks
         }
 
         /// <summary>
-        /// "false" version means that the test being false is "bad"
+        /// "false" version means that the test being false is "bad".
         /// </summary>
         /// <param name="test"></param>
         /// <param name="formattedString"></param>
@@ -188,6 +260,14 @@ namespace RelhaxModpack.Automation.Tasks
             return ValidateForExitTrue(test_, AutomationExitCode.ProcessResultsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
         }
 
+        /// <summary>
+        /// Evaluates if a logical result is true or false. If true, an error is reported.
+        /// </summary>
+        /// <param name="test">The logic to run.</param>
+        /// <param name="exitCode">If the logic returns true, the exit code to set for the task.</param>
+        /// <param name="formattedString">If the logic returns true, the error message to set for the task.</param>
+        /// <returns>True if the logic result is true, false otherwise.</returns>
+        /// <seealso cref="AutomationExitCode"/>
         protected virtual bool ValidateForExitTrue(bool test, AutomationExitCode exitCode, string formattedString)
         {
             if (test)
@@ -198,16 +278,12 @@ namespace RelhaxModpack.Automation.Tasks
             return test;
         }
 
-        protected virtual bool ValidateForExitTrueNew(bool test, AutomationExitCode exitCode, string formattedString)
-        {
-            if (test)
-            {
-                ExitCode = exitCode;
-                ErrorMessage = string.Format("Exit Code {0}: {1}", (int)exitCode, formattedString);
-            }
-            return test;
-        }
-
+        /// <summary>
+        /// Executes the task.
+        /// </summary>
+        /// <remarks>The method will run the following pre-defined methods:
+        /// ProcessMacros(), ValidateCommands(), RunTask(), ProcessTaskResults.
+        /// Each method, or 'phase' of the task contains a try-catch and an evaluation of the results to determine if the next phase should run.</remarks>
         public async Task Execute()
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: Task start", Command);
@@ -265,6 +341,13 @@ namespace RelhaxModpack.Automation.Tasks
                 disposable.Dispose();
         }
 
+        /// <summary>
+        /// Process any escape characters used within the task argument.
+        /// </summary>
+        /// <param name="argName">The name of the task argument.</param>
+        /// <param name="arg">The value of the task argument.</param>
+        /// <returns>The processed argument.</returns>
+        /// <remarks>This currently processes escaped characters \{ and \}.</remarks>
         protected static string ProcessEscapeCharacters(string argName, string arg)
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg escape characters '{0}'", argName);
@@ -277,6 +360,13 @@ namespace RelhaxModpack.Automation.Tasks
             return arg;
         }
 
+        /// <summary>
+        /// Find and replace any macros that exist in a task argument with their macro values.
+        /// </summary>
+        /// <param name="argName">The name of the task argument.</param>
+        /// <param name="arg">The value task argument.</param>
+        /// <param name="macros">The list of macros to try to find and replace in the task argument.</param>
+        /// <returns>The macro replaced string.</returns>
         public static string ProcessMacro(string argName, string arg, List<AutomationMacro> macros)
         {
             //set property value to temp, making new variable
@@ -287,6 +377,12 @@ namespace RelhaxModpack.Automation.Tasks
             return temp;
         }
 
+        /// <summary>
+        /// Find and replace any macros that exist in a string with their macro values.
+        /// </summary>
+        /// <param name="argName">The name of the task argument.</param>
+        /// <param name="arg">The value task argument.</param>
+        /// <returns>The macro replaced string.</returns>
         public string ProcessMacro(string argName, string arg)
         {
             //set property value to temp, making new variable
@@ -297,6 +393,13 @@ namespace RelhaxModpack.Automation.Tasks
             return temp;
         }
 
+        /// <summary>
+        /// Find and replace any macros that exist in a string with their macro values.
+        /// </summary>
+        /// <param name="argName">The name of the task argument.</param>
+        /// <param name="arg">The value task argument.</param>
+        /// <param name="macros">The list of macros to try to find and replace in the task argument.</param>
+        /// <param name="recursionLevel">The iteration of replacing macros inside of macros. Normally this isn't set unless inside this function.</param>
         protected static void ProcessMacro(string argName, ref string arg, List<AutomationMacro> macros, int recursionLevel = 0)
         {
             string recursiveLevelString = string.Empty;

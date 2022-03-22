@@ -25,7 +25,7 @@ namespace RelhaxModpack.Automation.Tasks
         public override async Task RunTask()
         {
             Logging.Info("Clear previous compares");
-            AutomationCompareTracker.Reset();
+            AutomationCompareManager.Reset();
         }
 
         public override void ProcessTaskResults()

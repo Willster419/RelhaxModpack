@@ -40,7 +40,7 @@ namespace RelhaxModpack.Automation.Tasks
             if (directoryFilesA.Length != directoryFilesB.Length)
             {
                 Logging.Info("The number of files between directory a ({0}) and directory b ({1}) do not match, update needed", directoryFilesA.Length, directoryFilesB.Length);
-                AutomationCompareTracker.AddCompare(this, new AutomationCompareDirectory(DirectoryComparePathA, DirectoryComparePathB, AutomationCompareMode.NoMatchContinue, directoryFilesA.Length, directoryFilesB.Length));
+                AutomationCompareManager.AddCompare(this, new AutomationCompareDirectory(DirectoryComparePathA, DirectoryComparePathB, AutomationCompareMode.NoMatchContinue, directoryFilesA.Length, directoryFilesB.Length));
                 operationFinished = true;
                 return;
             }
@@ -55,7 +55,7 @@ namespace RelhaxModpack.Automation.Tasks
                 {
                     Logging.Info("At index {0}, relative path a ({1}) does not match relative path b ({2})", i, relativePathA, relativePathB);
                     Logging.Info("The paths have changed, update needed");
-                    AutomationCompareTracker.AddCompare(this, new AutomationCompareDirectory(DirectoryComparePathA, DirectoryComparePathB, AutomationCompareMode.NoMatchContinue, directoryFilesA.Length, directoryFilesB.Length, i));
+                    AutomationCompareManager.AddCompare(this, new AutomationCompareDirectory(DirectoryComparePathA, DirectoryComparePathB, AutomationCompareMode.NoMatchContinue, directoryFilesA.Length, directoryFilesB.Length, i));
                     operationFinished = true;
                     return;
                 }
