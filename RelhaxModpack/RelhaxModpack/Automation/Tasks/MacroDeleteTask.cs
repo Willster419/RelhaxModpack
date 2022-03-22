@@ -18,6 +18,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             Logging.Info("Deleting macro {0}", MacroName);
@@ -25,6 +28,9 @@ namespace RelhaxModpack.Automation.Tasks
             Logging.Info("Deleted");
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             AutomationMacro macro = Macros.Find(mac => mac.Name.Equals(MacroName));

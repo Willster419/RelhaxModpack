@@ -23,6 +23,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// </summary>
         public override void ValidateCommands()
         {
             base.ValidateCommands();
@@ -40,6 +43,9 @@ namespace RelhaxModpack.Automation.Tasks
         }
 
         #region Task execution
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             using (WebClient = new WebClient { Credentials = new NetworkCredential(AutomationSettings.BigmodsUsername, AutomationSettings.BigmodsPassword) })
@@ -83,6 +89,9 @@ namespace RelhaxModpack.Automation.Tasks
             }
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             base.ProcessTaskResults();

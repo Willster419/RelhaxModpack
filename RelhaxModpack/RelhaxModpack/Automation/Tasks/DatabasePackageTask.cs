@@ -14,6 +14,9 @@ namespace RelhaxModpack.Automation.Tasks
         public List<DatabasePackage> DatabasePackages { get { return AutomationSequence.DatabasePackages; } }
 
         #region Task execution
+        /// <summary>
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// </summary>
         public override void ValidateCommands()
         {
             if (ValidateCommandTrue(DatabasePackage == null, string.Format("DatabasePackage is null (This is an internal application error)")))

@@ -37,12 +37,18 @@ namespace RelhaxModpack.Automation.Tasks
         #endregion
 
         #region Task execution
+        /// <summary>
+        /// Process any macros that exist in the task's arguments.
+        /// </summary>
         public override void ProcessMacros()
         {
             base.ProcessMacros();
             Jsonpath = ProcessMacro(nameof(Jsonpath), Jsonpath);
         }
 
+        /// <summary>
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// </summary>
         public override void ValidateCommands()
         {
             base.ValidateCommands();
@@ -51,6 +57,9 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             await base.RunTask();
@@ -101,6 +110,9 @@ namespace RelhaxModpack.Automation.Tasks
             return true;
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             base.ProcessTaskResults();

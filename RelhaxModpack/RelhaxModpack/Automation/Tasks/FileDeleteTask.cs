@@ -22,6 +22,9 @@ namespace RelhaxModpack.Automation.Tasks
         protected bool fileDeleteResult;
 
         #region Task execution
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             Logging.Info("Deleting file at location {0}", SourceFilePath);
@@ -29,6 +32,9 @@ namespace RelhaxModpack.Automation.Tasks
             fileDeleteResult = FileUtils.FileDelete(SourceFilePath);
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             if (!ProcessTaskResultFalse(fileDeleteResult, "The file delete operation failed"))

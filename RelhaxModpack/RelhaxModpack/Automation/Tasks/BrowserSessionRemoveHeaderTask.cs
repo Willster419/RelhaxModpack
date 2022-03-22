@@ -19,12 +19,18 @@ namespace RelhaxModpack.Automation.Tasks
         public override string Command { get { return TaskCommandName; } }
 
         #region Task execution
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             Logging.Info(Utilities.Enums.LogOptions.ClassName, "Removing header name: '{0}'", Name);
             BrowserSessionManager.RemoveHeader(Name);
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             //this method intentionally left blank

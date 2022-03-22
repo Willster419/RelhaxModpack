@@ -10,6 +10,9 @@ namespace RelhaxModpack.Automation.Tasks
     {
         protected string stringReturnValue { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             AutomationMacro macro = Macros.Find(mac => mac.Name.Equals(MacroName));

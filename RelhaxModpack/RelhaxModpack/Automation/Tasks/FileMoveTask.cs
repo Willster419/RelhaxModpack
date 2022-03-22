@@ -23,6 +23,9 @@ namespace RelhaxModpack.Automation.Tasks
         protected bool fileMoveResult;
 
         #region Task execution
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             base.RunTask();
@@ -37,6 +40,9 @@ namespace RelhaxModpack.Automation.Tasks
             fileMoveResult = FileUtils.FileMove(SourceFilePath, DestinationFilePath);
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             if (!ProcessTaskResultFalse(fileMoveResult, "The file move operation failed"))

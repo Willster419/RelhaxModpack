@@ -55,6 +55,9 @@ namespace RelhaxModpack.Automation.Tasks
         #endregion
 
         #region Task execution
+        /// <summary>
+        /// Process any macros that exist in the task's arguments.
+        /// </summary>
         public override void ProcessMacros()
         {
             Cmd = ProcessMacro(nameof(Cmd), Cmd);
@@ -64,6 +67,9 @@ namespace RelhaxModpack.Automation.Tasks
             Cmd = ProcessEscapeCharacters(nameof(Cmd), Cmd);
         }
 
+        /// <summary>
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// </summary>
         public override void ValidateCommands()
         {
             if (ValidateCommandTrue(string.IsNullOrEmpty(Wd), "Wd is empty string"))
@@ -79,6 +85,9 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             //build the task process
@@ -154,6 +163,9 @@ namespace RelhaxModpack.Automation.Tasks
             Logging.Info("[PROCESS INFO]: {0}", e.Data);
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             if (ProcessTaskResultFalse(processStarted, "The process failed to start"))

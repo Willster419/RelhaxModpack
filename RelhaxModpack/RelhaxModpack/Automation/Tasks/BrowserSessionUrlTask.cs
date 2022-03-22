@@ -24,12 +24,18 @@ namespace RelhaxModpack.Automation.Tasks
         #endregion
 
         #region Task execution
+        /// <summary>
+        /// Process any macros that exist in the task's arguments.
+        /// </summary>
         public override void ProcessMacros()
         {
             Url = ProcessMacro(nameof(Url), Url);
             CreateLastDownloadFilenameMacro();
         }
 
+        /// <summary>
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// </summary>
         public override void ValidateCommands()
         {
             if (ValidateCommandTrue(string.IsNullOrEmpty(Url), string.Format("The parameter {0} is null or empty", nameof(Url))))

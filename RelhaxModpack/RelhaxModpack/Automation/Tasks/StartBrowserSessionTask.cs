@@ -36,22 +36,34 @@ namespace RelhaxModpack.Automation.Tasks
         #endregion
 
         #region Task execution
+        /// <summary>
+        /// Process any macros that exist in the task's arguments.
+        /// </summary>
         public override void ProcessMacros()
         {
             browserEngine = (BrowserSessionType)Enum.Parse(typeof(BrowserSessionType), ProcessMacro(nameof(Browser), Browser));
         }
 
+        /// <summary>
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// </summary>
         public override void ValidateCommands()
         {
             //this method intentionally left blank
         }
 
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             Logging.Info("Starting browser compare session");
             AutomationSequence.ResetBrowserSessionManager(browserEngine);
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             //this method intentionally left blank

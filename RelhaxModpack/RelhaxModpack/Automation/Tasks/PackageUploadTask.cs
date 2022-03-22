@@ -37,12 +37,18 @@ namespace RelhaxModpack.Automation.Tasks
         #endregion
 
         #region Task Execution
+        /// <summary>
+        /// Process any macros that exist in the task's arguments.
+        /// </summary>
         public override void ProcessMacros()
         {
             base.ProcessMacros();
             ZipFileName = ProcessMacro(nameof(ZipFileName), ZipFileName);
         }
 
+        /// <summary>
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// </summary>
         public override void ValidateCommands()
         {
             base.ValidateCommands();
@@ -54,6 +60,9 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             NetworkCredential networkCredential = new NetworkCredential(AutomationSettings.BigmodsUsername, AutomationSettings.BigmodsPassword);

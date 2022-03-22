@@ -21,6 +21,9 @@ namespace RelhaxModpack.Automation.Tasks
         public override string Command { get { return TaskCommandName; } }
 
         #region Task execution
+        /// <summary>
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// </summary>
         public override void ValidateCommands()
         {
             //don't run the base because it will check to make sure the directory exists, which we know it doesn't
@@ -38,6 +41,9 @@ namespace RelhaxModpack.Automation.Tasks
                 Directory.CreateDirectory(DirectoryPath);
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             if (ProcessTaskResultFalse(Directory.Exists(DirectoryPath), "The directory path does not exist"))

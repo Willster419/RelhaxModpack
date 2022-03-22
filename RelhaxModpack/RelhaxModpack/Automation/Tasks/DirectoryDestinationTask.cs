@@ -25,12 +25,18 @@ namespace RelhaxModpack.Automation.Tasks
         #endregion
 
         #region Task Execution
+        /// <summary>
+        /// Process any macros that exist in the task's arguments.
+        /// </summary>
         public override void ProcessMacros()
         {
             base.ProcessMacros();
             DestinationPath = ProcessMacro(nameof(DestinationPath), DestinationPath);
         }
 
+        /// <summary>
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// </summary>
         public override void ValidateCommands()
         {
             base.ValidateCommands();

@@ -34,12 +34,18 @@ namespace RelhaxModpack.Automation.Tasks
         #endregion
 
         #region Task execution
+        /// <summary>
+        /// Process any macros that exist in the task's arguments.
+        /// </summary>
         public override void ProcessMacros()
         {
             base.ProcessMacros();
             MacroValue = ProcessMacro(nameof(MacroValue), MacroValue);
         }
 
+        /// <summary>
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// </summary>
         public override void ValidateCommands()
         {
             base.ValidateCommands();
@@ -49,6 +55,9 @@ namespace RelhaxModpack.Automation.Tasks
             }
         }
 
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             Logging.Info("Deleting macro if already exists");
@@ -58,6 +67,9 @@ namespace RelhaxModpack.Automation.Tasks
             Macros.Add(new AutomationMacro() { MacroType = MacroType.Local, Name = MacroName, Value = MacroValue });
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             AutomationMacro macro = Macros.Find(mac => mac.Name.Equals(MacroName));

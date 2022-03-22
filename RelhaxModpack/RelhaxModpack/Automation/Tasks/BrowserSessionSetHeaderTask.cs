@@ -33,12 +33,18 @@ namespace RelhaxModpack.Automation.Tasks
         #endregion
 
         #region Task execution
+        /// <summary>
+        /// Process any macros that exist in the task's arguments.
+        /// </summary>
         public override void ProcessMacros()
         {
             base.ProcessMacros();
             Value = ProcessMacro(nameof(Value), Value);
         }
 
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             Logging.Info(Utilities.Enums.LogOptions.ClassName, "Setting header name: '{0}'", Name);
@@ -46,6 +52,9 @@ namespace RelhaxModpack.Automation.Tasks
             BrowserSessionManager.SetHeader(Name, Value);
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             //this method intentionally left blank

@@ -30,6 +30,9 @@ namespace RelhaxModpack.Automation.Tasks
         protected CancellationTokenSource cancellationTokenSource;
 
         #region Task execution
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
         public override async Task RunTask()
         {
             base.RunTask();
@@ -74,6 +77,9 @@ namespace RelhaxModpack.Automation.Tasks
             }
         }
 
+        /// <summary>
+        /// Validate that the task executed without error and any expected output resources were processed correctly.
+        /// </summary>
         public override void ProcessTaskResults()
         {
             if (!ProcessTaskResultFalse(fileCopyResult, "The file copy operation failed"))
