@@ -30,6 +30,9 @@ namespace RelhaxModpack.Automation.Tasks
 
         protected Progress<RelhaxProgress> calculationProgress;
 
+        /// <summary>
+        /// The cancellation token.
+        /// </summary>
         protected CancellationTokenSource cancellationTokenSource;
 
         #region Xml serialization
@@ -130,6 +133,9 @@ namespace RelhaxModpack.Automation.Tasks
             AutomationCompareManager.AddCompare(this, compareFile);
         }
 
+        /// <summary>
+        /// Sends a cancellation request to task's current operation.
+        /// </summary>
         public virtual void Cancel()
         {
             cancellationTokenSource.Cancel();

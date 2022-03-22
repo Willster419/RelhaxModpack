@@ -25,6 +25,9 @@ namespace RelhaxModpack.Automation.Tasks
 
         protected bool downloaded = false;
 
+        /// <summary>
+        /// The cancellation token.
+        /// </summary>
         protected CancellationTokenSource cancellationTokenSource;
 
         #region Xml serialization
@@ -122,6 +125,9 @@ namespace RelhaxModpack.Automation.Tasks
             DatabaseAutomationRunner.DownloadProgressChanged?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Sends a cancellation request to task's current operation.
+        /// </summary>
         public virtual void Cancel()
         {
             if (cancellationTokenSource != null)

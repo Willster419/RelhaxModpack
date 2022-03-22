@@ -103,6 +103,9 @@ namespace RelhaxModpack.Automation.Tasks
             base.RunSearch();
         }
 
+        /// <summary>
+        /// Sends a cancellation request to task's current operation.
+        /// </summary>
         public virtual void Cancel()
         {
             base.Cancel();

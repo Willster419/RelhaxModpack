@@ -27,6 +27,9 @@ namespace RelhaxModpack.Automation.Tasks
 
         protected Progress<RelhaxProgress> copyProgress;
 
+        /// <summary>
+        /// The cancellation token.
+        /// </summary>
         protected CancellationTokenSource cancellationTokenSource;
 
         #region Task execution
@@ -86,6 +89,9 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
+        /// <summary>
+        /// Sends a cancellation request to task's current operation.
+        /// </summary>
         public virtual void Cancel()
         {
             cancellationTokenSource.Cancel();

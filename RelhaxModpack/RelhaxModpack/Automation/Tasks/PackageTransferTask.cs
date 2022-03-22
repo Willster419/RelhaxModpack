@@ -67,6 +67,9 @@ namespace RelhaxModpack.Automation.Tasks
         }
         #endregion
 
+        /// <summary>
+        /// Sends a cancellation request to task's current operation.
+        /// </summary>
         public virtual void Cancel()
         {
             if (WebClient != null)

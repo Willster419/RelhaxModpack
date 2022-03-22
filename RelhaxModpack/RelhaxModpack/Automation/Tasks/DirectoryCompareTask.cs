@@ -42,6 +42,9 @@ namespace RelhaxModpack.Automation.Tasks
 
         protected RelhaxProgress progress;
 
+        /// <summary>
+        /// The cancellation token.
+        /// </summary>
         protected CancellationTokenSource cancellationTokenSource;
 
         #region Xml Serialization
@@ -186,6 +189,9 @@ namespace RelhaxModpack.Automation.Tasks
             directoryFilesB = FileUtils.FileSearch(DirectoryComparePathB, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly, false, true, SearchPattern);
         }
 
+        /// <summary>
+        /// Sends a cancellation request to task's current operation.
+        /// </summary>
         public virtual void Cancel()
         {
             cancellationTokenSource.Cancel();
