@@ -49,7 +49,10 @@ namespace RelhaxModpack.Automation.Tasks
             base.ValidateCommands();
         }
 
-        public async override Task RunTask()
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
+        public override async Task RunTask()
         {
             RunSearch();
 

@@ -50,7 +50,10 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
-        public async override Task RunTask()
+        /// <summary>
+        /// Runs the main feature of the task.
+        /// </summary>
+        public override async Task RunTask()
         {
             //stub
         }
