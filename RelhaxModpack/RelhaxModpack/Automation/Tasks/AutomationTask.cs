@@ -19,11 +19,21 @@ namespace RelhaxModpack.Automation.Tasks
     public abstract class AutomationTask : IXmlSerializable, IComponentWithID
     {
         #region Xml serialization
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml attributes.
+        /// </summary>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public virtual string[] PropertiesForSerializationAttributes()
         {
             return new string[] { nameof(ID) };
         }
 
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml elements.
+        /// </summary>
+        /// <returns>A list of string property names.</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional.</remarks>
         public virtual string[] PropertiesForSerializationElements()
         {
             return new string[] { };
@@ -143,7 +153,7 @@ namespace RelhaxModpack.Automation.Tasks
         public AutomationExitCode ExitCode { get; protected set; } = 0;
 
         /// <summary>
-        /// Gets the name of the command to define what type of task this object is.
+        /// Gets the xml name of the command to determine the task instance type.
         /// </summary>
         /// <seealso cref="TaskTypeMapper"/>
         public abstract string Command { get; }
