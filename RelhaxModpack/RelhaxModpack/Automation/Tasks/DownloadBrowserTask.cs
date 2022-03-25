@@ -17,36 +17,78 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class DownloadBrowserTask : DownloadHtmlTask, IDownloadTask, IXmlSerializable, IHtmlParseTask
+    /// <summary>
+    /// Performs a file download on a url resource by parsing an HtmlPath result of the web page (includes parsed from JavaScript).
+    /// </summary>
+    public class DownloadBrowserTask : DownloadHtmlTask, IDownloadTask, IXmlSerializable, IHtmlParseTask, ICancelOperation
     {
         /// <summary>
         /// The xml name of this command.
         /// </summary>
-        public const string TaskCommandName = "download_browser";
+        public new const string TaskCommandName = "download_browser";
 
         /// <summary>
         /// Gets the xml name of the command to determine the task instance type.
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The time, in milliseconds, to wait after the first NavigationCompleted event is fired (or a previous wait).
+        /// </summary>
+        /// <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+        /// <seealso cref="WaitCounts"/>
         public string WaitTimeMs { get; set; } = "1000";
 
+        /// <summary>
+        /// The number of times the browser should wait for WaitTimeMs after the first NavigationCompleted event is fired.
+        /// </summary>
+        /// <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+        /// <seealso cref="WaitTimeMs"/>
         public string WaitCounts { get; set; } = "3";
 
+        /// <summary>
+        /// Gets or sets the height of the browser.
+        /// </summary>
         public string BrowserHeight { get; set; } = "0";
 
+        /// <summary>
+        /// Gets or sets the width of the browser.
+        /// </summary>
         public string BrowserWidth { get; set; } = "0";
 
+        /// <summary>
+        /// Sets the browser api implementation to use for this browser download operation.
+        /// </summary>
         public string BrowserEngine { get; set; } = BrowserType.WebBrowser.ToString();
 
+        /// <summary>
+        /// Parsed result of the argument WaitTimeMs.
+        /// </summary>
+        /// <seealso cref="WaitTimeMs"/>
         protected int waitTimeMs;
 
+        /// <summary>
+        /// Parsed result of the argument WaitCounts.
+        /// </summary>
+        /// <seealso cref="WaitCounts"/>
         protected int waitCounts;
 
+        /// <summary>
+        /// Parsed result of the argument BrowserHeight.
+        /// </summary>
+        /// <seealso cref="BrowserHeight"/>
         protected int browserHeight = 0;
 
+        /// <summary>
+        /// Parsed result of the argument BrowserWidth.
+        /// </summary>
+        /// <seealso cref="BrowserWidth"/>
         protected int browserWidth = 0;
 
+        /// <summary>
+        /// Parsed result of the argument BrowserEngine.
+        /// </summary>
+        /// <seealso cref="BrowserEngine"/>
         protected BrowserType browserEngine = BrowserType.WebBrowser;
 
         #region Xml serialization
@@ -100,6 +142,9 @@ namespace RelhaxModpack.Automation.Tasks
             (htmlXpathParser as HtmlBrowserParser).Dispose();
         }
 
+        /// <summary>
+        /// Ensures this application can use the latest version of the embedded IE browser, prepares and runs the Html browser parser object, and sets the result of the parser as this task's url.
+        /// </summary>
         protected async override Task SetupUrl()
         {
             //add registry entry to use latest IE for script parsing
@@ -121,6 +166,9 @@ namespace RelhaxModpack.Automation.Tasks
             base.ProcessTaskResults();
         }
 
+        /// <summary>
+        /// Cancels the browser download operation.
+        /// </summary>
         public override void Cancel()
         {
             base.Cancel();

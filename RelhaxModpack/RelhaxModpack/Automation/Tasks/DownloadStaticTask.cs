@@ -10,6 +10,9 @@ using System.IO;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Performs a file download on a url resource.
+    /// </summary>
     public class DownloadStaticTask : AutomationTask, IDownloadTask, IXmlSerializable, ICancelOperation
     {
         /// <summary>
@@ -22,14 +25,26 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The destination of where to download the file to, including the file name. If the path to the file doesn't exist, then it will be created.
+        /// </summary>
         public string DestinationPath { get; set; } = string.Empty;
 
+        /// <summary>
+        /// The url to download the resource from.
+        /// </summary>
         public string Url { get; set; } = string.Empty;
 
+        /// <summary>
+        /// The WebClient to use for downloading the resultant url to disk.
+        /// </summary>
         protected WebClient WebClient = null;
 
-        protected string urlFilename;
-
+        /// <summary>
+        /// Temporary variable to parse the DestinationPath argument and determine (if there's a macro in it) if the macro resolves to an empty string.
+        /// </summary>
+        /// <remarks>This temporary variable is required because during the task's execution, it will create a macro "last_download_filename". That may be inside this argument and thus will need to be parsed later.</remarks>
+        /// <seealso cref="GetDownloadUrlFilename"/>
         protected string destinationPathTemp;
 
         #region Xml serialization
@@ -74,6 +89,9 @@ namespace RelhaxModpack.Automation.Tasks
             await DownloadFile();
         }
 
+        /// <summary>
+        /// Prepares the destination path for the download of the resource.
+        /// </summary>
         protected void DownloadSetup()
         {
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Verifying that destination path ({0}) exists and deleting file if exists", DestinationPath);
@@ -84,6 +102,9 @@ namespace RelhaxModpack.Automation.Tasks
                 File.Delete(DestinationPath);
         }
 
+        /// <summary>
+        /// Downloads the file from the url to the location on disk.
+        /// </summary>
         protected async Task DownloadFile()
         {
             using (WebClient = new WebClient())
@@ -130,10 +151,14 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
+        /// <summary>
+        /// Parses the url argument for the file name of the resource to download. The macro "last_download_filename" is created with the parsed name.
+        /// </summary>
+        /// <seealso cref="Url"/>
         protected virtual void GetDownloadUrlFilename()
         {
             string[] urlSplit = Url.Split('/');
-            urlFilename = urlSplit.Last();
+            string urlFilename = urlSplit.Last();
             Logging.Info("Url filename parsed as {0}", urlFilename);
 
             Logging.Info("Creating macro, Name: {0}, Value: {1}", "last_download_filename", urlFilename);
@@ -143,7 +168,7 @@ namespace RelhaxModpack.Automation.Tasks
         }
 
         /// <summary>
-        /// Sends a cancellation request to task's current operation.
+        /// Cancels the download operation.
         /// </summary>
         public virtual void Cancel()
         {

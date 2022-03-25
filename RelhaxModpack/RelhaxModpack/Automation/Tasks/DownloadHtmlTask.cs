@@ -11,13 +11,19 @@ using HtmlAgilityPack;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class DownloadHtmlTask : DownloadStaticTask, IDownloadTask, IXmlSerializable, IHtmlParseTask
+    /// <summary>
+    /// Performs a file download on a url resource by parsing an HtmlPath result of the web page (excludes parsed from JavaScript).
+    /// </summary>
+    public class DownloadHtmlTask : DownloadStaticTask, IDownloadTask, IXmlSerializable, IHtmlParseTask, ICancelOperation
     {
         /// <summary>
         /// The xml name of this command.
         /// </summary>
-        public const string TaskCommandName = "download_html";
+        public new const string TaskCommandName = "download_html";
 
+        /// <summary>
+        /// The HtmlPath argument to use for parsing.
+        /// </summary>
         public string HtmlPath { get; set; } = string.Empty;
 
         /// <summary>
@@ -25,8 +31,14 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The HtmlPath parser to use to processing the HTML web page.
+        /// </summary>
         protected HtmlWebscrapeParser htmlXpathParser;
 
+        /// <summary>
+        /// The exit code from the HtmlPath parser when executed.
+        /// </summary>
         protected HtmlXpathParserExitCode parserExitCode;
 
         #region Xml serialization
@@ -71,6 +83,9 @@ namespace RelhaxModpack.Automation.Tasks
                 await DownloadFile();
         }
 
+        /// <summary>
+        /// Prepares and runs the Html parser object and sets the result of the parser as this task's url.
+        /// </summary>
         protected async virtual Task SetupUrl()
         {
             Logging.AutomationRunner("Running web scrape execution code");
@@ -91,6 +106,9 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
+        /// <summary>
+        /// Cancels the download operation.
+        /// </summary>
         public override void Cancel()
         {
             if (htmlXpathParser != null)
