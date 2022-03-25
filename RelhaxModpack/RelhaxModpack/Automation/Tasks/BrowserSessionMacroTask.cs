@@ -59,12 +59,12 @@ namespace RelhaxModpack.Automation.Tasks
             AutomationMacro macro = Macros.Find(mac => mac.Name.Equals(MacroName));
             if (macro != null)
             {
-                if (macro.MacroType == Utilities.Enums.MacroType.ApplicationDefined)
+                if (macro.MacroType == MacroType.ApplicationDefined)
                 {
                     Logging.Error("Cannot replace value of application defined macro {0}", macro.Name);
                     return false;
                 }
-                else if (macro.MacroType == Utilities.Enums.MacroType.Global)
+                else if (macro.MacroType == MacroType.Global)
                 {
                     Logging.Warning("Replacing global macro {0}", macro.Name);
                 }

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Allows for creation of a macro from a parsed HTML web page (without JavaScsript), using the Split method.
+    /// </summary>
     public class MacroStringSplitHtmlTask : MacroStringSplitTask, IXmlSerializable, ICancelOperation, IHtmlParseTask
     {
         /// <summary>
@@ -15,8 +18,14 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public const string TaskCommandName = "macro_string_split_html";
 
+        /// <summary>
+        /// The HtmlPath argument to use for parsing.
+        /// </summary>
         public string HtmlPath { get; set; }
 
+        /// <summary>
+        /// The url to get the web page to parse.
+        /// </summary>
         public string Url { get; set; }
 
         /// <summary>
@@ -24,8 +33,14 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The HtmlPath parser to use to processing the HTML web page.
+        /// </summary>
         protected HtmlWebscrapeParser htmlXpathParser;
 
+        /// <summary>
+        /// The exit code from the HtmlPath parser when executed.
+        /// </summary>
         protected HtmlXpathParserExitCode parserExitCode;
 
         #region Xml serialization
@@ -72,6 +87,9 @@ namespace RelhaxModpack.Automation.Tasks
             await base.RunTask();
         }
 
+        /// <summary>
+        /// Get the string to use for macro creation by preparing and running the HtmlParser and saving its result.
+        /// </summary>
         protected override async Task GetStringValue()
         {
             Logging.AutomationRunner("Running web scrape execution code");
@@ -82,6 +100,9 @@ namespace RelhaxModpack.Automation.Tasks
             ProcessEscapeCharacters();
         }
 
+        /// <summary>
+        /// Replace HTML/XML escape characters with their literals.
+        /// </summary>
         protected override void ProcessEscapeCharacters()
         {
             base.ProcessEscapeCharacters();

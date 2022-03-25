@@ -15,24 +15,55 @@ using System.Xml.XPath;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Provides an implementation to import a list of xml objects into an already existing list of objects.
+    /// </summary>
     public abstract class ImportTask : AutomationTask, IXmlSerializable, ICancelOperation
     {
+        /// <summary>
+        /// The path relative to the root of the source repository to where the xml document is located.
+        /// </summary>
         public string RepoUrlPath { get; set; } = string.Empty;
 
+        /// <summary>
+        /// The Xpath search pattern to use for getting a list of xml element objects.
+        /// </summary>
         protected abstract string XpathExpression { get; }
 
+        /// <summary>
+        /// The client to use for downloading the xml document with definitions to import.
+        /// </summary>
         protected WebClient client;
 
+        /// <summary>
+        /// The xml document with definitions to import.
+        /// </summary>
         protected XDocument document;
 
+        /// <summary>
+        /// A string pre-parsed representation of the xml document.
+        /// </summary>
+        /// <seealso cref="document"/>
         protected string xmlString;
 
+        /// <summary>
+        /// A flag to indicate if the import operation succeeded.
+        /// </summary>
         protected bool importResult;
 
+        /// <summary>
+        /// A container list to hold the parsed objects from xml elements.
+        /// </summary>
         protected IList objectList;
 
+        /// <summary>
+        /// A container list to hold the xml elements.
+        /// </summary>
         protected XElement automationTaskHolder;
 
+        /// <summary>
+        /// The absolute parsed location (disk location or url) of where to retrieve the xml document.
+        /// </summary>
         protected string fullFilepath;
 
         #region Xml Serialization
@@ -105,6 +136,9 @@ namespace RelhaxModpack.Automation.Tasks
             importResult = true;
         }
 
+        /// <summary>
+        /// Creates an absolute path to load the xml document, either web URL or location on disk.
+        /// </summary>
         protected void ParseDownloadUrl()
         {
             if (RepoUrlPath[0].Equals('/') || RepoUrlPath[0].Equals('\\'))
@@ -126,7 +160,7 @@ namespace RelhaxModpack.Automation.Tasks
             {
                 if (RepoUrlPath.Contains("\\"))
                 {
-                    Logging.Warning("The RepoUrlPath argument contains folder seperator chars, but should be http url slashes");
+                    Logging.Warning("The RepoUrlPath argument contains folder separator chars, but should be http url slashes");
                     RepoUrlPath = RepoUrlPath.Replace('\\', '/');
                 }
                 fullFilepath = automationXmlRepoFilebaseEscapedMacro.Value + RepoUrlPath;
@@ -135,17 +169,25 @@ namespace RelhaxModpack.Automation.Tasks
             Logging.Debug("Parsed RepoUrlPath to resolve to {0}", fullFilepath);
         }
 
+        /// <summary>
+        /// Loads the xml document from a location on disk.
+        /// </summary>
+        /// <returns>The xml document string.</returns>
         protected string LoadXmlFromDisk()
         {
             if (!File.Exists(fullFilepath))
             {
-                Logging.Error("The full filepath {0} does not exist", fullFilepath);
+                Logging.Error("The full file path {0} does not exist", fullFilepath);
                 return null;
             }
 
             return File.ReadAllText(fullFilepath);
         }
 
+        /// <summary>
+        /// Loads the xml document from a url.
+        /// </summary>
+        /// <returns>The xml document string.</returns>
         protected async Task<string> LoadXmlFromUrlAsync()
         {
             try
@@ -165,6 +207,10 @@ namespace RelhaxModpack.Automation.Tasks
             return null;
         }
 
+        /// <summary>
+        /// Loads the xml document from a resource, either web or disk.
+        /// </summary>
+        /// <returns>True if the xml document was loaded to xmlString, false otherwise.</returns>
         protected async Task<bool> LoadXmlStringAsync()
         {
             if (AutomationSettings.UseLocalRunnerDatabase)
@@ -178,6 +224,10 @@ namespace RelhaxModpack.Automation.Tasks
             return !string.IsNullOrEmpty(xmlString);
         }
 
+        /// <summary>
+        /// Parse the xml string to an XmlDocument object and perform an Xpath search to get a list of xml element objects.
+        /// </summary>
+        /// <returns>True if the operation succeeded, false otherwise.</returns>
         protected bool ParseXml()
         {
             if (string.IsNullOrEmpty(xmlString))
@@ -203,13 +253,23 @@ namespace RelhaxModpack.Automation.Tasks
             return true;
         }
 
+        /// <summary>
+        /// Parses the xml element objects to custom type objects.
+        /// </summary>
+        /// <returns>True if the operation succeeded, false otherwise.</returns>
         protected virtual bool ParseToList()
         {
             return CommonUtils.SetListEntries(objectList, ID, automationTaskHolder.Elements(), null, null);
         }
 
+        /// <summary>
+        /// Initializes the list object objectList with the custom type to hold the parsed objects.
+        /// </summary>
         protected abstract void CreateList();
 
+        /// <summary>
+        /// Perform and post-processing on the created objects and add them to a parent list.
+        /// </summary>
         protected abstract void ImportList();
 
         /// <summary>

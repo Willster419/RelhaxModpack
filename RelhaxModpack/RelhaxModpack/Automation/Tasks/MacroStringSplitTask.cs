@@ -8,16 +8,35 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Allows for processing of text using the Split method, to be used for a macro.
+    /// </summary>
     public abstract class MacroStringSplitTask : MacroStringTask, IXmlSerializable
     {
+        /// <summary>
+        /// The characters to use as the delimiter for the Split function.
+        /// </summary>
         public string SplitCharacters { get; set; }
 
+        /// <summary>
+        /// The array index value to select from the result array of the Split function.
+        /// </summary>
         public string Index { get; set; }
 
+        /// <summary>
+        /// Parsed result of the argument Index.
+        /// </summary>
+        /// <seealso cref="Index"/>
         protected int index { get; set; }
 
+        /// <summary>
+        /// The resultant string array from the Split operation.
+        /// </summary>
         protected string[] stringSplit { get; set; }
 
+        /// <summary>
+        /// The string to perform the Split operation on.
+        /// </summary>
         protected string stringWithValue { get; set; } = string.Empty;
 
         #region Xml serialization

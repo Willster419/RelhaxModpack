@@ -8,18 +8,42 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Allows for processing of text using the Substring method, to be used for a macro.
+    /// </summary>
     public abstract class MacroSubstringTask : MacroStringTask, IXmlSerializable
     {
+        /// <summary>
+        /// The nth (0 based) character to start capturing the start of the new string.
+        /// </summary>
         public string StartIndex { get; set; }
 
+        /// <summary>
+        /// How many characters after StartIndex to use for capturing characters for the new string.
+        /// </summary>
+        /// <seealso cref="StartIndex"/>
         public string Length { get; set; } = "-1";
 
+        /// <summary>
+        /// Parsed result of the argument StartIndex.
+        /// </summary>
+        /// <seealso cref="StartIndex"/>
         protected int startIndex;
 
+        /// <summary>
+        /// Parsed result of the argument Length.
+        /// </summary>
+        /// <seealso cref="Length"/>
         protected int length = -1;
 
+        /// <summary>
+        /// The string to perform the SubString operation on.
+        /// </summary>
         protected string stringWithValue { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Flag to indicate if the task completed successfully.
+        /// </summary>
         protected bool taskCompleted = false;
 
         #region Xml serialization

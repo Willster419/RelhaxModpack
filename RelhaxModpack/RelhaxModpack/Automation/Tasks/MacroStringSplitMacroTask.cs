@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Allows for creation of a macro from an argument, using the Split method.
+    /// </summary>
     public class MacroStringSplitMacroTask : MacroStringSplitTask, IXmlSerializable
     {
         /// <summary>
@@ -19,6 +22,10 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The text to create a macro with.
+        /// </summary>
+        /// <remarks>The text can additionally be a macro.</remarks>
         public string InputText { get; set; }
 
         #region Xml serialization
@@ -62,7 +69,13 @@ namespace RelhaxModpack.Automation.Tasks
             await base.RunTask();
         }
 
+        /// <summary>
+        /// Get the string to use for macro creation from the InputText argument.
+        /// </summary>
+        /// <seealso cref="InputText"/>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         protected override async Task GetStringValue()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             stringWithValue = InputText;
         }

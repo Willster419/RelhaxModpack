@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Import of a list of macros from another automation sequence xml file or a macro definitions xml file.
+    /// </summary>
     public class MacroImportTask : ImportTask
     {
         /// <summary>
@@ -19,13 +22,22 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The Xpath search pattern to use for getting a list of xml task objects.
+        /// </summary>
         protected override string XpathExpression { get { return AutomationSequence.AutomationSequenceMacroDefinitionsXpath; } }
 
+        /// <summary>
+        /// Initializes objectList to hold AutomationMacro objects.
+        /// </summary>
         protected override void CreateList()
         {
             objectList = new List<AutomationMacro>();
         }
 
+        /// <summary>
+        /// Perform and post-processing on the created macros and add them to the list of macros of this sequence.
+        /// </summary>
         protected override void ImportList()
         {
             Logging.Debug("Setting each parsed macro as local, overriding if other local macro exists");

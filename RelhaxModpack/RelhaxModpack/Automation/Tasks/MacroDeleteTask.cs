@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Removes a macro by a given name, if the macro exists.
+    /// </summary>
     public class MacroDeleteTask : MacroTask
     {
         /// <summary>

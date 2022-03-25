@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Allows for creation of a macro from a filename using the Split method.
+    /// </summary>
     public class MacroStringSplitFilenameTask : MacroStringSplitTask, IXmlSerializable
     {
         /// <summary>
@@ -20,6 +23,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The path, relative or absolute, to the file to use for macro creation.
+        /// </summary>
         public string FilePath { get; set; }
 
         #region Xml serialization
@@ -66,7 +72,12 @@ namespace RelhaxModpack.Automation.Tasks
             await base.RunTask();
         }
 
+        /// <summary>
+        /// Gets the name of the file, excluding the directory path.
+        /// </summary>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         protected override async Task GetStringValue()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             stringWithValue = Path.GetFileName(FilePath);
         }

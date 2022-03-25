@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Provides saving of text to a macro.
+    /// </summary>
     public abstract class MacroTask : AutomationTask
     {
+        /// <summary>
+        /// The name of the macro to create.
+        /// </summary>
         public string MacroName { get; set; }
 
         #region Xml serialization
@@ -43,11 +49,16 @@ namespace RelhaxModpack.Automation.Tasks
         /// <summary>
         /// Runs the main feature of the task.
         /// </summary>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task RunTask()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             CheckIfMacroExits();
         }
 
+        /// <summary>
+        /// Checks if a macro of MacroName already exists, and if so, if it can be overridden.
+        /// </summary>
         protected virtual void CheckIfMacroExits()
         {
             Logging.Debug("Checking for if macro {0} already exists", MacroName);

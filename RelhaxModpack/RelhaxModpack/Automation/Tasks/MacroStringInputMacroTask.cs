@@ -8,10 +8,21 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A MacroStringInputMacroTask allows for creation of a macro by using an already existing macro and a custom string retrieval implementation.
+    /// </summary>
+    /// <remarks>The name of the macro to use (that already exists in the list of macros) is specified rather then passing the macro as an input text value.</remarks>
     public abstract class MacroStringInputMacroTask : MacroStringTask, IXmlSerializable
     {
+        /// <summary>
+        /// The name of the macro in the list of macros to use as input text.
+        /// </summary>
         public string InputMacroName { get; set; }
 
+        /// <summary>
+        /// The result of the retrieval of the given macro by name.
+        /// </summary>
+        /// <seealso cref="InputMacroName"/>
         protected string inputMacroText;
 
         #region Xml serialization
@@ -37,7 +48,7 @@ namespace RelhaxModpack.Automation.Tasks
         }
 
         /// <summary>
-        /// Validates that all task arguments are correct and the task is initialized correctly to execute.
+        /// Validates that all task arguments are correct and the task is initialized correctly to execute. Additionally assigns the result of finding the macro by InputMacroName to inputMacroText.
         /// </summary>
         public override void ValidateCommands()
         {
@@ -56,7 +67,7 @@ namespace RelhaxModpack.Automation.Tasks
         public override async Task RunTask()
         {
             await base.RunTask();
-            bool gotString = await GetStringReturnValue();
+            bool gotString = GetStringReturnValue();
             if (!gotString)
             {
                 Logging.Error("String return value gave false exit result");
@@ -66,14 +77,20 @@ namespace RelhaxModpack.Automation.Tasks
             Macros.Add(new AutomationMacro() { MacroType = MacroType.Local, Name = MacroName, Value = stringReturnValue });
         }
 
+        /// <summary>
+        /// Do not call GetStringValue() for any task deriving from MacroStringInputMacroTask
+        /// </summary>
         protected override Task GetStringValue()
         {
             Logging.Error("Do not call GetStringValue() for any task deriving from MacroStringInputMacroTask (did you mean to implement GetStringReturnValue?)");
             throw new NotImplementedException();
         }
 
-        //assign stringReturnValue in here
-        protected abstract Task<bool> GetStringReturnValue();
+        /// <summary>
+        /// Runs a task implementation to parse inputMacroText to get a string result saved to stringReturnValue
+        /// </summary>
+        /// <returns>True if the implementation was successful, false otherwise.</returns>
+        protected abstract bool GetStringReturnValue();
 
         /// <summary>
         /// Validate that the task executed without error and any expected output resources were processed correctly.

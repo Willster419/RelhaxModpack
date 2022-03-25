@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A MacroStringInputMacroJsonTask allows for creation of a macro by using an already existing macro as input text for a JsonPath search operation.
+    /// </summary>
     public class MacroStringInputMacroJsonTask : MacroStringInputMacroTask, IXmlSerializable
     {
         /// <summary>
@@ -22,6 +25,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The JsonPath argument to use for parsing.
+        /// </summary>
         public string Jsonpath { get; set; }
 
         #region Xml serialization
@@ -65,7 +71,11 @@ namespace RelhaxModpack.Automation.Tasks
             await base.RunTask();
         }
 
-        protected override async Task<bool> GetStringReturnValue()
+        /// <summary>
+        /// Runs a jsonPath search operation to get a string result saved to stringReturnValue
+        /// </summary>
+        /// <returns>True if the implementation was successful, false otherwise.</returns>
+        protected override bool GetStringReturnValue()
         {
             //parse it into json for jsonpath evaluation
             //load the settings

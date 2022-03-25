@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A MacroCreateTask will create a macro using a given input text argument.
+    /// </summary>
     public class MacroCreateTask : MacroTask
     {
         /// <summary>
@@ -19,6 +22,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The value to create macro from.
+        /// </summary>
         public string MacroValue { get; set; }
 
         #region Xml serialization
