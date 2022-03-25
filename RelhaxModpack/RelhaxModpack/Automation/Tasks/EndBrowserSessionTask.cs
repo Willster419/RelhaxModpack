@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Closes an open browser session by closing the browser manager.
+    /// </summary>
     public class EndBrowserSessionTask : AutomationTask
     {
         /// <summary>
@@ -37,7 +40,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// <summary>
         /// Runs the main feature of the task.
         /// </summary>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task RunTask()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             Logging.Debug("Browser session completed");
             AutomationSequence.ClearBrowserSessionManager();
