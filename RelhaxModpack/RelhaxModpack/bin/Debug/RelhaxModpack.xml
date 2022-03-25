@@ -1566,6 +1566,11 @@
             <param name="macros">The list of macros to try to find and replace in the task argument.</param>
             <param name="recursionLevel">The iteration of replacing macros inside of macros. Normally this isn't set unless inside this function.</param>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask">
+            <summary>
+            A BrowserSessionDownloadFileTask enables downloading a resource from a url to a file destination on disk.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -1574,6 +1579,21 @@
         <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.DestinationPath">
+            <summary>
+            The destination of where to download the file to, including the file name. If the path to the file doesn't exist, then it will be created.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.downloaded">
+            <summary>
+            Flag for the download process to determine if the download completely and successfully.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.cancellationTokenSource">
+            <summary>
+            The cancellation token.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.PropertiesForSerializationAttributes">
@@ -1601,6 +1621,26 @@
         <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.DownloadSetup">
+            <summary>
+            Prepares the destination path for the download of the resource.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.DownloadFile">
+            <summary>
+            Downloads the resource to disk using the given web api implementation.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionDownloadFileTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.BrowserSessionGetTask">
+            <summary>
+            Allows a browser session to perform an HTTP GET request and parse the return response.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionGetTask.TaskCommandName">
@@ -1633,6 +1673,22 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionGetTask.GetHtmlString">
+            <summary>
+            Runs the browser manager to perform the GET request and return the response to htmlText.
+            </summary>
+            <returns>True if the operation completed successfully, false otherwise.</returns>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.BrowserSessionHeaderTask">
+            <summary>
+            Provides implementation for handling the request headers of a browser manager's HTTP requests.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionHeaderTask.Name">
+            <summary>
+            The name of the request header.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionHeaderTask.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes.
@@ -1648,6 +1704,16 @@
         <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionHeaderTask.ValidateCommands">
             <summary>
             Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.BrowserSessionMacroTask">
+            <summary>
+            Provides saving of text to a macro for browser session tasks.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionMacroTask.MacroName">
+            <summary>
+            The name of the macro to create.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionMacroTask.PropertiesForSerializationAttributes">
@@ -1666,6 +1732,82 @@
             <summary>
             Validates that all task arguments are correct and the task is initialized correctly to execute.
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionMacroTask.CheckIfMacroExits">
+            <summary>
+            Checks if a macro of MacroName already exists, and if so, if it can be overridden.
+            </summary>
+            <returns>True if the macro can be created, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionMacroTask.CreateMacro(System.String)">
+            <summary>
+            Creates a local type macro of name MacroName.
+            </summary>
+            <param name="value">The value of the macro.</param>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask">
+            <summary>
+            Provides an implementation to parse a browser session's response HTML result via an HtmlPath parser.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.ParseResult">
+            <summary>
+            The parsed result from the HtmlPath parser.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.HtmlPath">
+            <summary>
+            The HtmlPath argument to use for parsing.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.WriteHtmlResult">
+            <summary>
+            Controls for debugging, if the HTML result should be written to disk.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.parseResult">
+            <summary>
+            Parsed result of the argument ParseResult.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.ParseResult"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.writeHtmlResult">
+            <summary>
+            Parsed result of the argument WriteHtmlResult.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.WriteHtmlResult"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.htmlText">
+            <summary>
+            The html result string from the HTTP request.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.htmlPathResult">
+            <summary>
+            The result from the HtmlPath parser.
+            </summary>
+            <remarks>Check parserExitCode to know if the HtmlPath parser completed successful.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.htmlTextParser">
+            <summary>
+            The HtmlPath parser.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.parserExitCode">
+            <summary>
+            The exit code from the HtmlPath parser when executed.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.htmlStringGotten">
+            <summary>
+            Flag to determine if the task successfully ran the HtmlParser.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.macroSetup">
+            <summary>
+            Flag to determine if the macro with the given name can be created.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.BrowserSessionMacroTask.MacroName"/>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.PropertiesForSerializationAttributes">
             <summary>
@@ -1694,6 +1836,23 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.ParseHtmlResult">
+            <summary>
+            Run the HtmlParser engine.
+            </summary>
+            <returns>The exit code from the HtmlParser engine.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.GetHtmlString">
+            <summary>
+            Gets the string to parse for HtmlPath.
+            </summary>
+            <returns>True if the string was successfully retrieved, false otherwise.</returns>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask">
+            <summary>
+            Allows a browser session to perform an HTTP POST request and parse the return response.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -1702,6 +1861,16 @@
         <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.PostData">
+            <summary>
+            The data to send in the HTTP POST request.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.ContentType">
+            <summary>
+            The type of HTTP post contest to send.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.PropertiesForSerializationAttributes">
@@ -1731,6 +1900,17 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionPostTask.GetHtmlString">
+            <summary>
+            Gets the html response string to parse via the browser session manager's post request.
+            </summary>
+            <returns>True if the operation completed successfully, false otherwise.</returns>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.BrowserSessionRemoveHeaderTask">
+            <summary>
+            Removes a request header from the browser session manager's list of request headers.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionRemoveHeaderTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -1751,6 +1931,11 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.BrowserSessionSetHeaderTask">
+            <summary>
+            Sets or updates an HTTP request header for the browser session manager.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.BrowserSessionSetHeaderTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -1759,6 +1944,11 @@
         <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionSetHeaderTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionSetHeaderTask.Value">
+            <summary>
+            The value of the HTTP request header.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionSetHeaderTask.PropertiesForSerializationAttributes">
@@ -1783,6 +1973,16 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.BrowserSessionUrlTask">
+            <summary>
+            Handles tasks associated with the Url of a browser session task.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionUrlTask.Url">
+            <summary>
+            The Url to navigate to.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionUrlTask.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes.
@@ -1799,6 +1999,12 @@
             <summary>
             Validates that all task arguments are correct and the task is initialized correctly to execute.
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.BrowserSessionUrlTask.CreateLastDownloadFilenameMacro">
+            <summary>
+            Creates a sample filename by parsing the url for it's last separator character '/'
+            </summary>
+            <remarks>For download hosting sites like Google Drive, when the url is a cryptic link, the created macro from this should not be used.</remarks>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.TaskCommandName">
             <summary>
@@ -1835,6 +2041,11 @@
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.TaskCommandName">
@@ -1884,6 +2095,11 @@
             Gets the xml name of the command to determine the task instance type.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.cancellationTokenSource">
+            <summary>
+            The cancellation token.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes.
@@ -1909,6 +2125,11 @@
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCreateTask.TaskCommandName">
@@ -1990,6 +2211,11 @@
             Gets the xml name of the command to determine the task instance type.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.cancellationTokenSource">
+            <summary>
+            The cancellation token.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes.
@@ -2017,6 +2243,11 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2025,6 +2256,11 @@
         <member name="P:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.cancellationTokenSource">
+            <summary>
+            The cancellation token.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.PropertiesForSerializationAttributes">
@@ -2052,6 +2288,16 @@
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryDestinationTask.DestinationPath">
+            <summary>
+            The destination of where to download the file to, including the file name. If the path to the file doesn't exist, then it will be created.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDestinationTask.PropertiesForSerializationAttributes">
@@ -2086,6 +2332,11 @@
             Gets the xml name of the command to determine the task instance type.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.cancellationTokenSource">
+            <summary>
+            The cancellation token.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes.
@@ -2111,6 +2362,11 @@
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectorySearchTask.PropertiesForSerializationAttributes">
@@ -2157,6 +2413,11 @@
             Validates that all task arguments are correct and the task is initialized correctly to execute.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DownloadBrowserTask">
+            <summary>
+            Performs a file download on a url resource by parsing an HtmlPath result of the web page (includes parsed from JavaScript).
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2166,6 +2427,65 @@
             <summary>
             Gets the xml name of the command to determine the task instance type.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.WaitTimeMs">
+            <summary>
+            The time, in milliseconds, to wait after the first NavigationCompleted event is fired (or a previous wait).
+            </summary>
+            <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.WaitCounts"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.WaitCounts">
+            <summary>
+            The number of times the browser should wait for WaitTimeMs after the first NavigationCompleted event is fired.
+            </summary>
+            <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.WaitTimeMs"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.BrowserHeight">
+            <summary>
+            Gets or sets the height of the browser.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.BrowserWidth">
+            <summary>
+            Gets or sets the width of the browser.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.BrowserEngine">
+            <summary>
+            Sets the browser api implementation to use for this browser download operation.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.waitTimeMs">
+            <summary>
+            Parsed result of the argument WaitTimeMs.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.WaitTimeMs"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.waitCounts">
+            <summary>
+            Parsed result of the argument WaitCounts.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.WaitCounts"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.browserHeight">
+            <summary>
+            Parsed result of the argument BrowserHeight.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.BrowserHeight"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.browserWidth">
+            <summary>
+            Parsed result of the argument BrowserWidth.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.BrowserWidth"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.browserEngine">
+            <summary>
+            Parsed result of the argument BrowserEngine.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.BrowserEngine"/>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.PropertiesForSerializationAttributes">
             <summary>
@@ -2189,9 +2509,24 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.SetupUrl">
+            <summary>
+            Ensures this application can use the latest version of the embedded IE browser, prepares and runs the Html browser parser object, and sets the result of the parser as this task's url.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadBrowserTask.Cancel">
+            <summary>
+            Cancels the browser download operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DownloadHtmlTask">
+            <summary>
+            Performs a file download on a url resource by parsing an HtmlPath result of the web page (excludes parsed from JavaScript).
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.TaskCommandName">
@@ -2199,9 +2534,24 @@
             The xml name of this command.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.HtmlPath">
+            <summary>
+            The HtmlPath argument to use for parsing.
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.htmlXpathParser">
+            <summary>
+            The HtmlPath parser to use to processing the HTML web page.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.parserExitCode">
+            <summary>
+            The exit code from the HtmlPath parser when executed.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.PropertiesForSerializationAttributes">
@@ -2226,9 +2576,24 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.SetupUrl">
+            <summary>
+            Prepares and runs the Html parser object and sets the result of the parser as this task's url.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadHtmlTask.Cancel">
+            <summary>
+            Cancels the download operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DownloadStaticTask">
+            <summary>
+            Performs a file download on a url resource.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DownloadStaticTask.TaskCommandName">
@@ -2240,6 +2605,28 @@
             <summary>
             Gets the xml name of the command to determine the task instance type.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DownloadStaticTask.DestinationPath">
+            <summary>
+            The destination of where to download the file to, including the file name. If the path to the file doesn't exist, then it will be created.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DownloadStaticTask.Url">
+            <summary>
+            The url to download the resource from.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadStaticTask.WebClient">
+            <summary>
+            The WebClient to use for downloading the resultant url to disk.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DownloadStaticTask.destinationPathTemp">
+            <summary>
+            Temporary variable to parse the DestinationPath argument and determine (if there's a macro in it) if the macro resolves to an empty string.
+            </summary>
+            <remarks>This temporary variable is required because during the task's execution, it will create a macro "last_download_filename". That may be inside this argument and thus will need to be parsed later.</remarks>
+            <seealso cref="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.GetDownloadUrlFilename"/>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.PropertiesForSerializationAttributes">
             <summary>
@@ -2263,9 +2650,35 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.DownloadSetup">
+            <summary>
+            Prepares the destination path for the download of the resource.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.DownloadFile">
+            <summary>
+            Downloads the file from the url to the location on disk.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.GetDownloadUrlFilename">
+            <summary>
+            Parses the url argument for the file name of the resource to download. The macro "last_download_filename" is created with the parsed name.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DownloadStaticTask.Url"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DownloadStaticTask.Cancel">
+            <summary>
+            Cancels the download operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.EndBrowserSessionTask">
+            <summary>
+            Closes an open browser session by closing the browser manager.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.EndBrowserSessionTask.TaskCommandName">
@@ -2363,6 +2776,11 @@
             The xml name of this command.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCompareTask.cancellationTokenSource">
+            <summary>
+            The cancellation token.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.FileCompareTask.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes.
@@ -2390,6 +2808,11 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCompareTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.FileCopyTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2400,6 +2823,11 @@
             Gets the xml name of the command to determine the task instance type.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCopyTask.cancellationTokenSource">
+            <summary>
+            The cancellation token.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.FileCopyTask.RunTask">
             <summary>
             Runs the main feature of the task.
@@ -2408,6 +2836,11 @@
         <member name="M:RelhaxModpack.Automation.Tasks.FileCopyTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.FileCopyTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.FileDeleteTask.TaskCommandName">
@@ -2568,6 +3001,57 @@
             A task that implements this interface implies that it will always have a destination location for the resultant file
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.ImportTask">
+            <summary>
+            Provides an implementation to import a list of xml objects into an already existing list of objects.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.ImportTask.RepoUrlPath">
+            <summary>
+            The path relative to the root of the source repository to where the xml document is located.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.ImportTask.XpathExpression">
+            <summary>
+            The Xpath search pattern to use for getting a list of xml element objects.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ImportTask.client">
+            <summary>
+            The client to use for downloading the xml document with definitions to import.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ImportTask.document">
+            <summary>
+            The xml document with definitions to import.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ImportTask.xmlString">
+            <summary>
+            A string pre-parsed representation of the xml document.
+            </summary>
+            <seealso cref="F:RelhaxModpack.Automation.Tasks.ImportTask.document"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ImportTask.importResult">
+            <summary>
+            A flag to indicate if the import operation succeeded.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ImportTask.objectList">
+            <summary>
+            A container list to hold the parsed objects from xml elements.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ImportTask.automationTaskHolder">
+            <summary>
+            A container list to hold the xml elements.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ImportTask.fullFilepath">
+            <summary>
+            The absolute parsed location (disk location or url) of where to retrieve the xml document.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes.
@@ -2590,9 +3074,59 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.ParseDownloadUrl">
+            <summary>
+            Creates an absolute path to load the xml document, either web URL or location on disk.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.LoadXmlFromDisk">
+            <summary>
+            Loads the xml document from a location on disk.
+            </summary>
+            <returns>The xml document string.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.LoadXmlFromUrlAsync">
+            <summary>
+            Loads the xml document from a url.
+            </summary>
+            <returns>The xml document string.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.LoadXmlStringAsync">
+            <summary>
+            Loads the xml document from a resource, either web or disk.
+            </summary>
+            <returns>True if the xml document was loaded to xmlString, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.ParseXml">
+            <summary>
+            Parse the xml string to an XmlDocument object and perform an Xpath search to get a list of xml element objects.
+            </summary>
+            <returns>True if the operation succeeded, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.ParseToList">
+            <summary>
+            Parses the xml element objects to custom type objects.
+            </summary>
+            <returns>True if the operation succeeded, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.CreateList">
+            <summary>
+            Initializes the list object objectList with the custom type to hold the parsed objects.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.ImportList">
+            <summary>
+            Perform and post-processing on the created objects and add them to a parent list.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ImportTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.TaskCommandName">
@@ -2632,6 +3166,11 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroCreateTask">
+            <summary>
+            A MacroCreateTask will create a macro using a given input text argument.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroCreateTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2640,6 +3179,11 @@
         <member name="P:RelhaxModpack.Automation.Tasks.MacroCreateTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroCreateTask.MacroValue">
+            <summary>
+            The value to create macro from.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroCreateTask.PropertiesForSerializationAttributes">
@@ -2669,6 +3213,11 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroDeleteTask">
+            <summary>
+            Removes a macro by a given name, if the macro exists.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroDeleteTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2689,6 +3238,11 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroImportTask">
+            <summary>
+            Import of a list of macros from another automation sequence xml file or a macro definitions xml file.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroImportTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2699,6 +3253,26 @@
             Gets the xml name of the command to determine the task instance type.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroImportTask.XpathExpression">
+            <summary>
+            The Xpath search pattern to use for getting a list of xml task objects.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroImportTask.CreateList">
+            <summary>
+            Initializes objectList to hold AutomationMacro objects.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroImportTask.ImportList">
+            <summary>
+            Perform and post-processing on the created macros and add them to the list of macros of this sequence.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask">
+            <summary>
+            A MacroStringInputMacroJsonTask allows for creation of a macro by using an already existing macro as input text for a JsonPath search operation.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2707,6 +3281,11 @@
         <member name="P:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.Jsonpath">
+            <summary>
+            The JsonPath argument to use for parsing.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.PropertiesForSerializationAttributes">
@@ -2731,10 +3310,33 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.GetStringReturnValue">
+            <summary>
+            Runs a jsonPath search operation to get a string result saved to stringReturnValue
+            </summary>
+            <returns>True if the implementation was successful, false otherwise.</returns>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroJsonTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask">
+            <summary>
+            A MacroStringInputMacroTask allows for creation of a macro by using an already existing macro and a custom string retrieval implementation.
+            </summary>
+            <remarks>The name of the macro to use (that already exists in the list of macros) is specified rather then passing the macro as an input text value.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.InputMacroName">
+            <summary>
+            The name of the macro in the list of macros to use as input text.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.inputMacroText">
+            <summary>
+            The result of the retrieval of the given macro by name.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.InputMacroName"/>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.PropertiesForSerializationAttributes">
             <summary>
@@ -2750,7 +3352,7 @@
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.ValidateCommands">
             <summary>
-            Validates that all task arguments are correct and the task is initialized correctly to execute.
+            Validates that all task arguments are correct and the task is initialized correctly to execute. Additionally assigns the result of finding the macro by InputMacroName to inputMacroText.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.RunTask">
@@ -2758,9 +3360,25 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.GetStringValue">
+            <summary>
+            Do not call GetStringValue() for any task deriving from MacroStringInputMacroTask
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.GetStringReturnValue">
+            <summary>
+            Runs a task implementation to parse inputMacroText to get a string result saved to stringReturnValue
+            </summary>
+            <returns>True if the implementation was successful, false otherwise.</returns>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringInputMacroTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask">
+            <summary>
+            Allows for creation of a macro from a parsed HTML web page (with JavaScsript), using the Split method.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.TaskCommandName">
@@ -2772,6 +3390,65 @@
             <summary>
             Gets the xml name of the command to determine the task instance type.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.WaitTimeMs">
+            <summary>
+            The time, in milliseconds, to wait after the first NavigationCompleted event is fired (or a previous wait).
+            </summary>
+            <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.WaitCounts"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.WaitCounts">
+            <summary>
+            The number of times the browser should wait for WaitTimeMs after the first NavigationCompleted event is fired.
+            </summary>
+            <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.WaitTimeMs"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.BrowserHeight">
+            <summary>
+            Gets or sets the height of the browser.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.BrowserWidth">
+            <summary>
+            Gets or sets the width of the browser.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.BrowserEngine">
+            <summary>
+            Sets the browser api implementation to use for this browser download operation.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.waitTimeMs">
+            <summary>
+            Parsed result of the argument WaitTimeMs.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.WaitTimeMs"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.waitCounts">
+            <summary>
+            Parsed result of the argument WaitCounts.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.WaitCounts"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.browserHeight">
+            <summary>
+            Parsed result of the argument BrowserHeight.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.BrowserHeight"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.browserWidth">
+            <summary>
+            Parsed result of the argument BrowserWidth.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.BrowserWidth"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.browserEngine">
+            <summary>
+            Parsed result of the argument BrowserEngine.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.BrowserEngine"/>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.PropertiesForSerializationAttributes">
             <summary>
@@ -2795,9 +3472,24 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.GetStringValue">
+            <summary>
+            Ensures this application can use the latest version of the embedded IE browser, and gets the string to use for macro creation by preparing and running the HtmlParser and saving its result.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitBrowserTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask">
+            <summary>
+            Allows for creation of a macro from a filename using the Split method.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.TaskCommandName">
@@ -2808,6 +3500,11 @@
         <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.FilePath">
+            <summary>
+            The path, relative or absolute, to the file to use for macro creation.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.PropertiesForSerializationAttributes">
@@ -2832,9 +3529,19 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.GetStringValue">
+            <summary>
+            Gets the name of the file, excluding the directory path.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitFilenameTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask">
+            <summary>
+            Allows for creation of a macro from a parsed HTML web page (without JavaScsript), using the Split method.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.TaskCommandName">
@@ -2842,9 +3549,29 @@
             The xml name of this command.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.HtmlPath">
+            <summary>
+            The HtmlPath argument to use for parsing.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.Url">
+            <summary>
+            The url to get the web page to parse.
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.htmlXpathParser">
+            <summary>
+            The HtmlPath parser to use to processing the HTML web page.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.parserExitCode">
+            <summary>
+            The exit code from the HtmlPath parser when executed.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.PropertiesForSerializationAttributes">
@@ -2869,9 +3596,29 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.GetStringValue">
+            <summary>
+            Get the string to use for macro creation by preparing and running the HtmlParser and saving its result.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.ProcessEscapeCharacters">
+            <summary>
+            Replace HTML/XML escape characters with their literals.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitHtmlTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask">
+            <summary>
+            Allows for creation of a macro from an argument, using the Split method.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.TaskCommandName">
@@ -2883,6 +3630,12 @@
             <summary>
             Gets the xml name of the command to determine the task instance type.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.InputText">
+            <summary>
+            The text to create a macro with.
+            </summary>
+            <remarks>The text can additionally be a macro.</remarks>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.PropertiesForSerializationAttributes">
             <summary>
@@ -2906,9 +3659,46 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.GetStringValue">
+            <summary>
+            Get the string to use for macro creation from the InputText argument.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.InputText"/>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitMacroTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroStringSplitTask">
+            <summary>
+            Allows for processing of text using the Split method, to be used for a macro.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.SplitCharacters">
+            <summary>
+            The characters to use as the delimiter for the Split function.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.Index">
+            <summary>
+            The array index value to select from the result array of the Split function.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.index">
+            <summary>
+            Parsed result of the argument Index.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.Index"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.stringSplit">
+            <summary>
+            The resultant string array from the Split operation.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.stringWithValue">
+            <summary>
+            The string to perform the Split operation on.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringSplitTask.PropertiesForSerializationAttributes">
@@ -2938,9 +3728,37 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroStringTask">
+            <summary>
+            Provides skeleton framework for getting a string value to use for saving to a macro.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroStringTask.stringReturnValue">
+            <summary>
+            The value to save the result of from GetStringValue.
+            </summary>
+            <seealso cref="M:RelhaxModpack.Automation.Tasks.MacroStringTask.GetStringValue"/>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroStringTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringTask.GetStringValue">
+            <summary>
+            Gets the string to use for the macro's value and saves it to stringReturnValue.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroStringTask.stringReturnValue"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroStringTask.ProcessEscapeCharacters">
+            <summary>
+            Process escape characters that may exist from the mechanism that provided the resultant string.
+            </summary>
+            <remarks>For example, processing HTML escape characters from a downloaded HTML page.</remarks>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask">
+            <summary>
+            Allows for creation of a macro from a parsed HTML web page (with JavaScsript), using the Substring method.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.TaskCommandName">
@@ -2952,6 +3770,65 @@
             <summary>
             Gets the xml name of the command to determine the task instance type.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.WaitTimeMs">
+            <summary>
+            The time, in milliseconds, to wait after the first NavigationCompleted event is fired (or a previous wait).
+            </summary>
+            <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.WaitCounts"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.WaitCounts">
+            <summary>
+            The number of times the browser should wait for WaitTimeMs after the first NavigationCompleted event is fired.
+            </summary>
+            <remarks>The total wait time can be calculated as WaitTimeMs * WaitCounts.</remarks>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.WaitTimeMs"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.BrowserHeight">
+            <summary>
+            Gets or sets the height of the browser.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.BrowserWidth">
+            <summary>
+            Gets or sets the width of the browser.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.BrowserEngine">
+            <summary>
+            Sets the browser api implementation to use for this browser download operation.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.waitTimeMs">
+            <summary>
+            Parsed result of the argument WaitTimeMs.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.WaitTimeMs"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.waitCounts">
+            <summary>
+            Parsed result of the argument WaitCounts.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.WaitCounts"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.browserHeight">
+            <summary>
+            Parsed result of the argument BrowserHeight.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.BrowserHeight"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.browserWidth">
+            <summary>
+            Parsed result of the argument BrowserWidth.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.BrowserWidth"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.browserEngine">
+            <summary>
+            Parsed result of the argument BrowserEngine.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.BrowserEngine"/>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.PropertiesForSerializationAttributes">
             <summary>
@@ -2975,14 +3852,39 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.GetStringValue">
+            <summary>
+            Ensures this application can use the latest version of the embedded IE browser, and gets the string to use for macro creation by preparing and running the HtmlParser and saving its result.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringBrowserTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask">
+            <summary>
+            Allows for creation of a macro from a filename using the Substring method.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.TaskCommandName">
             <summary>
             The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.FilePath">
+            <summary>
+            The path, relative or absolute, to the file to use for macro creation.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.PropertiesForSerializationAttributes">
@@ -3007,9 +3909,19 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.GetStringValue">
+            <summary>
+            Gets the name of the file, excluding the directory path.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringFilenameTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask">
+            <summary>
+            Allows for creation of a macro from a parsed HTML web page (without JavaScsript), using the Substring method.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.TaskCommandName">
@@ -3017,9 +3929,29 @@
             The xml name of this command.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.HtmlPath">
+            <summary>
+            The HtmlPath argument to use for parsing.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.Url">
+            <summary>
+            The url to get the web page to parse.
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.htmlXpathParser">
+            <summary>
+            The HtmlPath parser to use to processing the HTML web page.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.parserExitCode">
+            <summary>
+            The exit code from the HtmlPath parser when executed.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.PropertiesForSerializationAttributes">
@@ -3044,9 +3976,29 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.GetStringValue">
+            <summary>
+            Get the string to use for macro creation by preparing and running the HtmlParser and saving its result.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.ProcessEscapeCharacters">
+            <summary>
+            Replace HTML/XML escape characters with their literals.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringHtmlTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask">
+            <summary>
+            Allows for creation of a macro from an argument, using the Substring method.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.TaskCommandName">
@@ -3058,6 +4010,12 @@
             <summary>
             Gets the xml name of the command to determine the task instance type.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.InputText">
+            <summary>
+            The text to create a macro with.
+            </summary>
+            <remarks>The text can additionally be a macro.</remarks>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.PropertiesForSerializationAttributes">
             <summary>
@@ -3081,9 +4039,53 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.GetStringValue">
+            <summary>
+            Get the string to use for macro creation from the InputText argument.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.InputText"/>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringMacroTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroSubstringTask">
+            <summary>
+            Allows for processing of text using the Substring method, to be used for a macro.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringTask.StartIndex">
+            <summary>
+            The nth (0 based) character to start capturing the start of the new string.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringTask.Length">
+            <summary>
+            How many characters after StartIndex to use for capturing characters for the new string.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroSubstringTask.StartIndex"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringTask.startIndex">
+            <summary>
+            Parsed result of the argument StartIndex.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroSubstringTask.StartIndex"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringTask.length">
+            <summary>
+            Parsed result of the argument Length.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.MacroSubstringTask.Length"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroSubstringTask.stringWithValue">
+            <summary>
+            The string to perform the SubString operation on.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.MacroSubstringTask.taskCompleted">
+            <summary>
+            Flag to indicate if the task completed successfully.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroSubstringTask.PropertiesForSerializationAttributes">
@@ -3113,6 +4115,16 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.MacroTask">
+            <summary>
+            Provides saving of text to a macro.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.MacroTask.MacroName">
+            <summary>
+            The name of the macro to create.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.MacroTask.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes.
@@ -3133,6 +4145,11 @@
         <member name="M:RelhaxModpack.Automation.Tasks.MacroTask.RunTask">
             <summary>
             Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.MacroTask.CheckIfMacroExits">
+            <summary>
+            Checks if a macro of MacroName already exists, and if so, if it can be overridden.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.PackageDownloadTask.TaskCommandName">
@@ -3180,6 +4197,11 @@
         <member name="M:RelhaxModpack.Automation.Tasks.PackageTransferTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.PackageTransferTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.PackageUploadTask.TaskCommandName">
@@ -3325,6 +4347,16 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.ShellExecuteTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask">
+            <summary>
+            Starts a browser session by (re)-creating the browser session manager.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -3334,6 +4366,17 @@
             <summary>
             Gets the xml name of the command to determine the task instance type.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.Browser">
+            <summary>
+            Sets the browser api implementation to use for this browser session.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.browserEngine">
+            <summary>
+            Parsed result of the argument Browser.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.Browser"/>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.PropertiesForSerializationAttributes">
             <summary>
@@ -3392,6 +4435,11 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.TaskImportTask">
+            <summary>
+            Import a list of tasks from a sequence xml document by inserting them in to the list of tasks to execute.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.TaskImportTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -3400,6 +4448,32 @@
         <member name="P:RelhaxModpack.Automation.Tasks.TaskImportTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.TaskImportTask.XpathExpression">
+            <summary>
+            The Xpath search pattern to use for getting a list of xml macro objects.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.TaskImportTask.AutomationTasks">
+            <summary>
+            The list of tasks executing during this sequence.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.TaskImportTask.CreateList">
+            <summary>
+            Initializes objectList to hold AutomationTask objects.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.TaskImportTask.ParseToList">
+            <summary>
+            Parses the xml objects from task elements to task object instances.
+            </summary>
+            <returns>True if the operation succeeded, false otherwise.</returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.TaskImportTask.ImportList">
+            <summary>
+            Perform and post-processing on the created tasks and insert them into the list of tasks to run.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.TaskCommandName">
