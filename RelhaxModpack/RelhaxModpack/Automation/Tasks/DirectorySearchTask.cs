@@ -63,7 +63,7 @@ namespace RelhaxModpack.Automation.Tasks
             if (ValidateCommandStringNullEmptyTrue(nameof(Recursive), Recursive))
                 return;
 
-            if (ValidateCommandFalse(ableToParseRecursive, string.Format("Unable to parse the arg Recursive from given string {0}", Recursive)))
+            if (ValidateCommandFalse(ableToParseRecursive, string.Format("Unable to parse The argument Recursive from given string {0}", Recursive)))
                 return;
         }
 

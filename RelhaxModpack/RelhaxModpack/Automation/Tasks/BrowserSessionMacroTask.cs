@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Provides saving of text to a macro for browser session tasks.
+    /// </summary>
     public abstract class BrowserSessionMacroTask : BrowserSessionUrlTask
     {
+        /// <summary>
+        /// The name of the macro to create.
+        /// </summary>
         public string MacroName { get; set; }
 
         #region Xml serialization
@@ -39,10 +45,14 @@ namespace RelhaxModpack.Automation.Tasks
         public override void ValidateCommands()
         {
             base.ValidateCommands();
-            if (ValidateCommandTrue(string.IsNullOrEmpty(MacroName), "The arg MacroName is empty string"))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(MacroName), "The argument MacroName is empty string"))
                 return;
         }
 
+        /// <summary>
+        /// Checks if a macro of MacroName already exists, and if so, if it can be overridden.
+        /// </summary>
+        /// <returns>True if the macro can be created, false otherwise.</returns>
         protected virtual bool CheckIfMacroExits()
         {
             Logging.Debug("Checking for if macro {0} already exists", MacroName);
@@ -64,6 +74,10 @@ namespace RelhaxModpack.Automation.Tasks
             return true;
         }
 
+        /// <summary>
+        /// Creates a local type macro of name MacroName.
+        /// </summary>
+        /// <param name="value">The value of the macro.</param>
         protected virtual void CreateMacro(string value)
         {
             Logging.Info("Creating macro, Name: {0}, Value: {1}", MacroName, value);

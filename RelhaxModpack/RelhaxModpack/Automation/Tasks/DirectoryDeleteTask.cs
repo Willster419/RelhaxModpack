@@ -81,7 +81,7 @@ namespace RelhaxModpack.Automation.Tasks
             if (ValidateCommandStringNullEmptyTrue(nameof(IncludeRootInSearch), IncludeRootInSearch))
                 return;
 
-            if (ValidateCommandFalse(ableToParseIncludeRootInSearch, string.Format("Unable to parse the arg IncludeRootInSearch from given string {0}", IncludeRootInSearch)))
+            if (ValidateCommandFalse(ableToParseIncludeRootInSearch, string.Format("Unable to parse The argument IncludeRootInSearch from given string {0}", IncludeRootInSearch)))
                 return;
         }
 

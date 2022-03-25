@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Starts a browser session by (re)-creating the browser session manager.
+    /// </summary>
     public class StartBrowserSessionTask : AutomationTask
     {
         /// <summary>
@@ -19,8 +22,15 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// Sets the browser api implementation to use for this browser session.
+        /// </summary>
         public string Browser { get; set; } = BrowserSessionType.WebClient.ToString();
 
+        /// <summary>
+        /// Parsed result of the argument Browser.
+        /// </summary>
+        /// <seealso cref="Browser"/>
         protected BrowserSessionType browserEngine = BrowserSessionType.WebClient;
 
         #region Xml serialization
@@ -55,7 +65,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// <summary>
         /// Runs the main feature of the task.
         /// </summary>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task RunTask()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             Logging.Info("Starting browser compare session");
             AutomationSequence.ResetBrowserSessionManager(browserEngine);

@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Handles tasks associated with the Url of a browser session task.
+    /// </summary>
     public abstract class BrowserSessionUrlTask : AutomationTask
     {
+        /// <summary>
+        /// The Url to navigate to.
+        /// </summary>
         public string Url { get; set; }
 
         #region Xml serialization
@@ -42,6 +48,10 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
+        /// <summary>
+        /// Creates a sample filename by parsing the url for it's last separator character '/'
+        /// </summary>
+        /// <remarks>For download hosting sites like Google Drive, when the url is a cryptic link, the created macro from this should not be used.</remarks>
         protected virtual void CreateLastDownloadFilenameMacro()
         {
             string[] urlSplit = Url.Split('/');

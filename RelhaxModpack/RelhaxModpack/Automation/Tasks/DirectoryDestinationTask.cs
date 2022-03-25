@@ -10,7 +10,10 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public abstract class DirectoryDestinationTask : DirectorySearchTask, IXmlSerializable
     {
-        public string DestinationPath { get; set; }
+        /// <summary>
+        /// The destination of where to download the file to, including the file name. If the path to the file doesn't exist, then it will be created.
+        /// </summary>
+        public string DestinationPath { get; set; } = string.Empty;
 
         #region Xml Serialization
         /// <summary>

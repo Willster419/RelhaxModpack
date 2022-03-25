@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Sets or updates an HTTP request header for the browser session manager.
+    /// </summary>
     public class BrowserSessionSetHeaderTask : BrowserSessionHeaderTask
     {
         /// <summary>
@@ -18,6 +21,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The value of the HTTP request header.
+        /// </summary>
         public string Value { get; set; }
 
         #region Xml serialization
@@ -45,7 +51,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// <summary>
         /// Runs the main feature of the task.
         /// </summary>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task RunTask()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             Logging.Info(Utilities.Enums.LogOptions.ClassName, "Setting header name: '{0}'", Name);
             Logging.Info(Utilities.Enums.LogOptions.ClassName, "Setting header value: '{0}'", Value);

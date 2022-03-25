@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Allows a browser session to perform an HTTP GET request and parse the return response.
+    /// </summary>
     public class BrowserSessionGetTask : BrowserSessionParseTask, IHtmlParseTask
     {
         /// <summary>
@@ -51,6 +54,10 @@ namespace RelhaxModpack.Automation.Tasks
             base.ProcessTaskResults();
         }
 
+        /// <summary>
+        /// Runs the browser manager to perform the GET request and return the response to htmlText.
+        /// </summary>
+        /// <returns>True if the operation completed successfully, false otherwise.</returns>
         protected override async Task<bool> GetHtmlString()
         {
             try

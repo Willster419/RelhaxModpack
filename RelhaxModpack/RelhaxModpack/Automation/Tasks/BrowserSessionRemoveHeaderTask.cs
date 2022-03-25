@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Removes a request header from the browser session manager's list of request headers.
+    /// </summary>
     public class BrowserSessionRemoveHeaderTask : BrowserSessionHeaderTask
     {
         /// <summary>
@@ -22,7 +25,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// <summary>
         /// Runs the main feature of the task.
         /// </summary>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task RunTask()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             Logging.Info(Utilities.Enums.LogOptions.ClassName, "Removing header name: '{0}'", Name);
             BrowserSessionManager.RemoveHeader(Name);

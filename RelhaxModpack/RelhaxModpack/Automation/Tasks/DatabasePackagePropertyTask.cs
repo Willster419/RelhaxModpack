@@ -77,7 +77,7 @@ namespace RelhaxModpack.Automation.Tasks
         {
             base.ValidateCommands();
 
-            if (ValidateCommandTrue(string.IsNullOrEmpty(PropertyName), "The arg PropertyName is empty string"))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(PropertyName), "The argument PropertyName is empty string"))
                 return;
 
             if (ValidateCommandTrue(targetPackage == null, string.Format("A package by the UID {0} was not found in the database list", TargetPackageUID)))

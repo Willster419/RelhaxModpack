@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Allows a browser session to perform an HTTP POST request and parse the return response.
+    /// </summary>
     public class BrowserSessionPostTask: BrowserSessionParseTask, IHtmlParseTask
     {
         /// <summary>
@@ -18,8 +21,14 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The data to send in the HTTP POST request.
+        /// </summary>
         public string PostData { get; set; }
 
+        /// <summary>
+        /// The type of HTTP post contest to send.
+        /// </summary>
         public string ContentType { get; set; }
 
         #region Xml serialization
@@ -73,6 +82,10 @@ namespace RelhaxModpack.Automation.Tasks
             base.ProcessTaskResults();
         }
 
+        /// <summary>
+        /// Gets the html response string to parse via the browser session manager's post request.
+        /// </summary>
+        /// <returns>True if the operation completed successfully, false otherwise.</returns>
         protected override async Task<bool> GetHtmlString()
         {
             try

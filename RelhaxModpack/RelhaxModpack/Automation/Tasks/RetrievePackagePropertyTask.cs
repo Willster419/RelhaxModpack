@@ -58,7 +58,7 @@ namespace RelhaxModpack.Automation.Tasks
         {
             base.ValidateCommands();
 
-            if (ValidateCommandTrue(string.IsNullOrEmpty(MacroSaveName), "The arg MacroSaveName is empty string"))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(MacroSaveName), "The argument MacroSaveName is empty string"))
                 return;
 
             if (ValidateCommandTrue(targetPackage == null, string.Format("A package by the UID {0} was not found in the database list", TargetPackageUID)))

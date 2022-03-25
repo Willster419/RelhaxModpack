@@ -7,28 +7,68 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Provides an implementation to parse a browser session's response HTML result via an HtmlPath parser.
+    /// </summary>
     public abstract class BrowserSessionParseTask : BrowserSessionMacroTask, IHtmlParseTask
     {
+        /// <summary>
+        /// The parsed result from the HtmlPath parser.
+        /// </summary>
         public string ParseResult { get; set; }
 
+        /// <summary>
+        /// The HtmlPath argument to use for parsing.
+        /// </summary>
         public string HtmlPath { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Controls for debugging, if the HTML result should be written to disk.
+        /// </summary>
         public string WriteHtmlResult { get; set; }
 
+        /// <summary>
+        /// Parsed result of the argument ParseResult.
+        /// </summary>
+        /// <seealso cref="ParseResult"/>
         protected bool parseResult;
 
+        /// <summary>
+        /// Parsed result of the argument WriteHtmlResult.
+        /// </summary>
+        /// <seealso cref="WriteHtmlResult"/>
         protected bool writeHtmlResult = false;
 
+        /// <summary>
+        /// The html result string from the HTTP request.
+        /// </summary>
         protected string htmlText;
 
+        /// <summary>
+        /// The result from the HtmlPath parser.
+        /// </summary>
+        /// <remarks>Check parserExitCode to know if the HtmlPath parser completed successful.</remarks>
         protected string htmlPathResult;
 
+        /// <summary>
+        /// The HtmlPath parser.
+        /// </summary>
         protected HtmlTextParser htmlTextParser;
 
+        /// <summary>
+        /// The exit code from the HtmlPath parser when executed.
+        /// </summary>
         protected HtmlXpathParserExitCode parserExitCode;
 
+        /// <summary>
+        /// Flag to determine if the task successfully ran the HtmlParser.
+        /// </summary>
         protected bool htmlStringGotten;
 
+        /// <summary>
+        /// Flag to determine if the macro with the given name can be created.
+        /// </summary>
+        /// <seealso cref="BrowserSessionMacroTask.MacroName"/>
         protected bool macroSetup;
 
         #region Xml serialization
@@ -66,7 +106,7 @@ namespace RelhaxModpack.Automation.Tasks
             //don't call base, need to do it manually because parsing macro is based on parseResult
             if (ValidateCommandTrue(string.IsNullOrEmpty(Url), string.Format("The parameter {0} is null or empty", nameof(Url))))
                 return;
-            if (ValidateCommandTrue(parseResult && string.IsNullOrEmpty(MacroName), "The arg MacroName is empty string"))
+            if (ValidateCommandTrue(parseResult && string.IsNullOrEmpty(MacroName), "The argument MacroName is empty string"))
                 return;
             if (ValidateCommandTrue(parseResult && string.IsNullOrEmpty(HtmlPath), string.Format("ParseResult is true but HtmlPath is null or empty")))
                 return;
@@ -116,6 +156,10 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
+        /// <summary>
+        /// Run the HtmlParser engine.
+        /// </summary>
+        /// <returns>The exit code from the HtmlParser engine.</returns>
         public virtual async Task<HtmlXpathParserExitCode> ParseHtmlResult()
         {
             Logging.Debug("Parsing HTML result with HtmlPath {0}", HtmlPath);
@@ -126,6 +170,10 @@ namespace RelhaxModpack.Automation.Tasks
             return parserExitCode;
         }
 
+        /// <summary>
+        /// Gets the string to parse for HtmlPath.
+        /// </summary>
+        /// <returns>True if the string was successfully retrieved, false otherwise.</returns>
         protected abstract Task<bool> GetHtmlString();
         #endregion
     }

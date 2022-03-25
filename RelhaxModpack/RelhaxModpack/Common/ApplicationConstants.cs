@@ -353,10 +353,18 @@ namespace RelhaxModpack.Common
         /// </summary>
         public static readonly string[] FoldersToCleanup = new string[]
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             PatchFolderName,
+#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
             ShortcutFolderName,
+#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
             XmlUnpackFolderName,
+#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
             AtlasCreationFoldername,
+#pragma warning restore CS0618 // Type or member is obsolete
             FontsToInstallFoldername,
             ReadmeFromZipfileFolderName,
             AutoUpdateZipFolderName

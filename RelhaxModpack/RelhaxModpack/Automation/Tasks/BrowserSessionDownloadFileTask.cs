@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A BrowserSessionDownloadFileTask enables downloading a resource from a url to a file destination on disk.
+    /// </summary>
     public class BrowserSessionDownloadFileTask : BrowserSessionUrlTask, ICancelOperation
     {
         /// <summary>
@@ -21,8 +24,14 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The destination of where to download the file to, including the file name. If the path to the file doesn't exist, then it will be created.
+        /// </summary>
         public string DestinationPath { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Flag for the download process to determine if the download completely and successfully.
+        /// </summary>
         protected bool downloaded = false;
 
         /// <summary>
@@ -83,6 +92,9 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
+        /// <summary>
+        /// Prepares the destination path for the download of the resource.
+        /// </summary>
         protected void DownloadSetup()
         {
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Verifying that destination path ({0}) exists and deleting file if exists", DestinationPath);
@@ -93,6 +105,9 @@ namespace RelhaxModpack.Automation.Tasks
                 File.Delete(DestinationPath);
         }
 
+        /// <summary>
+        /// Downloads the resource to disk using the given web api implementation.
+        /// </summary>
         protected virtual async Task DownloadFile()
         {
             cancellationTokenSource = new CancellationTokenSource();

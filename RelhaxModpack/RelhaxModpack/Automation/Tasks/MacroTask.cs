@@ -36,7 +36,7 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override void ValidateCommands()
         {
-            if (ValidateCommandTrue(string.IsNullOrEmpty(MacroName), "The arg MacroName is empty string"))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(MacroName), "The argument MacroName is empty string"))
                 return;
         }
 

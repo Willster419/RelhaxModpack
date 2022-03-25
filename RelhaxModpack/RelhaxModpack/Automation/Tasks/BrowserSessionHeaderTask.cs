@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Provides implementation for handling the request headers of a browser manager's HTTP requests.
+    /// </summary>
     public abstract class BrowserSessionHeaderTask : AutomationTask
     {
+        /// <summary>
+        /// The name of the request header.
+        /// </summary>
         public string Name { get; set; }
 
         #region Xml serialization
