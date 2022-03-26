@@ -14,7 +14,7 @@ namespace RelhaxModpack.Automation.Tasks
     /// <summary>
     /// Performs a file download on a url resource by parsing an HtmlPath result of the web page (excludes parsed from JavaScript).
     /// </summary>
-    public class DownloadHtmlTask : DownloadStaticTask, IDownloadTask, IXmlSerializable, IHtmlParseTask, ICancelOperation
+    public class DownloadHtmlTask : DownloadStaticTask, IXmlSerializable, IHtmlParseTask, ICancelOperation
     {
         /// <summary>
         /// The xml name of this command.
