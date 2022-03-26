@@ -12,6 +12,10 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Searches for a list of files to copy and copies them from the source to the destination.
+    /// </summary>
+    /// <remarks>The paths are relative to DirectoryPath and DestinationPath. In other words, {DirectoryPath}\folder\file.png will be copied to {DestinationPath}\folder\file.png</remarks>
     public class DirectoryCopyTask : DirectoryDestinationTask, IXmlSerializable, ICancelOperation
     {
         /// <summary>
@@ -24,12 +28,24 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// Flag to indicate if all found files were deleted or not.
+        /// </summary>
         protected bool good = false;
 
+        /// <summary>
+        /// Flag to control if progress of the delete operation will be reported to the database automation runner window.
+        /// </summary>
         protected bool reportingProgress { get { return DatabaseAutomationRunner != null; } }
 
+        /// <summary>
+        /// The object to hold progress report information.
+        /// </summary>
         protected RelhaxProgress relhaxProgress;
 
+        /// <summary>
+        /// The implementation to report progress to a subscribing member.
+        /// </summary>
         protected Progress<RelhaxProgress> progress;
 
         /// <summary>
@@ -37,6 +53,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         protected CancellationTokenSource cancellationTokenSource;
 
+        /// <summary>
+        /// The implementation to copy files and their metadata from one location to another.
+        /// </summary>
         protected FileCopier fileCopier;
 
         #region Xml Serialization

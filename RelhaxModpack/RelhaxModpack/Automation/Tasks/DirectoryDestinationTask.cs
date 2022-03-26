@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Provides a definition for tasks that have a destination for their operation.
+    /// </summary>
     public abstract class DirectoryDestinationTask : DirectorySearchTask, IXmlSerializable
     {
         /// <summary>

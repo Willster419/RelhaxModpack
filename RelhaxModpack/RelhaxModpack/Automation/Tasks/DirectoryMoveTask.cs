@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Gives the ability to move a file within a drive, instead of a copy-modify-delete operation.
+    /// </summary>
     public class DirectoryMoveTask : DirectoryDestinationTask, IXmlSerializable, ICancelOperation
     {
         /// <summary>
@@ -21,6 +24,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// Flag to determine if the move operation succeeded or not.
+        /// </summary>
         protected bool good = false;
 
         /// <summary>

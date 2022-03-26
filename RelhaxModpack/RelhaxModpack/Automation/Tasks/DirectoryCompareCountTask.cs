@@ -8,12 +8,17 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Searches for a list of files to compare and compares their integrity using the MD5 hash algorithm, and comparison method NoMatchContinue.
+    /// If the number or names of files between directories don't match. It is considered a comparison of NoMatchContinue.
+    /// </summary>
+    /// <seealso cref="AutomationCompareMode"/>
     public class DirectoryCompareCountTask : DirectoryCompareTask, IXmlSerializable, ICancelOperation
     {
         /// <summary>
         /// The xml name of this command.
         /// </summary>
-        public const string TaskCommandName = "directory_compare_count";
+        public new const string TaskCommandName = "directory_compare_count";
 
         /// <summary>
         /// Gets the xml name of the command to determine the task instance type.
@@ -85,7 +90,11 @@ namespace RelhaxModpack.Automation.Tasks
             operationFinished = await RunFileHashing();
         }
 
-        protected virtual async Task<bool> RunFileHashing()
+        /// <summary>
+        /// Runs the file hashing implementation between files list A and B, optionally reporting progress.
+        /// </summary>
+        /// <returns>True if the operation succeeds, false otherwise.</returns>
+        protected override async Task<bool> RunFileHashing()
         {
             return await base.RunFileHashing();
         }
@@ -98,6 +107,9 @@ namespace RelhaxModpack.Automation.Tasks
             base.ProcessTaskResults();
         }
 
+        /// <summary>
+        /// Runs the search on directories A and B to find files to compare.
+        /// </summary>
         protected override void RunSearch()
         {
             base.RunSearch();
@@ -106,7 +118,7 @@ namespace RelhaxModpack.Automation.Tasks
         /// <summary>
         /// Sends a cancellation request to task's current operation.
         /// </summary>
-        public virtual void Cancel()
+        public override void Cancel()
         {
             base.Cancel();
         }

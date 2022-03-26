@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Searches for a list of files to delete and deletes them. Optionally deletes the root folder where the operation started from.
+    /// </summary>
     public class DirectoryDeleteTask : DirectorySearchTask, IXmlSerializable, ICancelOperation
     {
         /// <summary>
@@ -23,18 +26,41 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// Flag to determine if the root directory of the search should be deleted as well.
+        /// </summary>
         public string IncludeRootInSearch { get; set; }
 
+        /// <summary>
+        /// Flag to indicate if all found files were deleted or not.
+        /// </summary>
         protected bool good = false;
 
+        /// <summary>
+        /// Parsed result of the argument IncludeRootInSearch.
+        /// </summary>
+        /// <seealso cref="IncludeRootInSearch"/>
         protected bool includeRootInSearch;
 
+        /// <summary>
+        /// Flag to determine if the task was able to parse the IncludeRootInSearch option.
+        /// </summary>
+        /// <seealso cref="IncludeRootInSearch"/>
         protected bool ableToParseIncludeRootInSearch = false;
 
+        /// <summary>
+        /// Flag to control if progress of the delete operation will be reported to the database automation runner window.
+        /// </summary>
         protected bool reportingProgress { get { return DatabaseAutomationRunner != null; } }
 
+        /// <summary>
+        /// The object to hold progress report information.
+        /// </summary>
         protected RelhaxProgress relhaxProgress;
 
+        /// <summary>
+        /// The implementation to report progress to a subscribing member.
+        /// </summary>
         protected Progress<RelhaxProgress> progress;
 
         /// <summary>
@@ -168,6 +194,9 @@ namespace RelhaxModpack.Automation.Tasks
             });
         }
 
+        /// <summary>
+        /// Runs the search for files to delete.
+        /// </summary>
         protected override void RunSearch()
         {
             searchResults = FileUtils.FileSearch(DirectoryPath, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly, includeRootInSearch, true, SearchPattern);

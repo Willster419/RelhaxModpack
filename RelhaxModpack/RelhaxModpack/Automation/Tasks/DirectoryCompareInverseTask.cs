@@ -10,17 +10,28 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Searches for a list of files to compare and compares their integrity using the MD5 hash algorithm, and comparison method NoMatchStop.
+    /// If the number or names of files between directories don't match. It is considered an error.
+    /// </summary>
+    /// <seealso cref="compareMode"/>
+    /// <seealso cref="AutomationCompareMode"/>
     public class DirectoryCompareInverseTask : DirectoryCompareTask, IXmlSerializable, ICancelOperation
     {
         /// <summary>
         /// The xml name of this command.
         /// </summary>
-        public const string TaskCommandName = "directory_compare_inverse";
+        public new const string TaskCommandName = "directory_compare_inverse";
 
         /// <summary>
         /// Gets the xml name of the command to determine the task instance type.
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
+
+        /// <summary>
+        /// The comparison mode to use for the compare operations.
+        /// </summary>
+        protected new AutomationCompareMode compareMode = AutomationCompareMode.NoMatchStop;
 
         #region Xml Serialization
         /// <summary>
@@ -59,58 +70,13 @@ namespace RelhaxModpack.Automation.Tasks
             await base.RunTask();
         }
 
+        /// <summary>
+        /// Runs the file hashing implementation between files list A and B, optionally reporting progress.
+        /// </summary>
+        /// <returns>True if the operation succeeds, false otherwise.</returns>
         protected override async Task<bool> RunFileHashing()
         {
-            calculationProgress = new Progress<RelhaxProgress>();
-            cancellationTokenSource = new CancellationTokenSource();
-            progress = new RelhaxProgress() { ChildCurrentProgress = "barWithTextChild", ChildCurrent = 0, ChildTotal = directoryFilesA.Length };
-            fileHashComparer = new FileHashComparer()
-            {
-                CancellationTokenA = cancellationTokenSource.Token,
-                CancellationTokenB = cancellationTokenSource.Token,
-            };
-
-            if (DatabaseAutomationRunner != null)
-            {
-                calculationProgress.ProgressChanged += DatabaseAutomationRunner.RelhaxProgressChanged;
-            }
-
-            try
-            {
-                for (int i = 0; i < directoryFilesA.Length; i++)
-                {
-                    await fileHashComparer.ComputeHashA(directoryFilesA[i]);
-                    await fileHashComparer.ComputeHashB(directoryFilesB[i]);
-
-                    string fileAHash = fileHashComparer.HashAStringBuilder?.ToString();
-                    string fileBHash = fileHashComparer.HashBStringBuilder?.ToString();
-                    Logging.Debug("File A hash: {0}", fileAHash);
-                    Logging.Debug("File B hash: {0}", fileBHash);
-
-                    AutomationCompareManager.AddCompare(this,
-                        new AutomationCompareFile(DirectoryComparePathA, DirectoryComparePathB, AutomationCompareMode.NoMatchStop, directoryFilesA[i], fileAHash, directoryFilesB[i], fileBHash));
-                    progress.ChildCurrent++;
-                    (calculationProgress as IProgress<RelhaxProgress>).Report(progress);
-
-                    if (cancellationTokenSource.Token.IsCancellationRequested)
-                        cancellationTokenSource.Cancel();
-                }
-            }
-            catch (OperationCanceledException) { }
-            catch (Exception ex)
-            {
-                Logging.Exception(ex.ToString());
-                return false;
-            }
-            finally
-            {
-                cancellationTokenSource.Dispose();
-                if (DatabaseAutomationRunner != null)
-                {
-                    calculationProgress.ProgressChanged -= DatabaseAutomationRunner.RelhaxProgressChanged;
-                }
-            }
-            return true;
+            return await base.RunFileHashing();
         }
 
         /// <summary>
@@ -121,11 +87,17 @@ namespace RelhaxModpack.Automation.Tasks
             base.ProcessTaskResults();
         }
 
+        /// <summary>
+        /// Runs the search on directories A and B to find files to compare.
+        /// </summary>
         protected override void RunSearch()
         {
             base.RunSearch();
         }
 
+        /// <summary>
+        /// Sends a cancellation request to task's current operation.
+        /// </summary>
         public override void Cancel()
         {
             base.Cancel();

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Creates a directory if it does not already exist.
+    /// </summary>
     public class DirectoryCreateTask : DirectoryTask, IXmlSerializable
     {
         /// <summary>
@@ -34,7 +37,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// <summary>
         /// Runs the main feature of the task.
         /// </summary>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task RunTask()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             Logging.Debug("Creating directory {0}", DirectoryPath);
 

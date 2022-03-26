@@ -9,18 +9,40 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A DirectorySearchTask provides an implementation to search for files in a path, specifying the file name and recursion.
+    /// </summary>
     public abstract class DirectorySearchTask : DirectoryTask, IXmlSerializable
     {
+        /// <summary>
+        /// The default search for files. Will return all files.
+        /// </summary>
         public const string SEARCH_ALL = "*";
 
+        /// <summary>
+        /// The search pattern to use for the file search.
+        /// </summary>
         public string SearchPattern { get; set; } = SEARCH_ALL;
 
+        /// <summary>
+        /// Determines if the serach should recurse into child directories.
+        /// </summary>
         public string Recursive { get; set; }
 
+        /// <summary>
+        /// Parsed result of the argument Recursive.
+        /// </summary>
+        /// <seealso cref="Recursive"/>
         protected bool recursive;
 
+        /// <summary>
+        /// The list of complete file paths that match the search criteria.
+        /// </summary>
         protected string[] searchResults;
 
+        /// <summary>
+        /// Flag to indicate if the search operation completed correctly.
+        /// </summary>
         protected bool ableToParseRecursive = false;
 
         #region Xml Serialization
@@ -70,11 +92,16 @@ namespace RelhaxModpack.Automation.Tasks
         /// <summary>
         /// Runs the main feature of the task.
         /// </summary>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task RunTask()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             RunSearch();
         }
 
+        /// <summary>
+        /// Runs the file search.
+        /// </summary>
         protected virtual void RunSearch()
         {
             searchResults = FileUtils.FileSearch(DirectoryPath, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly, false, false, SearchPattern);

@@ -8,8 +8,14 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A DirectoryTask is a base class to use for directory based tasks.
+    /// </summary>
     public abstract class DirectoryTask : AutomationTask, IXmlSerializable
     {
+        /// <summary>
+        /// A directory path to use for a derived task.
+        /// </summary>
         public string DirectoryPath { get; set; }
 
         #region Xml Serialization

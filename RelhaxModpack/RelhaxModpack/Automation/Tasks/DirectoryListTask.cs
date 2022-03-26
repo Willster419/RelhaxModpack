@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A DirectoryListTask allows searching a directory (or directories) for files. Each result is stored in the macro list as full paths to the file with a macro prefix.
+    /// </summary>
     public class DirectoryListTask : DirectorySearchTask, IXmlSerializable
     {
         /// <summary>
@@ -22,6 +25,10 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The prefix to save the file search results macros as.
+        /// </summary>
+        /// <remarks>For example, if MacroPrefix = "the_search_result", and there were 5 file results, then there would be 5 macros created with the names "the_search_result_N"</remarks>
         public string MacroPrefix { get; set; }
 
         #region Xml Serialization
@@ -59,7 +66,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// <summary>
         /// Runs the main feature of the task.
         /// </summary>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task RunTask()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             searchResults = FileUtils.FileSearch(DirectoryPath, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly, false, false, SearchPattern);
             if (searchResults == null || searchResults.Count() == 0)
