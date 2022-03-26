@@ -2273,6 +2273,37 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask">
+            <summary>
+            Provides an implementation for working with a property of a DatabasePackage.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.PropertyName">
+            <summary>
+            The name of the property to access.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.TargetPackageUID">
+            <summary>
+            The UID of the DatabasePackage to access.
+            </summary>
+            <remarks>If the value of this argument is "this", then it will use the UID of this sequence's DatabasePackage.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.targetPackage">
+            <summary>
+            The DatabasePackage object to access.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.packageType">
+            <summary>
+            The type of the targetPackage.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.property">
+            <summary>
+            The metadata of the property to access.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes.
@@ -2285,14 +2316,66 @@
             Process any macros that exist in the task's arguments.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.PreProcessTargetPackage">
+            <summary>
+            Attempts to retrieve the target package by the TargetPackageUID task argument.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.TargetPackageUID"/>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.PreProcessTargetProperty">
+            <summary>
+            Attempts to retrieve the target property metadata of the target package by the PropertyName task argument.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.PropertyName"/>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DatabasePackagePropertyTask.ValidateCommands">
             <summary>
             Validates that all task arguments are correct and the task is initialized correctly to execute.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DatabasePackageTask">
+            <summary>
+            A DatabasePackageTask provides a framework for handling of the current DatabasePackage, and access to the list of loaded packages.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DatabasePackageTask.DatabasePackage">
+            <summary>
+            Get the DatabasePackage associated with this automation sequence.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DatabasePackageTask.DatabasePackages">
+            <summary>
+            Get the list of loaded database packages.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DatabasePackageTask.ValidateCommands">
             <summary>
             Validates that all task arguments are correct and the task is initialized correctly to execute.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DatabaseTask">
+            <summary>
+            A DatabaseTask provides an implementation for managing the loaded package database.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DatabaseTask.CustomDatabasePath">
+            <summary>
+            A custom location to use for loading or saving a database. This corresponds to the root database file, "database.xml".
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DatabaseTask.DatabaseManager">
+            <summary>
+            The database manager to load or save the database.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DatabaseTask.customPathMacroError">
+            <summary>
+            Flag to indicate if the task argument CustomDatabasePath was parsed to a null or empty string (an error with the macros).
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DatabaseTask.useCustomPath">
+            <summary>
+            Flag to indicate if the CustomDatabasePath task argument should be used for loading or saving the database.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DatabaseTask.PropertiesForSerializationAttributes">
@@ -3006,6 +3089,13 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.FileCompareInverseTask">
+            <summary>
+            A FileCompareTask allows for an MD5 comparison of two files to determine their contents are equal.
+            </summary>
+            <remarks>If the files are found to not be equal, the comparison is reported as type NoMatchStop. Great for configuration files that have patches written for, that should be manually inspected when they change.</remarks>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.AutomationCompareMode"/>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.FileCompareInverseTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -3036,9 +3126,51 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.FileCompareTask">
+            <summary>
+            A FileCompareTask allows for an MD5 comparison of two files to determine their contents are equal.
+            </summary>
+            <remarks>If the files are found to not be equal, the comparison is reported as type NoMatchContinue. Great for wotmod or resource files that may need an update for a new client patch.</remarks>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.AutomationCompareMode"/>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.FileCompareTask.TaskCommandName">
             <summary>
             The xml name of this command.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.FileCompareTask.Command">
+            <summary>
+            Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.FileCompareTask.FileA">
+            <summary>
+            The path to file A for comparison.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.FileCompareTask.FileB">
+            <summary>
+            The path to file B for comparison.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCompareTask.fileHashComparer">
+            <summary>
+            The implementation to compare the two files.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCompareTask.fileAHash">
+            <summary>
+            The calculated MD5 hash values of each file.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCompareTask.fileBHash">
+            <summary>
+            The calculated MD5 hash values of each file.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCompareTask.calculationProgress">
+            <summary>
+            The implementation to provide progress updates to subscribed listeners.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.FileCompareTask.cancellationTokenSource">
@@ -3078,6 +3210,11 @@
             Sends a cancellation request to task's current operation.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.FileCopyTask">
+            <summary>
+            A FileCopyTask allows for the copy of a single file from source to destination.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.FileCopyTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -3086,6 +3223,21 @@
         <member name="P:RelhaxModpack.Automation.Tasks.FileCopyTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCopyTask.fileCopyResult">
+            <summary>
+            Flag to indicate if the copy operation was successful.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCopyTask.fileCopier">
+            <summary>
+            The implementation to copy the source file to the destination path, keeping metadata information.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileCopyTask.copyProgress">
+            <summary>
+            The implementation to provide progress updates to subscribed listeners.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.FileCopyTask.cancellationTokenSource">
@@ -3108,6 +3260,11 @@
             Sends a cancellation request to task's current operation.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.FileDeleteTask">
+            <summary>
+            A FileDeleteTask will delete a file at a given path.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.FileDeleteTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -3118,6 +3275,11 @@
             Gets the xml name of the command to determine the task instance type.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileDeleteTask.fileDeleteResult">
+            <summary>
+            Flag to indicate if the delete operation completed successfully.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.FileDeleteTask.RunTask">
             <summary>
             Runs the main feature of the task.
@@ -3126,6 +3288,21 @@
         <member name="M:RelhaxModpack.Automation.Tasks.FileDeleteTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.FileDestinationTask">
+            <summary>
+            A FileDestinationTask provides an implementation for file tasks that have a destination.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.FileDestinationTask.DestinationFilePath">
+            <summary>
+            The path to the destination file.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileDestinationTask.destinationDeleteResult">
+            <summary>
+            Flag to indicate if the file at the destination path (if it existed) was deleted successfully.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.FileDestinationTask.PropertiesForSerializationAttributes">
@@ -3148,6 +3325,11 @@
         <member name="M:RelhaxModpack.Automation.Tasks.FileDestinationTask.RunTask">
             <summary>
             Runs the main feature of the task.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.FileExistsTask">
+            <summary>
+            A FileExistsTask will ensure that a file exists at a given location.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.FileExistsTask.TaskCommandName">
@@ -3187,6 +3369,11 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.FileMoveTask">
+            <summary>
+            A FileMoveTask will allow a file to be moved within a single volume by modification of the file table rather then a copy.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.FileMoveTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -3195,6 +3382,11 @@
         <member name="P:RelhaxModpack.Automation.Tasks.FileMoveTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.FileMoveTask.fileMoveResult">
+            <summary>
+            Flag to indicate if the file move was successful.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.FileMoveTask.RunTask">
@@ -3253,6 +3445,16 @@
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryListTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.FileSourceTask">
+            <summary>
+            A FileSourceTask provides an implementation for file tasks that have a source.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.FileSourceTask.SourceFilePath">
+            <summary>
+            The path to the source file.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.FileSourceTask.PropertiesForSerializationAttributes">
@@ -3405,6 +3607,11 @@
             Sends a cancellation request to task's current operation.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.LoadDatabaseTask">
+            <summary>
+            Loads a package database from the default or a custom location.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -3413,6 +3620,11 @@
         <member name="P:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.failCode">
+            <summary>
+            The response code of loading the database.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.LoadDatabaseTask.PropertiesForSerializationAttributes">
@@ -4512,6 +4724,12 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask">
+            <summary>
+            Retrieves a string representation of a property of a package. If the property is a list of array, then retrieve the given index.
+            </summary>
+            <remarks>A great use of this is to get the developer URL at a specific index for where to check for package updates.</remarks>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -4521,6 +4739,27 @@
             <summary>
             Gets the xml name of the command to determine the task instance type.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.MacroSaveName">
+            <summary>
+            The name of the macro to create with the retrieved value.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.PropertyIndex">
+            <summary>
+            The index into the property array to retrieve the value.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.propertyGot">
+            <summary>
+            Flag to indicate of the value of the property of the package was successfully retrieved.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.propertyIndex">
+            <summary>
+            Parsed result of the argument PropertyIndex.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.PropertyIndex"/>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.PropertiesForSerializationAttributes">
             <summary>
@@ -4547,6 +4786,11 @@
         <member name="M:RelhaxModpack.Automation.Tasks.RetrievePackagePropertyTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.SaveDatabaseTask">
+            <summary>
+            Saves a package database from the default or a custom location.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.SaveDatabaseTask.TaskCommandName">
@@ -4757,6 +5001,11 @@
             Perform and post-processing on the created tasks and insert them into the list of tasks to run.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask">
+            <summary>
+            Allows a database's property value to be updated with a value given from the PropertyValue argument.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -4765,6 +5014,16 @@
         <member name="P:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.PropertyValue">
+            <summary>
+            The value to update the property with.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.propertySet">
+            <summary>
+            Flag to indicate if the property was successfully updated.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.UpdatePackagePropertyTask.PropertiesForSerializationAttributes">
@@ -5870,6 +6129,7 @@
             The filename to save the self updater script as.
             </summary>
             <remarks>
+            The server stores it as a text file that we write as a batch file.
             Something something downloading batch files is scary to anti-virus.
             </remarks>
             <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.RelicBatchUpdateScriptServer"/>
