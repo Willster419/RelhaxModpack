@@ -2006,6 +2006,13 @@
             </summary>
             <remarks>For download hosting sites like Google Drive, when the url is a cryptic link, the created macro from this should not be used.</remarks>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask">
+            <summary>
+            Searches for a list of files to compare and compares their integrity using the MD5 hash algorithm, and comparison method NoMatchContinue.
+            If the number or names of files between directories don't match. It is considered a comparison of NoMatchContinue.
+            </summary>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.AutomationCompareMode"/>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2038,15 +2045,34 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.RunFileHashing">
+            <summary>
+            Runs the file hashing implementation between files list A and B, optionally reporting progress.
+            </summary>
+            <returns>True if the operation succeeds, false otherwise.</returns>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.RunSearch">
+            <summary>
+            Runs the search on directories A and B to find files to compare.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareCountTask.Cancel">
             <summary>
             Sends a cancellation request to task's current operation.
             </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask">
+            <summary>
+            Searches for a list of files to compare and compares their integrity using the MD5 hash algorithm, and comparison method NoMatchStop.
+            If the number or names of files between directories don't match. It is considered an error.
+            </summary>
+            <seealso cref="F:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.compareMode"/>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.AutomationCompareMode"/>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.TaskCommandName">
             <summary>
@@ -2056,6 +2082,11 @@
         <member name="P:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.compareMode">
+            <summary>
+            The comparison mode to use for the compare operations.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.PropertiesForSerializationAttributes">
@@ -2080,10 +2111,34 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.RunFileHashing">
+            <summary>
+            Runs the file hashing implementation between files list A and B, optionally reporting progress.
+            </summary>
+            <returns>True if the operation succeeds, false otherwise.</returns>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.RunSearch">
+            <summary>
+            Runs the search on directories A and B to find files to compare.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareInverseTask.Cancel">
+            <summary>
+            Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DirectoryCompareTask">
+            <summary>
+            Searches for a list of files to compare and compares their integrity using the MD5 hash algorithm, and comparison method NoMatchContinue.
+            If the number or names of files between directories don't match. It is considered an error.
+            </summary>
+            <seealso cref="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.compareMode"/>
+            <seealso cref="T:RelhaxModpack.Utilities.Enums.AutomationCompareMode"/>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.TaskCommandName">
             <summary>
@@ -2095,9 +2150,54 @@
             Gets the xml name of the command to determine the task instance type.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.DirectoryComparePathA">
+            <summary>
+            The path to directory A to compare.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.DirectoryComparePathB">
+            <summary>
+            The path to directory B to compare.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.directoryFilesA">
+            <summary>
+            The list of found files from directory A.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.directoryFilesB">
+            <summary>
+            The list of found files from directory B.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.operationFinished">
+            <summary>
+            Flag to indicate if all files were hashed or not.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.fileHashComparer">
+            <summary>
+            The implementation to compare files from directories A and B.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.relhaxProgress">
+            <summary>
+            The object to hold progress report information.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.calculationProgress">
+            <summary>
+            The implementation to report progress to a subscribing member.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.cancellationTokenSource">
             <summary>
             The cancellation token.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.compareMode">
+            <summary>
+            The comparison mode to use for the compare operations.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.PropertiesForSerializationAttributes">
@@ -2122,14 +2222,30 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.RunFileHashing">
+            <summary>
+            Runs the file hashing implementation between files list A and B, optionally reporting progress.
+            </summary>
+            <returns>True if the operation succeeds, false otherwise.</returns>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.RunSearch">
+            <summary>
+            Runs the search on directories A and B to find files to compare.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCompareTask.Cancel">
             <summary>
             Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DirectoryCreateTask">
+            <summary>
+            Creates a directory if it does not already exist.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCreateTask.TaskCommandName">
@@ -2201,6 +2317,12 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DirectoryCopyTask">
+            <summary>
+            Searches for a list of files to copy and copies them from the source to the destination.
+            </summary>
+            <remarks>The paths are relative to DirectoryPath and DestinationPath. In other words, {DirectoryPath}\folder\file.png will be copied to {DestinationPath}\folder\file.png</remarks>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2211,9 +2333,34 @@
             Gets the xml name of the command to determine the task instance type.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.good">
+            <summary>
+            Flag to indicate if all found files were deleted or not.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.reportingProgress">
+            <summary>
+            Flag to control if progress of the delete operation will be reported to the database automation runner window.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.relhaxProgress">
+            <summary>
+            The object to hold progress report information.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.progress">
+            <summary>
+            The implementation to report progress to a subscribing member.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.cancellationTokenSource">
             <summary>
             The cancellation token.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.fileCopier">
+            <summary>
+            The implementation to copy files and their metadata from one location to another.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryCopyTask.PropertiesForSerializationAttributes">
@@ -2248,6 +2395,11 @@
             Sends a cancellation request to task's current operation.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask">
+            <summary>
+            Searches for a list of files to delete and deletes them. Optionally deletes the root folder where the operation started from.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2256,6 +2408,43 @@
         <member name="P:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.IncludeRootInSearch">
+            <summary>
+            Flag to determine if the root directory of the search should be deleted as well.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.good">
+            <summary>
+            Flag to indicate if all found files were deleted or not.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.includeRootInSearch">
+            <summary>
+            Parsed result of the argument IncludeRootInSearch.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.IncludeRootInSearch"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.ableToParseIncludeRootInSearch">
+            <summary>
+            Flag to determine if the task was able to parse the IncludeRootInSearch option.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.IncludeRootInSearch"/>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.reportingProgress">
+            <summary>
+            Flag to control if progress of the delete operation will be reported to the database automation runner window.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.relhaxProgress">
+            <summary>
+            The object to hold progress report information.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.progress">
+            <summary>
+            The implementation to report progress to a subscribing member.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.cancellationTokenSource">
@@ -2285,6 +2474,11 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.RunSearch">
+            <summary>
+            Runs the search for files to delete.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
@@ -2293,6 +2487,11 @@
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryDeleteTask.Cancel">
             <summary>
             Sends a cancellation request to task's current operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DirectoryDestinationTask">
+            <summary>
+            Provides a definition for tasks that have a destination for their operation.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Automation.Tasks.DirectoryDestinationTask.DestinationPath">
@@ -2322,6 +2521,11 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DirectoryMoveTask">
+            <summary>
+            Gives the ability to move a file within a drive, instead of a copy-modify-delete operation.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2330,6 +2534,11 @@
         <member name="P:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.good">
+            <summary>
+            Flag to determine if the move operation succeeded or not.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryMoveTask.cancellationTokenSource">
@@ -2369,6 +2578,42 @@
             Sends a cancellation request to task's current operation.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DirectorySearchTask">
+            <summary>
+            A DirectorySearchTask provides an implementation to search for files in a path, specifying the file name and recursion.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectorySearchTask.SEARCH_ALL">
+            <summary>
+            The default search for files. Will return all files.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectorySearchTask.SearchPattern">
+            <summary>
+            The search pattern to use for the file search.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectorySearchTask.Recursive">
+            <summary>
+            Determines if the serach should recurse into child directories.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectorySearchTask.recursive">
+            <summary>
+            Parsed result of the argument Recursive.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Automation.Tasks.DirectorySearchTask.Recursive"/>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectorySearchTask.searchResults">
+            <summary>
+            The list of complete file paths that match the search criteria.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.DirectorySearchTask.ableToParseRecursive">
+            <summary>
+            Flag to indicate if the search operation completed correctly.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectorySearchTask.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes.
@@ -2391,9 +2636,24 @@
             Runs the main feature of the task.
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.DirectorySearchTask.RunSearch">
+            <summary>
+            Runs the file search.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectorySearchTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DirectoryTask">
+            <summary>
+            A DirectoryTask is a base class to use for directory based tasks.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryTask.DirectoryPath">
+            <summary>
+            A directory path to use for a derived task.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryTask.PropertiesForSerializationAttributes">
@@ -2942,6 +3202,11 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.DirectoryListTask">
+            <summary>
+            A DirectoryListTask allows searching a directory (or directories) for files. Each result is stored in the macro list as full paths to the file with a macro prefix.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.DirectoryListTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -2951,6 +3216,12 @@
             <summary>
             Gets the xml name of the command to determine the task instance type.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.DirectoryListTask.MacroPrefix">
+            <summary>
+            The prefix to save the file search results macros as.
+            </summary>
+            <remarks>For example, if MacroPrefix = "the_search_result", and there were 5 file results, then there would be 5 macros created with the names "the_search_result_N"</remarks>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.DirectoryListTask.PropertiesForSerializationAttributes">
             <summary>
@@ -12014,7 +12285,7 @@
         </member>
         <member name="M:RelhaxModpack.Utilities.FileUtils.FileSearch(System.String,System.IO.SearchOption,System.Boolean,System.Boolean,System.String,System.UInt32,System.UInt32,System.Boolean)">
             <summary>
-            Return a list of files from a directory
+            Return a list of files from a directory, including their paths.
             </summary>
             <param name="directoryPath">The directory to search for files</param>
             <param name="option">Specifies to search this top directory or subdirectories to the Directory.GetFiles() method</param>
