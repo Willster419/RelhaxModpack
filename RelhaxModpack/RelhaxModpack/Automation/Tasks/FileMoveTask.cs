@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A FileMoveTask will allow a file to be moved within a single volume by modification of the file table rather then a copy.
+    /// </summary>
     public class FileMoveTask : FileDestinationTask
     {
         /// <summary>
@@ -20,6 +23,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// Flag to indicate if the file move was successful.
+        /// </summary>
         protected bool fileMoveResult;
 
         #region Task execution

@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Loads a package database from the default or a custom location.
+    /// </summary>
     public class LoadDatabaseTask : DatabaseTask, IDatabaseTask, IXmlSerializable
     {
         /// <summary>
@@ -21,6 +24,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The response code of loading the database.
+        /// </summary>
         protected DatabaseLoadFailCode failCode;
 
         #region Xml serialization

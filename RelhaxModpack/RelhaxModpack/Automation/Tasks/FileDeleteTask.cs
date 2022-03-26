@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A FileDeleteTask will delete a file at a given path.
+    /// </summary>
     public class FileDeleteTask : FileSourceTask
     {
         /// <summary>
@@ -19,6 +22,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// Flag to indicate if the delete operation completed successfully.
+        /// </summary>
         protected bool fileDeleteResult;
 
         #region Task execution

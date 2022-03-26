@@ -8,8 +8,14 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A FileSourceTask provides an implementation for file tasks that have a source.
+    /// </summary>
     public abstract class FileSourceTask : AutomationTask, IXmlSerializable
     {
+        /// <summary>
+        /// The path to the source file.
+        /// </summary>
         public string SourceFilePath { get; set; } = string.Empty;
 
         #region Xml Serialization

@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A FileCopyTask allows for the copy of a single file from source to destination.
+    /// </summary>
     public class FileCopyTask : FileDestinationTask, ICancelOperation
     {
         /// <summary>
@@ -21,10 +24,19 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// Flag to indicate if the copy operation was successful.
+        /// </summary>
         protected bool fileCopyResult;
 
+        /// <summary>
+        /// The implementation to copy the source file to the destination path, keeping metadata information.
+        /// </summary>
         protected FileCopier fileCopier;
 
+        /// <summary>
+        /// The implementation to provide progress updates to subscribed listeners.
+        /// </summary>
         protected Progress<RelhaxProgress> copyProgress;
 
         /// <summary>

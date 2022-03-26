@@ -9,10 +9,19 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A FileDestinationTask provides an implementation for file tasks that have a destination.
+    /// </summary>
     public abstract class FileDestinationTask : FileSourceTask, IXmlSerializable
     {
+        /// <summary>
+        /// The path to the destination file.
+        /// </summary>
         public string DestinationFilePath { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Flag to indicate if the file at the destination path (if it existed) was deleted successfully.
+        /// </summary>
         protected bool destinationDeleteResult = true;
 
         #region Xml Serialization

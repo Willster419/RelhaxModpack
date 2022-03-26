@@ -9,16 +9,35 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Provides an implementation for working with a property of a DatabasePackage.
+    /// </summary>
     public abstract class DatabasePackagePropertyTask : DatabasePackageTask
     {
+        /// <summary>
+        /// The name of the property to access.
+        /// </summary>
         public string PropertyName { get; set; }
 
+        /// <summary>
+        /// The UID of the DatabasePackage to access.
+        /// </summary>
+        /// <remarks>If the value of this argument is "this", then it will use the UID of this sequence's DatabasePackage.</remarks>
         public string TargetPackageUID { get; set; } = "this";
 
+        /// <summary>
+        /// The DatabasePackage object to access.
+        /// </summary>
         protected DatabasePackage targetPackage;
 
+        /// <summary>
+        /// The type of the targetPackage.
+        /// </summary>
         protected Type packageType;
 
+        /// <summary>
+        /// The metadata of the property to access.
+        /// </summary>
         protected PropertyInfo property;
 
         #region Xml serialization
@@ -45,6 +64,10 @@ namespace RelhaxModpack.Automation.Tasks
             PreProcessTargetProperty();
         }
 
+        /// <summary>
+        /// Attempts to retrieve the target package by the TargetPackageUID task argument.
+        /// </summary>
+        /// <seealso cref="TargetPackageUID"/>
         protected virtual void PreProcessTargetPackage()
         {
             //check that the target package exists
@@ -58,6 +81,10 @@ namespace RelhaxModpack.Automation.Tasks
             }
         }
 
+        /// <summary>
+        /// Attempts to retrieve the target property metadata of the target package by the PropertyName task argument.
+        /// </summary>
+        /// <seealso cref="PropertyName"/>
         protected virtual void PreProcessTargetProperty()
         {
             if (targetPackage != null)

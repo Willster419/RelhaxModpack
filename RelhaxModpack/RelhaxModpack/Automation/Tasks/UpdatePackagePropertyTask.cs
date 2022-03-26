@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Allows a database's property value to be updated with a value given from the PropertyValue argument.
+    /// </summary>
     public class UpdatePackagePropertyTask : DatabasePackagePropertyTask
     {
         /// <summary>
@@ -22,8 +25,14 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The value to update the property with.
+        /// </summary>
         public string PropertyValue { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Flag to indicate if the property was successfully updated.
+        /// </summary>
         protected bool propertySet;
 
         #region Xml serialization

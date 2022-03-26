@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Retrieves a string representation of a property of a package. If the property is a list of array, then retrieve the given index.
+    /// </summary>
+    /// <remarks>A great use of this is to get the developer URL at a specific index for where to check for package updates.</remarks>
     public class RetrievePackagePropertyTask : DatabasePackagePropertyTask
     {
         /// <summary>
@@ -19,12 +23,25 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The name of the macro to create with the retrieved value.
+        /// </summary>
         public string MacroSaveName { get; set; }
 
+        /// <summary>
+        /// The index into the property array to retrieve the value.
+        /// </summary>
         public string PropertyIndex { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Flag to indicate of the value of the property of the package was successfully retrieved.
+        /// </summary>
         protected bool propertyGot;
 
+        /// <summary>
+        /// Parsed result of the argument PropertyIndex.
+        /// </summary>
+        /// <seealso cref="PropertyIndex"/>
         protected int propertyIndex;
 
         #region Xml serialization

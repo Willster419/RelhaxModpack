@@ -7,14 +7,29 @@ using System;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A DatabaseTask provides an implementation for managing the loaded package database.
+    /// </summary>
     public abstract class DatabaseTask : AutomationTask, IDatabaseTask, IXmlSerializable
     {
+        /// <summary>
+        /// A custom location to use for loading or saving a database. This corresponds to the root database file, "database.xml".
+        /// </summary>
         public string CustomDatabasePath { get; set; } = string.Empty;
 
+        /// <summary>
+        /// The database manager to load or save the database.
+        /// </summary>
         protected DatabaseManager DatabaseManager { get { return AutomationSequence.DatabaseManager; } }
 
+        /// <summary>
+        /// Flag to indicate if the task argument CustomDatabasePath was parsed to a null or empty string (an error with the macros).
+        /// </summary>
         bool customPathMacroError = false;
 
+        /// <summary>
+        /// Flag to indicate if the CustomDatabasePath task argument should be used for loading or saving the database.
+        /// </summary>
         protected bool useCustomPath = false;
 
         #region Xml serialization

@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A FileCompareTask allows for an MD5 comparison of two files to determine their contents are equal.
+    /// </summary>
+    /// <remarks>If the files are found to not be equal, the comparison is reported as type NoMatchStop. Great for configuration files that have patches written for, that should be manually inspected when they change.</remarks>
+    /// <seealso cref="AutomationCompareMode"/>
     public class FileCompareInverseTask : FileCompareTask, IXmlSerializable
     {
         /// <summary>

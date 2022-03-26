@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A FileExistsTask will ensure that a file exists at a given location.
+    /// </summary>
     public class FileExistsTask : FileSourceTask, IXmlSerializable
     {
         /// <summary>

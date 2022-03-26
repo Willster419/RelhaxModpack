@@ -7,10 +7,19 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A DatabasePackageTask provides a framework for handling of the current DatabasePackage, and access to the list of loaded packages.
+    /// </summary>
     public abstract class DatabasePackageTask : AutomationTask
     {
+        /// <summary>
+        /// Get the DatabasePackage associated with this automation sequence.
+        /// </summary>
         public DatabasePackage DatabasePackage { get { return AutomationSequence.Package; } }
 
+        /// <summary>
+        /// Get the list of loaded database packages.
+        /// </summary>
         public List<DatabasePackage> DatabasePackages { get { return AutomationSequence.DatabasePackages; } }
 
         #region Task execution

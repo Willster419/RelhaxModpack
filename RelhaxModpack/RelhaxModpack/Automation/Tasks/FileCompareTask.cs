@@ -11,6 +11,11 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A FileCompareTask allows for an MD5 comparison of two files to determine their contents are equal.
+    /// </summary>
+    /// <remarks>If the files are found to not be equal, the comparison is reported as type NoMatchContinue. Great for wotmod or resource files that may need an update for a new client patch.</remarks>
+    /// <seealso cref="AutomationCompareMode"/>
     public class FileCompareTask : AutomationTask, IXmlSerializable, ICancelOperation
     {
         /// <summary>
@@ -18,16 +23,34 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public const string TaskCommandName = "file_compare";
 
-        public override string Command { get {return TaskCommandName;} }
+        /// <summary>
+        /// Gets the xml name of the command to determine the task instance type.
+        /// </summary>
+        public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The path to file A for comparison.
+        /// </summary>
         public string FileA { get; set; }
 
+        /// <summary>
+        /// The path to file B for comparison.
+        /// </summary>
         public string FileB { get; set; }
 
+        /// <summary>
+        /// The implementation to compare the two files.
+        /// </summary>
         protected FileHashComparer fileHashComparer;
 
+        /// <summary>
+        /// The calculated MD5 hash values of each file.
+        /// </summary>
         protected string fileAHash, fileBHash = string.Empty;
 
+        /// <summary>
+        /// The implementation to provide progress updates to subscribed listeners.
+        /// </summary>
         protected Progress<RelhaxProgress> calculationProgress;
 
         /// <summary>
