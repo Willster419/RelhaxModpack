@@ -39,7 +39,7 @@ namespace RelhaxModpack.UI
         /// <summary>
         /// Gets or sets the selected index property in the base class without invoking the selectionChanged event
         /// </summary>
-        /// <seealso cref="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
+        /// <seealso href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
         public new int SelectedIndex
         {
             get
@@ -56,7 +56,7 @@ namespace RelhaxModpack.UI
         /// <summary>
         /// Gets or sets the selected item property in the base class without invoking the selectionChanged event
         /// </summary>
-        /// <seealso cref="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
+        /// <seealso href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
         public new object SelectedItem
         {
             get

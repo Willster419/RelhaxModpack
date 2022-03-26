@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Start a compare session by resetting the automation compare manager.
+    /// </summary>
     public class StartCompareTask : AutomationTask
     {
         /// <summary>

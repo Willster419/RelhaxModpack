@@ -7,6 +7,9 @@ using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// End a compare session by closing the automation compare manager.
+    /// </summary>
     public class EndCompareTask : AutomationTask
     {
         /// <summary>
