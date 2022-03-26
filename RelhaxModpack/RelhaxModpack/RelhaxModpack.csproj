@@ -199,7 +199,6 @@
     <Compile Include="Automation\HtmlBrowserParser.cs" />
     <Compile Include="Automation\HtmlWebscrapeParser.cs" />
     <Compile Include="Automation\ICancelOperation.cs" />
-    <Compile Include="Automation\Tasks\IDatabaseTask.cs" />
     <Compile Include="Automation\Tasks\IHtmlParseTask.cs" />
     <Compile Include="Automation\Tasks\ImportTask.cs" />
     <Compile Include="Automation\Tasks\LoadDatabaseTask.cs" />
