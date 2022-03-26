@@ -560,7 +560,7 @@ namespace RelhaxModpack.Utilities
         }
 
         /// <summary>
-        /// Return a list of files from a directory
+        /// Return a list of files from a directory, including their paths.
         /// </summary>
         /// <param name="directoryPath">The directory to search for files</param>
         /// <param name="option">Specifies to search this top directory or subdirectories to the Directory.GetFiles() method</param>
