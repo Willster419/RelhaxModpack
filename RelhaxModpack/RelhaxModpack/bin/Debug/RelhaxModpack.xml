@@ -2971,6 +2971,11 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.EndCompareTask">
+            <summary>
+            End a compare session by closing the automation compare manager.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.EndCompareTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -4674,6 +4679,11 @@
         <member name="M:RelhaxModpack.Automation.Tasks.StartBrowserSessionTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.StartCompareTask">
+            <summary>
+            Start a compare session by resetting the automation compare manager.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Automation.Tasks.StartCompareTask.TaskCommandName">
@@ -10466,13 +10476,13 @@
             <summary>
             Gets or sets the selected index property in the base class without invoking the selectionChanged event
             </summary>
-            <seealso cref="!:https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
+            <seealso href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
         </member>
         <member name="P:RelhaxModpack.UI.RelhaxWPFComboBox.SelectedItem">
             <summary>
             Gets or sets the selected item property in the base class without invoking the selectionChanged event
             </summary>
-            <seealso cref="!:https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
+            <seealso href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
         </member>
         <member name="E:RelhaxModpack.UI.RelhaxWPFComboBox.SelectionCommitted">
             <summary>
