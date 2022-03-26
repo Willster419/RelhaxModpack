@@ -12,7 +12,7 @@ namespace RelhaxModpack.Automation.Tasks
     /// <summary>
     /// Loads a package database from the default or a custom location.
     /// </summary>
-    public class LoadDatabaseTask : DatabaseTask, IDatabaseTask, IXmlSerializable
+    public class LoadDatabaseTask : DatabaseTask, IXmlSerializable
     {
         /// <summary>
         /// The xml name of this command.

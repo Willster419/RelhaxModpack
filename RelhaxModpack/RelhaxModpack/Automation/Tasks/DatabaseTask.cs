@@ -10,7 +10,7 @@ namespace RelhaxModpack.Automation.Tasks
     /// <summary>
     /// A DatabaseTask provides an implementation for managing the loaded package database.
     /// </summary>
-    public abstract class DatabaseTask : AutomationTask, IDatabaseTask, IXmlSerializable
+    public abstract class DatabaseTask : AutomationTask, IXmlSerializable
     {
         /// <summary>
         /// A custom location to use for loading or saving a database. This corresponds to the root database file, "database.xml".

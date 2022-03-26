@@ -11,7 +11,7 @@ namespace RelhaxModpack.Automation.Tasks
     /// <summary>
     /// Saves a package database from the default or a custom location.
     /// </summary>
-    public class SaveDatabaseTask : DatabaseTask, IDatabaseTask, IXmlSerializable
+    public class SaveDatabaseTask : DatabaseTask, IXmlSerializable
     {
         /// <summary>
         /// The xml name of this command.
