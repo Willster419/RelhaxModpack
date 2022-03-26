@@ -3474,9 +3474,15 @@
             Validates that all task arguments are correct and the task is initialized correctly to execute.
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Automation.Tasks.IDownloadTask">
+        <member name="T:RelhaxModpack.Automation.Tasks.IHtmlParseTask">
             <summary>
-            A task that implements this interface implies that it will always have a destination location for the resultant file
+            An interface that requires the implementing task to use properties needed for HtmlPath navigation.
+            </summary>
+            <remarks>HtmlPath navigation is used across multiple abstract parent classes of AutomationTask, and this ensures they all use the same argument names.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.IHtmlParseTask.HtmlPath">
+            <summary>
+            The HtmlPath argument to use for parsing.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Automation.Tasks.ImportTask">
