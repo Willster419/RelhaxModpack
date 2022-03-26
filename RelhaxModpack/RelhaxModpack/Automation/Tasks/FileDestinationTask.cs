@@ -52,7 +52,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// <summary>
         /// Runs the main feature of the task.
         /// </summary>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task RunTask()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             string directoryPath = Path.GetDirectoryName(DestinationFilePath);
             Logging.Info("Checking if destination folder {0} already exists", directoryPath);

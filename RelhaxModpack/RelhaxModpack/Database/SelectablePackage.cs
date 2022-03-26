@@ -109,7 +109,9 @@ namespace RelhaxModpack.Database
             nameof(ShowInSearchList),
             nameof(Medias),
             nameof(UserFiles),
+#pragma warning disable CS0618 // Type or member is obsolete
             nameof(ConflictingPackages),
+#pragma warning restore CS0618 // Type or member is obsolete
             nameof(Dependencies),
             nameof(Packages)
         };
@@ -141,7 +143,9 @@ namespace RelhaxModpack.Database
                 new XmlDatabaseProperty() { XmlName = nameof(ShowInSearchList), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ShowInSearchList) },
                 new XmlDatabaseProperty() { XmlName = nameof(Medias), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Medias) },
                 new XmlDatabaseProperty() { XmlName = nameof(UserFiles), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(UserFiles) },
+#pragma warning disable CS0618 // Type or member is obsolete
                 new XmlDatabaseProperty() { XmlName = nameof(ConflictingPackages), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ConflictingPackages) },
+#pragma warning restore CS0618 // Type or member is obsolete
                 new XmlDatabaseProperty() { XmlName = nameof(Dependencies), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Dependencies) },
                 new XmlDatabaseProperty() { XmlName = nameof(Packages), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Packages) },
             };
@@ -208,9 +212,11 @@ namespace RelhaxModpack.Database
         {
             base.OnFinishedLoadingFromXml(propertyElement, loadStatus);
 
+#pragma warning disable CS0618 // Type or member is obsolete
             if (!string.IsNullOrEmpty(ConflictingPackages) && ConflictingPackagesNew.Count == 0)
             {
                 string[] conflictingPackagesByPackageName = ConflictingPackages.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+#pragma warning restore CS0618 // Type or member is obsolete
 
                 foreach (string conflictingPackageName in conflictingPackagesByPackageName)
                 {
@@ -254,12 +260,16 @@ namespace RelhaxModpack.Database
                 {
                     //need to convert the entries of conflictingPackages to the simple packageName format
                     string[] conflictingPackagesByPackagename = this.ConflictingPackagesProcessed.Select(conf => conf.PackageName).ToArray();
+#pragma warning disable CS0618 // Type or member is obsolete
                     ConflictingPackages = string.Join(",", conflictingPackagesByPackagename);
+#pragma warning restore CS0618 // Type or member is obsolete
                 }
                 else if (loadedConflictingPackagesSchemaIsOld && !targetConflictingPackagesSchemaIsOld)
                 {
                     //need to remove the old xml entry for conflicting packages and replace it with our new one
+#pragma warning disable CS0618 // Type or member is obsolete
                     XElement element = propertyElement.Elements().ToList().Find(elementToFind => elementToFind.Name.LocalName.ToLower().Equals(nameof(ConflictingPackages).ToLower()));
+#pragma warning restore CS0618 // Type or member is obsolete
                     if (element != null)
                         element.Remove();
                 }

@@ -2459,7 +2459,9 @@ namespace RelhaxModpack.Windows
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
+#pragma warning disable CS0618 // Type or member is obsolete
                 new XElement("mods", new XAttribute("ver", ApplicationConstants.ConfigFileVersion2V0),
+#pragma warning restore CS0618 // Type or member is obsolete
                 new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
                 new XAttribute("dbVersion", DatabaseVersion),

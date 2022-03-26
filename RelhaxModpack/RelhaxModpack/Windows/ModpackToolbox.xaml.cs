@@ -2336,6 +2336,7 @@ namespace RelhaxModpack.Windows
         {
             string[] rootFoldersToReplace = new string[]
             {
+#pragma warning disable CS0618 // Type or member is obsolete
                 ApplicationConstants.PatchFolderName,
                 ApplicationConstants.ShortcutFolderName,
                 ApplicationConstants.XmlUnpackFolderName,
@@ -2349,6 +2350,7 @@ namespace RelhaxModpack.Windows
                 ApplicationConstants.XmlUnpackFolderName,
                 ApplicationConstants.AtlasCreationFoldername,
                 ApplicationConstants.ReadmeFromZipfileFolderName
+#pragma warning restore CS0618 // Type or member is obsolete
             };
 
             string[] xpathToTestFor = new string[]

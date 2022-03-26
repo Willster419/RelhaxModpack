@@ -17,7 +17,9 @@ namespace RelhaxModpack.Automation
         /// <summary>
         /// Occurs when download progress of a file has changed.
         /// </summary>
+#pragma warning disable CS0067
         public event BrowserSessionManagerDelegate DownloadProgress;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Occurs when a web page has been fully downloaded and rendered by the browser.
