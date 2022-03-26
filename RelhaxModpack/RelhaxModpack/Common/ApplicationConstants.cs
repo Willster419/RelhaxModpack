@@ -51,6 +51,7 @@ namespace RelhaxModpack.Common
         /// The filename to save the self updater script as.
         /// </summary>
         /// <remarks>
+        /// The server stores it as a text file that we write as a batch file.
         /// Something something downloading batch files is scary to anti-virus.
         /// </remarks>
         /// <seealso cref="RelicBatchUpdateScriptServer"/>
