@@ -686,6 +686,24 @@ namespace RelhaxModpack
         {
             //toggle buttons and reset UI
             ResetUI();
+
+            //POST MODPACK SHUTDOWN: check time and if it's passed the date, then show the shutdown message
+            DateTime currentDate = DateTime.Now;
+            //note hour needs to be 24 hour format
+            DateTime shutdownDate = new DateTime(2022, 4, 20, 16, 20, 0);
+            int result = DateTime.Compare(currentDate, shutdownDate);
+            if (result > 0)
+            {
+                //POST MODPACK SHUTDOWN: if sender is null, then it's called from some automated script function. ignore it
+                if (sender == null)
+                    return;
+
+                //POST MODPACK SHUTDOWN: display the end of life banner and exit
+                EndOfLife eol = new EndOfLife(this.ModpackSettings);
+                _ = eol.ShowDialog();
+                return;
+            }
+
             ToggleUIButtons(false);
 
             if (ModpackSettings.InformIfApplicationInDownloadsFolder)
