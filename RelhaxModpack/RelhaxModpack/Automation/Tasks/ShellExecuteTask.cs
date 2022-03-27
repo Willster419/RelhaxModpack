@@ -14,6 +14,9 @@ using ThreadState = System.Threading.ThreadState;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// A ShellExecuteTask allows the launching of a shell process to run any command.
+    /// </summary>
     public class ShellExecuteTask : AutomationTask, IXmlSerializable, ICancelOperation
     {
         /// <summary>
@@ -26,20 +29,45 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The command arguments sent into the shell process.
+        /// </summary>
         public string Cmd { get; set; } = string.Empty;
 
+        /// <summary>
+        /// The working directory where the shell will launch from.
+        /// </summary>
         public string Wd { get; set; } = string.Empty;
 
+        /// <summary>
+        /// The binary file or shell command to execute.
+        /// </summary>
+        /// <remarks>This can either be an executable (with or without path) specified in your PATH environment variable, or an absolute path to an executable.</remarks>
         public string Filename { get; set; } = string.Empty;
 
+        /// <summary>
+        /// The process reference.
+        /// </summary>
         protected Process process = null;
 
+        /// <summary>
+        /// The process start info reference.
+        /// </summary>
         protected ProcessStartInfo startInfo = null;
 
+        /// <summary>
+        /// Flag to indicate if the process was able to launch.
+        /// </summary>
         protected bool processStarted = false;
 
+        /// <summary>
+        /// Flag to indicate if the process was able to close without error. This does NOT include the return code from the process.
+        /// </summary>
         protected bool processCompleted = false;
 
+        /// <summary>
+        /// The returned exit code from the shell process.
+        /// </summary>
         protected int exitCode;
 
         #region Xml serialization
