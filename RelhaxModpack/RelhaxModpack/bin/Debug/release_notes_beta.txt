@@ -1,3 +1,14 @@
+# Application version 1.4.1.1 (2022-03-26)
+https://www.virustotal.com/gui/file/a5f0656c9d44f31605261241613b4e38e515594689a419ba1ac4607c387d81a1?nocache=1
+
+## The Relhax Modpack will be closing on April 20th, 2022. Thank you to all our volunteers and users for over 5 years of success!
+
+- Fixed a bug with the language selection not saving.
+- Fixed a bug with the language selection not being displayed on application first launch (when the settings file is deleted).
+- Minor code refactoring and optimizations.
+- Updated documentation.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Application version 1.4.1.0 (2022-03-08)
 https://www.virustotal.com/gui/file/79db977e31acdbf7d6ecd6c7eefd5103f4ed63072f78e2ab14e518bb20794bd1
 
