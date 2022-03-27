@@ -3079,29 +3079,32 @@ namespace RelhaxModpack
             //the event should not fire if it's loading. loading boolean set in window loading event takes care of this
             if (loading)
                 return;
+            Languages selectedLanguage = Languages.English;
 
             switch (LanguagesSelector.SelectedItem as string)
             {
                 case Translations.LanguageEnglish:
-                    Translations.SetLanguage(Languages.English);
+                    selectedLanguage = Languages.English;
                     break;
                 case Translations.LanguageFrench:
-                    Translations.SetLanguage(Languages.French);
+                    selectedLanguage = Languages.French;
                     break;
                 case Translations.LanguageGerman:
-                    Translations.SetLanguage(Languages.German);
+                    selectedLanguage = Languages.German;
                     break;
                 case Translations.LanguagePolish:
-                    Translations.SetLanguage(Languages.Polish);
+                    selectedLanguage = Languages.Polish;
                     break;
                 case Translations.LanguageRussian:
-                    Translations.SetLanguage(Languages.Russian);
+                    selectedLanguage = Languages.Russian;
                     break;
                 case Translations.LanguageSpanish:
-                    Translations.SetLanguage(Languages.Spanish);
+                    selectedLanguage = Languages.Spanish;
                     break;
             }
 
+            Translations.SetLanguage(selectedLanguage);
+            this.ModpackSettings.Language = selectedLanguage;
             Translations.LocalizeWindow(this, true);
             ApplyCustomUILocalizations();
         }

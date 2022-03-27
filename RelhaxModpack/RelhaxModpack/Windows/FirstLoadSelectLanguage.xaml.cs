@@ -70,6 +70,7 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Error("failed to parse language form button name: {0}", buttonLanguage);
             }
+            this.ModpackSettings.Language = language;
             Translations.SetLanguage(language);
             Translations.LocalizeWindow(this, false);
         }
