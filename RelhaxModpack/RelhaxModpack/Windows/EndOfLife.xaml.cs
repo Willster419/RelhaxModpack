@@ -45,8 +45,8 @@ namespace RelhaxModpack.Windows
             endOfLifeTextbox.Text = creditsBuilder.ToString();
 
             //set other UI components
-            WoTForumAnnouncementsTextBlock.Text = Translations.GetTranslatedString(nameof(WoTForumAnnouncementsTextBlock));
-            CloseWindowButton.Content = Translations.GetTranslatedString(nameof(WoTForumAnnouncementsTextBlock));
+            WoTForumAnnouncementsTextBlock.Text = Translations.GetTranslatedString(nameof(WoTForumAnnouncementsTextBlock)) + "  ";
+            CloseWindowButton.Content = Translations.GetTranslatedString(nameof(CloseWindowButton));
         }
 
         private void CloseWindowButton_Click(object sender, RoutedEventArgs e)
