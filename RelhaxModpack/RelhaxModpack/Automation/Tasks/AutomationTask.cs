@@ -44,28 +44,41 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public static Dictionary<string, Type> TaskTypeMapper { get; } = new Dictionary<string, Type>()
         {
+            //download tasks
             { DownloadStaticTask.TaskCommandName, typeof(DownloadStaticTask) },
             { DownloadHtmlTask.TaskCommandName, typeof(DownloadHtmlTask) },
             { DownloadBrowserTask.TaskCommandName, typeof(DownloadBrowserTask) },
-            { ShellExecuteTask.TaskCommandName, typeof(ShellExecuteTask) },
+
+            //database tasks (load/save)
             { LoadDatabaseTask.TaskCommandName, typeof(LoadDatabaseTask) },
             { SaveDatabaseTask.TaskCommandName, typeof(SaveDatabaseTask) },
+
+            //package transfer tasks
             { PackageDownloadTask.TaskCommandName, typeof(PackageDownloadTask) },
             { PackageUploadTask.TaskCommandName, typeof(PackageUploadTask) },
-            { FileCompareTask.TaskCommandName, typeof(FileCompareTask) },
-            { FileCompareInverseTask.TaskCommandName, typeof(FileCompareInverseTask) },
+
+            //package property tasks
+            { UpdatePackagePropertyTask.TaskCommandName, typeof(UpdatePackagePropertyTask) },
+            { RetrievePackagePropertyTask.TaskCommandName, typeof(RetrievePackagePropertyTask) },
+
+            //file tasks
             { FileCopyTask.TaskCommandName, typeof(FileCopyTask) },
             { FileDeleteTask.TaskCommandName, typeof(FileDeleteTask) },
             { FileMoveTask.TaskCommandName, typeof(FileMoveTask) },
-            { TaskImportTask.TaskCommandName, typeof(TaskImportTask) },
-            { MacroImportTask.TaskCommandName, typeof(MacroImportTask) },
+            { FileExistsTask.TaskCommandName, typeof(FileExistsTask) },
+
+            //compare tasks
             { StartCompareTask.TaskCommandName, typeof(StartCompareTask) },
             { EndCompareTask.TaskCommandName, typeof(EndCompareTask) },
-            { UpdatePackagePropertyTask.TaskCommandName, typeof(UpdatePackagePropertyTask) },
-            { RetrievePackagePropertyTask.TaskCommandName, typeof(RetrievePackagePropertyTask) },
+            { FileCompareTask.TaskCommandName, typeof(FileCompareTask) },
+            { FileCompareInverseTask.TaskCommandName, typeof(FileCompareInverseTask) },
+            { DirectoryCompareTask.TaskCommandName, typeof(DirectoryCompareTask) },
+            { DirectoryCompareCountTask.TaskCommandName, typeof(DirectoryCompareCountTask) },
+            { DirectoryCompareInverseTask.TaskCommandName, typeof(DirectoryCompareInverseTask) },
+
+            //macro tasks
             { MacroDeleteTask.TaskCommandName, typeof(MacroDeleteTask) },
             { MacroCreateTask.TaskCommandName, typeof(MacroCreateTask) },
-            { DirectoryCreateTask.TaskCommandName, typeof(DirectoryCreateTask) },
             { MacroStringSplitMacroTask.TaskCommandName, typeof(MacroStringSplitMacroTask) },
             { MacroStringSplitFilenameTask.TaskCommandName, typeof(MacroStringSplitFilenameTask) },
             { MacroStringSplitHtmlTask.TaskCommandName, typeof(MacroStringSplitHtmlTask) },
@@ -74,15 +87,16 @@ namespace RelhaxModpack.Automation.Tasks
             { MacroSubstringFilenameTask.TaskCommandName, typeof(MacroSubstringFilenameTask) },
             { MacroSubstringHtmlTask.TaskCommandName, typeof(MacroSubstringHtmlTask) },
             { MacroSubstringBrowserTask.TaskCommandName, typeof(MacroSubstringBrowserTask) },
+            { MacroStringInputMacroJsonTask.TaskCommandName, typeof(MacroStringInputMacroJsonTask) },
+
+            //directory tasks
+            { DirectoryCreateTask.TaskCommandName, typeof(DirectoryCreateTask) },
             { DirectoryListTask.TaskCommandName, typeof(DirectoryListTask) },
             { DirectoryCopyTask.TaskCommandName, typeof(DirectoryCopyTask) },
             { DirectoryDeleteTask.TaskCommandName, typeof(DirectoryDeleteTask) },
-            { DirectoryCompareTask.TaskCommandName, typeof(DirectoryCompareTask) },
-            { DirectoryCompareCountTask.TaskCommandName, typeof(DirectoryCompareCountTask) },
-            { DirectoryCompareInverseTask.TaskCommandName, typeof(DirectoryCompareInverseTask) },
-            { FileExistsTask.TaskCommandName, typeof(FileExistsTask) },
-            { MacroStringInputMacroJsonTask.TaskCommandName, typeof(MacroStringInputMacroJsonTask) },
             { DirectoryMoveTask.TaskCommandName, typeof(DirectoryMoveTask) },
+
+            //browser session tasks
             { StartBrowserSessionTask.TaskCommandName, typeof(StartBrowserSessionTask) },
             { EndBrowserSessionTask.TaskCommandName, typeof(EndBrowserSessionTask) },
             { BrowserSessionSetHeaderTask.TaskCommandName, typeof(BrowserSessionSetHeaderTask) },
@@ -90,6 +104,13 @@ namespace RelhaxModpack.Automation.Tasks
             { BrowserSessionGetTask.TaskCommandName, typeof(BrowserSessionGetTask) },
             { BrowserSessionPostTask.TaskCommandName, typeof(BrowserSessionPostTask) },
             { BrowserSessionDownloadFileTask.TaskCommandName, typeof(BrowserSessionDownloadFileTask) },
+
+            //automation import tasks
+            { TaskImportTask.TaskCommandName, typeof(TaskImportTask) },
+            { MacroImportTask.TaskCommandName, typeof(MacroImportTask) },
+
+            //other tasks
+            { ShellExecuteTask.TaskCommandName, typeof(ShellExecuteTask) }
         };
 
         /// <summary>
