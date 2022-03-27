@@ -2087,7 +2087,9 @@ namespace RelhaxModpack
             //Component: SelectLanguagesContinueButton
             // Just a "Continue" button on the bottom. Proceeds to first-run acknowlegements window.
             English.Add("SelectLanguagesContinueButton", English["ContinueButton"]);
+            #endregion
 
+            #region Credits window
             //Component: Credits
             //Application window title
             English.Add("Credits", "Relhax Modpack Credits");
@@ -2189,6 +2191,52 @@ namespace RelhaxModpack
             //Component: conflictingPackageMessagePartE
             //
             English.Add("conflictingPackageMessagePartE", "Please select an option");
+            #endregion
+
+            #region End of Life announcement
+            //Component: EndOfLife
+            //Application window title
+            English.Add("EndOfLife", "Relhax End of Life");
+
+            //Component: endOfLifeMessagePart1
+            // First sentence, main point of the dialog box.
+            English.Add("endOfLifeMessagePart1", "On April 20th, 2022, the Relhax Modpack was shut down. I want to give a personal thank you to all our contributers and users for a successful 5+ years!");
+
+            //Component: endOfLifeMessagePart2a
+            // The rest of the "endOfLifeMessage" messages are my closing statements and thoughts on the modpack.
+            English.Add("endOfLifeMessagePart2a", "On January 1st, 2017, I set a challenge to myself to not only re-create the OMC modpack in a modern UI, but to make the fastest package installation system of any modpack that existed.");
+
+            //Component: endOfLifeMessagePart2b
+            //
+            English.Add("endOfLifeMessagePart2c", "I started as a team of 4, taking 3 members of OMC who wanted to contribute to the project. Over the course of 4 years, I designed, built, and re-built and modpack application from scratch, spending tens of thousands of hours.");
+
+            //Component: endOfLifeMessagePart2c
+            //
+            English.Add("endOfLifeMessagePart2c", "At one point, the team grew to over 8 people from most WoT server regions. During the process, I grew as a programmer, learned about common software practices, and learned about application multi-threading and job optimization.");
+
+            //Component: endOfLifeMessagePart2d
+            //
+            English.Add("endOfLifeMessagePart2d", "I gained experience through the project, and got to interact with a great modding community. It allowed me to contribute back to the Relic Gaming Community, a group I joined in 2014.");
+
+            //Component: endOfLifeMessagePart3a
+            //
+            English.Add("endOfLifeMessagePart3a", "As of this year, I finally finished my design work on the most optimized and efficient installer I could make for the community.");
+
+            //Component: endOfLifeMessagePart3b
+            //
+            English.Add("endOfLifeMessagePart3b", "Seeing the project meet my original goal, and my interest in the game (and the project) dwindling, I decided to close the project.");
+
+            //Component: endOfLifeMessagePart3c
+            //
+            English.Add("endOfLifeMessagePart3c", "It was a hard decision to make, but I did not want to continue to support a project I no longer had the interest to maintain.");
+
+            //Component: endOfLifeMessagePart3d
+            //
+            English.Add("endOfLifeMessagePart3d", "I think it would have reflected poorly on the quality of product, and it would not be fair to end users. I wanted to close the project while it was still in a healthy state.");
+
+            //Component: endOfLifeMessagePart4
+            //
+            English.Add("endOfLifeMessagePart4", "Again, thank you to everyone. It was a fun 5+ years, and I will miss it.");
             #endregion
         }
     }
