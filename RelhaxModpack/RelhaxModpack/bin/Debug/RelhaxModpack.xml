@@ -1752,7 +1752,7 @@
         </member>
         <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.ParseResult">
             <summary>
-            The parsed result from the HtmlPath parser.
+            Control if the result response string should be parsed as an html document.
             </summary>
         </member>
         <member name="P:RelhaxModpack.Automation.Tasks.BrowserSessionParseTask.HtmlPath">
@@ -14119,6 +14119,24 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.EndOfLife">
+            <summary>
+            Interaction logic for EndOfLife.xaml
+            </summary>
+            <summary>
+            EndOfLife
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.EndOfLife.#ctor(RelhaxModpack.Settings.ModpackSettings)">
+            <summary>
+            Create an instance of the EndOfLife window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.EndOfLife.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.HtmlPathSelector">
             <summary>
             Interaction logic for HtmlPathSelector.xaml
@@ -16712,6 +16730,11 @@
             </summary>
             <summary>
             App
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.App.CheckForUpdatesError">
+            <summary>
+            Flag to indicate during the update process if there was an error downloading the update package (manager info zip file).
             </summary>
         </member>
         <member name="F:RelhaxModpack.App.ManagerInfoZipfile">
