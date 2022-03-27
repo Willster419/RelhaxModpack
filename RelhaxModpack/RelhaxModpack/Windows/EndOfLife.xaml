@@ -14,7 +14,7 @@
     </Window.Resources>
     <Grid>
         <TextBox x:Name="endOfLifeTextbox" HorizontalAlignment="Stretch" Margin="10,10,10,42" TextWrapping="Wrap" VerticalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,391,471,10">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Width="400">
             <TextBlock x:Name="WoTForumAnnouncementsTextBlock" TextWrapping="Wrap" Text="WoT forum announcement posts:  "/>
             <ui:RelhaxHyperlink x:Name="WoTForumAnnouncementsLinkNa" URL="http://forum.worldoftanks.com/index.php?/topic/535868-11600-the-relhax-modpack-omc-20-will-be-discontinued-on-april-20th-2022/page__st__1200__pid__13013650#entry13013650" Text="NA" Margin="5,0"/>
             <ui:RelhaxHyperlink x:Name="WoTForumAnnouncementsLinkEuEng" URL="http://forum.worldoftanks.eu/index.php?/topic/623269-11600-the-relhax-modpack-omc-20-will-be-discontinued-on-april-20th-2022/page__st__1260__pid__18916784#entry18916784" Text="EU ENG" Margin="5,0"/>
