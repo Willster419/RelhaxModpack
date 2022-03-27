@@ -4646,6 +4646,11 @@
             Checks if a macro of MacroName already exists, and if so, if it can be overridden.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.PackageDownloadTask">
+            <summary>
+            Downloads a zip file of the sequence's database package entry to disk.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.PackageDownloadTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -4669,6 +4674,31 @@
         <member name="M:RelhaxModpack.Automation.Tasks.PackageDownloadTask.ProcessTaskResults">
             <summary>
             Validate that the task executed without error and any expected output resources were processed correctly.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.PackageTransferTask">
+            <summary>
+            Provides an implementation for transferring database package zip files for the database package of this sequence.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.PackageTransferTask.FilePath">
+            <summary>
+            The path to the file to transfer
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.PackageTransferTask.WoTOnlineFolderVersion">
+            <summary>
+            The FTP folder to upload to on the server.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.PackageTransferTask.WebClient">
+            <summary>
+            The Web client to handle package transfers.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.PackageTransferTask.TransferSuccess">
+            <summary>
+            Flag to indicate if the package transfer was a success or not.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.PackageTransferTask.PropertiesForSerializationAttributes">
@@ -4698,6 +4728,11 @@
             Sends a cancellation request to task's current operation.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.PackageUploadTask">
+            <summary>
+            Uploads a zip file to the sequence's database package entry to the loaded database's online FTP folder.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.PackageUploadTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -4706,6 +4741,11 @@
         <member name="P:RelhaxModpack.Automation.Tasks.PackageUploadTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.PackageUploadTask.ZipFileName">
+            <summary>
+            The name of the zip file to store in the database package entry.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.PackageUploadTask.PropertiesForSerializationAttributes">
@@ -4836,6 +4876,11 @@
             Validate that the task executed without error and any expected output resources were processed correctly.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.ShellExecuteTask">
+            <summary>
+            A ShellExecuteTask allows the launching of a shell process to run any command.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.Tasks.ShellExecuteTask.TaskCommandName">
             <summary>
             The xml name of this command.
@@ -4844,6 +4889,47 @@
         <member name="P:RelhaxModpack.Automation.Tasks.ShellExecuteTask.Command">
             <summary>
             Gets the xml name of the command to determine the task instance type.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.ShellExecuteTask.Cmd">
+            <summary>
+            The command arguments sent into the shell process.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.ShellExecuteTask.Wd">
+            <summary>
+            The working directory where the shell will launch from.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Automation.Tasks.ShellExecuteTask.Filename">
+            <summary>
+            The binary file or shell command to execute.
+            </summary>
+            <remarks>This can either be an executable (with or without path) specified in your PATH environment variable, or an absolute path to an executable.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ShellExecuteTask.process">
+            <summary>
+            The process reference.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ShellExecuteTask.startInfo">
+            <summary>
+            The process start info reference.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ShellExecuteTask.processStarted">
+            <summary>
+            Flag to indicate if the process was able to launch.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ShellExecuteTask.processCompleted">
+            <summary>
+            Flag to indicate if the process was able to close without error. This does NOT include the return code from the process.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Automation.Tasks.ShellExecuteTask.exitCode">
+            <summary>
+            The returned exit code from the shell process.
             </summary>
         </member>
         <member name="M:RelhaxModpack.Automation.Tasks.ShellExecuteTask.PropertiesForSerializationAttributes">
