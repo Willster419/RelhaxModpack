@@ -13,7 +13,7 @@
     <RootNamespace>RelhaxDocumentation</RootNamespace>
     <Name>RelhaxDocumentation</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.6.2</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.8</FrameworkVersion>
     <OutputPath>.\Help\</OutputPath>
     <HtmlHelpName>RelhaxDocumentation</HtmlHelpName>
     <Language>en-US</Language>
@@ -48,18 +48,18 @@
     </NamespaceSummaries>
     <MissingTags>Summary, Parameter, Returns, Value, AutoDocumentCtors, Namespace, TypeParameter, IncludeTargets, AutoDocumentDispose</MissingTags>
     <HelpTitle>Relhax Modpack Documentation</HelpTitle>
-    <HelpFileVersion>1.0.0.5</HelpFileVersion>
+    <HelpFileVersion>1.0.1.0</HelpFileVersion>
     <NamingMethod>MemberName</NamingMethod>
     <ContentPlacement>BelowNamespaces</ContentPlacement>
-    <RootNamespaceContainer>True</RootNamespaceContainer>
+    <RootNamespaceContainer>False</RootNamespaceContainer>
     <RootNamespaceTitle>RelhaxModpack</RootNamespaceTitle>
-    <NamespaceGrouping>False</NamespaceGrouping>
+    <NamespaceGrouping>True</NamespaceGrouping>
     <MaximumGroupParts>3</MaximumGroupParts>
-    <Preliminary>True</Preliminary>
+    <Preliminary>False</Preliminary>
     <FeedbackEMailAddress>info%40relhaxmodpack.com</FeedbackEMailAddress>
     <FeedbackEMailLinkText>info%40relhaxmodpack.com</FeedbackEMailLinkText>
     <SdkLinkTarget>Top</SdkLinkTarget>
-    <CopyrightHref>Copyright %28C%29 2019 Willard Wider</CopyrightHref>
+    <CopyrightHref>Copyright %28C%29 2022 Willard Wider</CopyrightHref>
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Internals, Privates, PublicCompilerGenerated</VisibleItems>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="RelhaxModpack" isExposed="True" xmlns="">
