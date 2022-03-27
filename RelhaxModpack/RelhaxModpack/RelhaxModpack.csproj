@@ -337,6 +337,9 @@
     <Compile Include="Windows\DatabaseAutomationRunner.xaml.cs">
       <DependentUpon>DatabaseAutomationRunner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\EndOfLife.xaml.cs">
+      <DependentUpon>EndOfLife.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\HtmlPathSelector.xaml.cs">
       <DependentUpon>HtmlPathSelector.xaml</DependentUpon>
     </Compile>
@@ -584,6 +587,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\DatabaseEditorTransferWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\EndOfLife.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

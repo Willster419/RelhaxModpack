@@ -1,0 +1,25 @@
+﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.EndOfLife"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:local="clr-namespace:RelhaxModpack.Windows"
+                    xmlns:ui="clr-namespace:RelhaxModpack.UI"
+                    mc:Ignorable="d"
+                    Title="Relhax End of Life" Height="450" Width="800"
+                    MinHeight="300" MinWidth="500" Loaded="RelhaxWindow_Loaded"
+                    ApplyToolTips="False" LocalizeWindow="False" EscapeKeyClosesWindow="True">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
+    <Grid>
+        <TextBox x:Name="endOfLifeTextbox" HorizontalAlignment="Stretch" Margin="10,10,10,42" TextWrapping="Wrap" VerticalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,391,471,10">
+            <TextBlock x:Name="WoTForumAnnouncementsTextBlock" TextWrapping="Wrap" Text="WoT forum announcement posts:  "/>
+            <ui:RelhaxHyperlink x:Name="WoTForumAnnouncementsLinkNa" URL="http://forum.worldoftanks.com/index.php?/topic/535868-11600-the-relhax-modpack-omc-20-will-be-discontinued-on-april-20th-2022/page__st__1200__pid__13013650#entry13013650" Text="NA" Margin="5,0"/>
+            <ui:RelhaxHyperlink x:Name="WoTForumAnnouncementsLinkEuEng" URL="http://forum.worldoftanks.eu/index.php?/topic/623269-11600-the-relhax-modpack-omc-20-will-be-discontinued-on-april-20th-2022/page__st__1260__pid__18916784#entry18916784" Text="EU ENG" Margin="5,0"/>
+            <ui:RelhaxHyperlink x:Name="WoTForumAnnouncementsLinkEuGer" URL="http://forum.worldoftanks.eu/index.php?/topic/624499-116xx-das-relhax-modpack-omc-20-stellt-seinen-dienst-zum-20042022-ein-stand-09032022/page__st__460__pid__18917349#entry18917349" Text="EU GER" Margin="5,0"/>
+        </StackPanel>
+        <Button x:Name="CloseWindowButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="76" Click="CloseWindowButton_Click"/>
+    </Grid>
+</local:RelhaxWindow>
