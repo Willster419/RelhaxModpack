@@ -196,7 +196,7 @@ namespace RelhaxModpack.Common
         /// <summary>
         /// The filename of the selection file used to select default packages upon loading of the package selection list.
         /// </summary>
-        /// <remarks>When loading from a stable or beta database distrobution (so not test mode), it will auto-check these when loading the package selection list window.</remarks>
+        /// <remarks>When loading from a stable or beta database distribution (so not test mode), it will auto-check these when loading the package selection list window.</remarks>
         public const string DefaultCheckedSelectionfile = "default_checked.xml";
 
         /// <summary>
