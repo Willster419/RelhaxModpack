@@ -93,7 +93,6 @@ namespace RelhaxModpack.Utilities
             if (string.IsNullOrEmpty(xmlString))
             {
                 Logging.Exception("Failed to get xml string from Settings.ModInfoZipfile");
-                Application.Current.Shutdown();
                 return null;
             }
 
@@ -125,17 +124,19 @@ namespace RelhaxModpack.Utilities
                 ((App)Application.Current).ManagerInfoZipfile = null;
             }
 
-            using (WebClient client = new WebClient())
+            using (PatientWebClient client = new PatientWebClient() { Timeout = 3 * TO_SECONDS })
             {
                 try
                 {
                     byte[] zipfile = await client.DownloadDataTaskAsync(ApplicationConstants.ManagerInfoURLBigmods);
+                    ((App)Application.Current).CheckForUpdatesError = false;
                     return ZipFile.Read(new MemoryStream(zipfile));
                 }
                 catch(Exception ex)
                 {
                     Logging.Exception("Failed to download managerInfo to memory stream");
                     Logging.Exception(ex.ToString());
+                    ((App)Application.Current).CheckForUpdatesError = true;
                     return null;
                 }
             }

@@ -2090,6 +2090,12 @@ namespace RelhaxModpack
                 Logging.Info("Application up to date");
                 return true;
             }
+            else if (outOfDate && ((App)Application.Current).CheckForUpdatesError)
+            {
+                Logging.Error("Application not up to date, it failed to check for updates.");
+                //MODPACK POST-SHUTDOWN: if the domain is down or the site can't be reached, then continue anyways
+                return true;
+            }
             else
             {
                 Logging.Info("Application not up to date");

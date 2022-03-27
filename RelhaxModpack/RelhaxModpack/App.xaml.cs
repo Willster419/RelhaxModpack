@@ -30,6 +30,11 @@ namespace RelhaxModpack
         private ModpackSettings modpackSettings;
 
         /// <summary>
+        /// Flag to indicate during the update process if there was an error downloading the update package (manager info zip file).
+        /// </summary>
+        public bool CheckForUpdatesError = false;
+
+        /// <summary>
         /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk. Parsed upon application load.
         /// </summary>
         public Ionic.Zip.ZipFile ManagerInfoZipfile;
