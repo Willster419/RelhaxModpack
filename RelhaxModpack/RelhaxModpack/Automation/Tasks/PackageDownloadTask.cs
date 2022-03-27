@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Downloads a zip file of the sequence's database package entry to disk.
+    /// </summary>
     public class PackageDownloadTask : PackageTransferTask
     {
         /// <summary>

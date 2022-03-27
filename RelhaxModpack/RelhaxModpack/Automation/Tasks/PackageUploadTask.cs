@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Uploads a zip file to the sequence's database package entry to the loaded database's online FTP folder.
+    /// </summary>
     public class PackageUploadTask : PackageTransferTask
     {
         /// <summary>
@@ -22,6 +25,9 @@ namespace RelhaxModpack.Automation.Tasks
         /// </summary>
         public override string Command { get { return TaskCommandName; } }
 
+        /// <summary>
+        /// The name of the zip file to store in the database package entry.
+        /// </summary>
         public string ZipFileName { get; set; } = string.Empty;
 
         #region Xml serialization

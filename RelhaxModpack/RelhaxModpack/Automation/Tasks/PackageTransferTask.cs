@@ -9,14 +9,29 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
+    /// <summary>
+    /// Provides an implementation for transferring database package zip files for the database package of this sequence.
+    /// </summary>
     public abstract class PackageTransferTask : DatabasePackageTask, IXmlSerializable, ICancelOperation
     {
+        /// <summary>
+        /// The path to the file to transfer
+        /// </summary>
         public string FilePath { get; set; } = string.Empty;
 
+        /// <summary>
+        /// The FTP folder to upload to on the server.
+        /// </summary>
         public string WoTOnlineFolderVersion { get { return AutomationSequence.DatabaseManager.WoTOnlineFolderVersion; } }
 
+        /// <summary>
+        /// The Web client to handle package transfers.
+        /// </summary>
         protected WebClient WebClient;
 
+        /// <summary>
+        /// Flag to indicate if the package transfer was a success or not.
+        /// </summary>
         protected bool TransferSuccess = false;
 
         #region Xml serialization
