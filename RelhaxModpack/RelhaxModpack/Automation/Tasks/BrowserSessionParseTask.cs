@@ -13,7 +13,7 @@ namespace RelhaxModpack.Automation.Tasks
     public abstract class BrowserSessionParseTask : BrowserSessionMacroTask, IHtmlParseTask
     {
         /// <summary>
-        /// The parsed result from the HtmlPath parser.
+        /// Control if the result response string should be parsed as an html document.
         /// </summary>
         public string ParseResult { get; set; }
 
