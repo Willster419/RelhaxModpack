@@ -86,7 +86,7 @@ namespace RelhaxModpack
 
             //Component: close
             // Close button used in multiple places.
-            // REFFERERS: GcDownloadStep5CloseText;
+            // REFFERERS: GcDownloadStep5CloseText; CloseWindowButton
             English.Add("close", "Close");
 
             //Component: none
@@ -2198,6 +2198,14 @@ namespace RelhaxModpack
             //Application window title
             English.Add("EndOfLife", "Relhax End of Life");
 
+            //Component: CloseWindowButton
+            //Close button
+            English.Add("CloseWindowButton", English["close"]);
+
+            //Component: WoTForumAnnouncementsTextBlock
+            //Text block at the bottom describing the forum post links
+            English.Add("WoTForumAnnouncementsTextBlock", "WoT forum announcement posts:");
+
             //Component: endOfLifeMessagePart1
             // First sentence, main point of the dialog box.
             English.Add("endOfLifeMessagePart1", "On April 20th, 2022, the Relhax Modpack was shut down. I want to give a personal thank you to all our contributers and users for a successful 5+ years!");
@@ -2208,7 +2216,7 @@ namespace RelhaxModpack
 
             //Component: endOfLifeMessagePart2b
             //
-            English.Add("endOfLifeMessagePart2c", "I started as a team of 4, taking 3 members of OMC who wanted to contribute to the project. Over the course of 4 years, I designed, built, and re-built and modpack application from scratch, spending tens of thousands of hours.");
+            English.Add("endOfLifeMessagePart2b", "I started as a team of 4, taking 3 members of OMC who wanted to contribute to the project. Over the course of 4 years, I designed, built, and re-built and modpack application from scratch, spending tens of thousands of hours.");
 
             //Component: endOfLifeMessagePart2c
             //

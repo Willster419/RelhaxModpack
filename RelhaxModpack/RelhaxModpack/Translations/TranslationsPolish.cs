@@ -650,6 +650,22 @@ namespace RelhaxModpack
             Polish.Add("conflictingPackageMessagePartD", "Zamknięcie tego okna spowoduje automatyczny wybór Opcji B");
             Polish.Add("conflictingPackageMessagePartE", "Którą opcję wybierasz?");
             #endregion
+
+            #region End of Life announcement
+            Polish.Add("EndOfLife", TranslationNeeded);
+            Polish.Add("CloseWindowButton", Polish["close"]);
+            Polish.Add("WoTForumAnnouncementsTextBlock", TranslationNeeded);
+            Polish.Add("endOfLifeMessagePart1", TranslationNeeded);
+            Polish.Add("endOfLifeMessagePart2a", TranslationNeeded);
+            Polish.Add("endOfLifeMessagePart2b", TranslationNeeded);
+            Polish.Add("endOfLifeMessagePart2c", TranslationNeeded);
+            Polish.Add("endOfLifeMessagePart2d", TranslationNeeded);
+            Polish.Add("endOfLifeMessagePart3a", TranslationNeeded);
+            Polish.Add("endOfLifeMessagePart3b", TranslationNeeded);
+            Polish.Add("endOfLifeMessagePart3c", TranslationNeeded);
+            Polish.Add("endOfLifeMessagePart3d", TranslationNeeded);
+            Polish.Add("endOfLifeMessagePart4", TranslationNeeded);
+            #endregion
         }
     }
 }

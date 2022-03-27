@@ -659,6 +659,22 @@ namespace RelhaxModpack
             German.Add("conflictingPackageMessagePartD", TranslationNeeded);
             German.Add("conflictingPackageMessagePartE", TranslationNeeded);
             #endregion
+
+            #region End of Life announcement
+            German.Add("EndOfLife", TranslationNeeded);
+            German.Add("CloseWindowButton", German["close"]);
+            German.Add("WoTForumAnnouncementsTextBlock", TranslationNeeded);
+            German.Add("endOfLifeMessagePart1", TranslationNeeded);
+            German.Add("endOfLifeMessagePart2a", TranslationNeeded);
+            German.Add("endOfLifeMessagePart2b", TranslationNeeded);
+            German.Add("endOfLifeMessagePart2c", TranslationNeeded);
+            German.Add("endOfLifeMessagePart2d", TranslationNeeded);
+            German.Add("endOfLifeMessagePart3a", TranslationNeeded);
+            German.Add("endOfLifeMessagePart3b", TranslationNeeded);
+            German.Add("endOfLifeMessagePart3c", TranslationNeeded);
+            German.Add("endOfLifeMessagePart3d", TranslationNeeded);
+            German.Add("endOfLifeMessagePart4", TranslationNeeded);
+            #endregion
         }
     }
 }

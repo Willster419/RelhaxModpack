@@ -634,6 +634,22 @@ namespace RelhaxModpack
             Russian.Add("conflictingPackageMessagePartD", "Закрытие окна равносильно выбору варианта B.");
             Russian.Add("conflictingPackageMessagePartE", "Выберите действие");
             #endregion
+
+            #region End of Life announcement
+            Russian.Add("EndOfLife", TranslationNeeded);
+            Russian.Add("CloseWindowButton", Russian["close"]);
+            Russian.Add("WoTForumAnnouncementsTextBlock", TranslationNeeded);
+            Russian.Add("endOfLifeMessagePart1", TranslationNeeded);
+            Russian.Add("endOfLifeMessagePart2a", TranslationNeeded);
+            Russian.Add("endOfLifeMessagePart2b", TranslationNeeded);
+            Russian.Add("endOfLifeMessagePart2c", TranslationNeeded);
+            Russian.Add("endOfLifeMessagePart2d", TranslationNeeded);
+            Russian.Add("endOfLifeMessagePart3a", TranslationNeeded);
+            Russian.Add("endOfLifeMessagePart3b", TranslationNeeded);
+            Russian.Add("endOfLifeMessagePart3c", TranslationNeeded);
+            Russian.Add("endOfLifeMessagePart3d", TranslationNeeded);
+            Russian.Add("endOfLifeMessagePart4", TranslationNeeded);
+            #endregion
         }
     }
 }
