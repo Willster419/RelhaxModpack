@@ -636,19 +636,18 @@ namespace RelhaxModpack
             #endregion
 
             #region End of Life announcement
-            Russian.Add("EndOfLife", TranslationNeeded);
-            Russian.Add("CloseWindowButton", Russian["close"]);
-            Russian.Add("WoTForumAnnouncementsTextBlock", TranslationNeeded);
-            Russian.Add("endOfLifeMessagePart1", TranslationNeeded);
-            Russian.Add("endOfLifeMessagePart2a", TranslationNeeded);
-            Russian.Add("endOfLifeMessagePart2b", TranslationNeeded);
-            Russian.Add("endOfLifeMessagePart2c", TranslationNeeded);
-            Russian.Add("endOfLifeMessagePart2d", TranslationNeeded);
-            Russian.Add("endOfLifeMessagePart3a", TranslationNeeded);
-            Russian.Add("endOfLifeMessagePart3b", TranslationNeeded);
-            Russian.Add("endOfLifeMessagePart3c", TranslationNeeded);
-            Russian.Add("endOfLifeMessagePart3d", TranslationNeeded);
-            Russian.Add("endOfLifeMessagePart4", TranslationNeeded);
+            Russian.Add("EndOfLife", "Прекращение поддержки Relhax");
+            Russian.Add("WoTForumAnnouncementsTextBlock", "Из анонса на форуме WoT:");
+            Russian.Add("endOfLifeMessagePart1", "20.04.2022 сервера Relhax Modpack были выключены. Я хочу лично поблагодарить всю нашу команду и пользователей за успешную работу на протяжении более пяти лет!");
+            Russian.Add("endOfLifeMessagePart2a", "01.01.2017 я поставил себе необычную задачу не только воссоздать модпак OMC с современным интерфейсом, но и создать самую быструю систему установки пакетов в сравнении с другими существующими модпаками.");
+            Russian.Add("endOfLifeMessagePart2b", "На первых порах команда состояла из четырёх человек, трое из которых были члены OMC, желавшие внести свой вклад в проект. На протяжении четырёх лет я проектировал, собирал и переделывал приложение модпака с нуля, тратя на это десятки тысяч часов.");
+            Russian.Add("endOfLifeMessagePart2c", "В какой-то момент команда выросла до восьми человек почти со всех регионов World of Tanks. Во время разработки я развивался как программист, узнавал о типичных практиках при разработке программ, в итоге сфокусировался на многопоточности приложения и обработке параллельных операций.");
+            Russian.Add("endOfLifeMessagePart2d", "Я получал опыт в процессе работы над проектом, и стал взаимодействовать с впечатляющим сообществом мододелов. Это позволило внести свою лепту в Relic Gaming Community — в группу, к которой я присоединился в 2014 году.");
+            Russian.Add("endOfLifeMessagePart3a", "В этом году, наконец, я закончил проектирование наболее оптимизированного и эффективного установщика, которого я мог создать для сообщества.");
+            Russian.Add("endOfLifeMessagePart3b", "Видя, что поставленная задача выполнена, а мой интерес к игре (и проекту) сокращается, я решил закрыть проект.");
+            Russian.Add("endOfLifeMessagePart3c", "Это было тяжёлое решение, но я не хотел поддерживать проект, к которому у меня больше нет интереса.");
+            Russian.Add("endOfLifeMessagePart3d", "Я думаю, что это плохо бы отразилось на качестве приложения, и это было бы несправедливо по отношению к конечным пользователям. Я хотел закрыть проект, пока он всё ещё в жизнеспособном состоянии.");
+            Russian.Add("endOfLifeMessagePart4", "И ещё раз, спасибо всем вам. За более пяти лет веселья, по которым я буду скучать.");
             #endregion
         }
     }
