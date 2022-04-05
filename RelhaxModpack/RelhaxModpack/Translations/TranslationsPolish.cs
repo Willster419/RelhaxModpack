@@ -652,19 +652,25 @@ namespace RelhaxModpack
             #endregion
 
             #region End of Life announcement
-            Polish.Add("EndOfLife", TranslationNeeded);
+            Polish.Add("EndOfLife", "Koniec Wsparcia dla Relhax");
             Polish.Add("CloseWindowButton", Polish["close"]);
-            Polish.Add("WoTForumAnnouncementsTextBlock", TranslationNeeded);
-            Polish.Add("endOfLifeMessagePart1", TranslationNeeded);
-            Polish.Add("endOfLifeMessagePart2a", TranslationNeeded);
-            Polish.Add("endOfLifeMessagePart2b", TranslationNeeded);
-            Polish.Add("endOfLifeMessagePart2c", TranslationNeeded);
-            Polish.Add("endOfLifeMessagePart2d", TranslationNeeded);
-            Polish.Add("endOfLifeMessagePart3a", TranslationNeeded);
-            Polish.Add("endOfLifeMessagePart3b", TranslationNeeded);
-            Polish.Add("endOfLifeMessagePart3c", TranslationNeeded);
-            Polish.Add("endOfLifeMessagePart3d", TranslationNeeded);
-            Polish.Add("endOfLifeMessagePart4", TranslationNeeded);
+            Polish.Add("WoTForumAnnouncementsTextBlock", "Posty z ogłoszeniem na forum WOT:");
+            Polish.Add("endOfLifeMessagePart1", "20/04/2022 projekt Relhax Modpack zakończył swoją działalność. " +
+                "Serdecznie dziękuję wszystkim naszym kontrybutorom i użytkownikom za ostatnie ponad pięć lat!");
+            Polish.Add("endOfLifeMessagePart2a", "1 stycznia 2017 postanowiłem, że podejmę się wyzwania nie tylko odtworzenia modpacka OMC, z nowoczesnym interfejsem, " +
+                "ale także stworzenia najszybszego systemu instalacji modów WOT, jaki kiedykolwiek istniał.");
+            Polish.Add("endOfLifeMessagePart2b", "Zaczynałem z trzema innymi osobami w zespole - członkami OMC, którzy chcieli pomagać przy projekcie. " +
+                "Przez następne 4 lata projektowałem, tworzyłem i przerabiałem modpacka od deski do deski, spędzając nad tym dziesiątki tysięcy godzin.");
+            Polish.Add("endOfLifeMessagePart2c", "Po pewnym czasie nasz zespół rozrósł się do ponad ośmiu osób z większości globalnych serwerów WOT. " +
+                "W tym czasie niesamowicie rozwijałem się jako programista, poznawałem standardy tworzenia oprogramowania oraz świetnie opanowałem temat wielowątkowości aplikacji.");
+            Polish.Add("endOfLifeMessagePart2d", "Dzięki temu projektowi zdobyłem masę doświadczenia oraz poznałem kulisy społeczności moderskiej. " +
+                "Wiedzę tę spożytkowałem wsparciem grupy Relic Gaming Community, której byłem członkiem od 2014.");
+            Polish.Add("endOfLifeMessagePart3a", "W tym roku udało mi się zakończyć prace nad najbardziej zoptymizowanym i najszybszym modpackiem, jaki mogłem stworzyć dla tej społeczności.");
+            Polish.Add("endOfLifeMessagePart3b", "Widząc, że wszystkie moje oryginalne cele i założenia dot. projektu zostały osiągnięte oraz moje zanikające zainteresowanie grą, zdecydowałem się zakończyć projekt.");
+            Polish.Add("endOfLifeMessagePart3c", "Nie była to łatwa decyzja, ale nie chciałem kontynuować pracy i wsparcia projektu, którego utrzymywanie nie sprawiało mi już radości.");
+            Polish.Add("endOfLifeMessagePart3d", "Myślę, że odbiłoby się to na jakości modpacka, co byłoby nie fair w stosunku do jego użytkowników. " +
+                "Pragnąłem wygasić projekt kiedy znajdował się jeszcze w dobrej kondycji.");
+            Polish.Add("endOfLifeMessagePart4", "Jeszcze raz dziękuję Wam wszystkim bardzo serdecznie. To było świetne 5 lat i będzie mi tego brakowało.");
             #endregion
         }
     }
