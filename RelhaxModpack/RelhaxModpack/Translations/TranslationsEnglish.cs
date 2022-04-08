@@ -2220,7 +2220,7 @@ namespace RelhaxModpack
 
             //Component: endOfLifeMessagePart2c
             //
-            English.Add("endOfLifeMessagePart2c", "At one point, the team grew to over 8 people from most WoT server regions. During the process, I grew as a programmer, learned about common software practices, and learned about application multi-threading and job optimization.");
+            English.Add("endOfLifeMessagePart2c", "At one point, the team grew to over 8 people from most WoT server regions. During the process, I grew as a programmer, learned about common software practices, and specialized in application multi-threading and handling concurrent operations.");
 
             //Component: endOfLifeMessagePart2d
             //
