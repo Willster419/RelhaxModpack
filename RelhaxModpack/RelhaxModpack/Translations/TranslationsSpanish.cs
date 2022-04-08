@@ -652,19 +652,19 @@ namespace RelhaxModpack
             #endregion
 
             #region End of Life announcement
-            Spanish.Add("EndOfLife", TranslationNeeded);
+            Spanish.Add("EndOfLife", "Fin de desarrollo de Relhax");
             Spanish.Add("CloseWindowButton", Spanish["close"]);
-            Spanish.Add("WoTForumAnnouncementsTextBlock", TranslationNeeded);
-            Spanish.Add("endOfLifeMessagePart1", TranslationNeeded);
-            Spanish.Add("endOfLifeMessagePart2a", TranslationNeeded);
-            Spanish.Add("endOfLifeMessagePart2b", TranslationNeeded);
-            Spanish.Add("endOfLifeMessagePart2c", TranslationNeeded);
-            Spanish.Add("endOfLifeMessagePart2d", TranslationNeeded);
-            Spanish.Add("endOfLifeMessagePart3a", TranslationNeeded);
-            Spanish.Add("endOfLifeMessagePart3b", TranslationNeeded);
-            Spanish.Add("endOfLifeMessagePart3c", TranslationNeeded);
-            Spanish.Add("endOfLifeMessagePart3d", TranslationNeeded);
-            Spanish.Add("endOfLifeMessagePart4", TranslationNeeded);
+            Spanish.Add("WoTForumAnnouncementsTextBlock", "Post del foro de anuncios de WoT:");
+            Spanish.Add("endOfLifeMessagePart1", "El 20 de abril de 2022, el Modpack Relhax cesó su desarrollo. Quiero dar un agradecimiento personal a todos nuestros colaboradores y usuarios por unos exitosos 5+ años.");
+            Spanish.Add("endOfLifeMessagePart2a", "El 1 de enero de 2017, me propuse un desafío de no sólo recrear el Modpack OMC en una interfaz moderna, si no también crear el sistema de instalación de paquetes más rápido que haya existido en ningún Modpack.");
+            Spanish.Add("endOfLifeMessagePart2b", "Empecé como un equipo de 4, con 3 miembros de OMC que querían contribuir al proyecto. Durante 4 años, he diseñado, contruído y reconstruido la aplicación del Modpack de la nada, gastando decenas de miles de horas.");
+            Spanish.Add("endOfLifeMessagePart2c", "En cierto punto, el equipo creció a más de 8 personas procedentes de la mayoría de regiones de los servidores de WoT. Durante el proceso, crecí como programador, aprendí prácticas comunes en el desarrollo de software, y me especialicé en manipular operaciones concurrentes y multi-threading en aplicaciones.");
+            Spanish.Add("endOfLifeMessagePart2d", "Gané experiencia a través del proyecto, y tuve la oportunidad de interactuar con una gran comunidad de modding. Me permitió colaborar de nuevo con el grupo Relic Gaming Community, al que me uní en 2014.");
+            Spanish.Add("endOfLifeMessagePart3a", "A fecha de este año, finalmente completé mi trabajo de diseñar el instalador más optimizado y eficiente que podía hacer para la comunidad.");
+            Spanish.Add("endOfLifeMessagePart3b", "Viendo el proyecto alcanzar su objetivo original, y mi interés en el juego (y el proyecto) disminuir, decidí cerrar el proyecto.");
+            Spanish.Add("endOfLifeMessagePart3c", "Ha sido una decisión difícil, pero no quería seguir apoyando un proyecto que ya no tenía interés de mantener.");
+            Spanish.Add("endOfLifeMessagePart3d", "Creo se habría reflejado de mala forma en la calidad del producto, y no sería justo para los usuarios finales. Quería cerrar el proyecto mientras aún estaba en buen estado.");
+            Spanish.Add("endOfLifeMessagePart4", "De nuevo, gracias a todos. Han sido 5+ divertidos años, y lo echaré de menos.");
             #endregion
         }
     }
