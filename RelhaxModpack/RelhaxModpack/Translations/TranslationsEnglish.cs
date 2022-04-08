@@ -2216,7 +2216,7 @@ namespace RelhaxModpack
 
             //Component: endOfLifeMessagePart2b
             //
-            English.Add("endOfLifeMessagePart2b", "I started as a team of 4, taking 3 members of OMC who wanted to contribute to the project. Over the course of 4 years, I designed, built, and re-built and modpack application from scratch, spending tens of thousands of hours.");
+            English.Add("endOfLifeMessagePart2b", "I started as a team of 4, taking 3 members of OMC who wanted to contribute to the project. Over the course of 4 years, I designed, built, and re-built the modpack application from scratch, spending tens of thousands of hours.");
 
             //Component: endOfLifeMessagePart2c
             //
