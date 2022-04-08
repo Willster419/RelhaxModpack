@@ -139,9 +139,9 @@ namespace RelhaxModpack
             French.Add("LauchEditorText", "Lancer l'éditeur de la base de données");
             French.Add("LauchEditorDescription", "Lancer l'éditeur de la base de données d'ici, au lieu de le lancer depuis une ligne de commande");
             French.Add("LauchPatchDesignerText", "Lancer le Patch Designer");
-            French.Add("LauchPatchDesignerDescription", Translations.TranslationNeeded);
-            French.Add("LauchAutomationRunnerText", Translations.TranslationNeeded);
-            French.Add("LauchAutomationRunnerDescription", Translations.TranslationNeeded);
+            French.Add("LauchPatchDesignerDescription", "Lance le concepteur de patch ici, au lieu d’une ligne de commande");
+            French.Add("LauchAutomationRunnerText", "Lancer l'exécuteur d'automatisation");
+            French.Add("LauchAutomationRunnerDescription", "Lancer l’exécuteur d’automatisation ici, au lieu d’une ligne de commande");
             French.Add("InstallWhileDownloadingText", "Extraire pendant le téléchargement");
             French.Add("InstallWhileDownloadingCBDescription", "Si cette option est activée, l'installateur va extraire un fichier zip dès qu'il est téléchargé, au lieu" +
                 " d'attendre que chaque fichier zip soit téléchargé pour l'extraction.");
@@ -293,7 +293,7 @@ namespace RelhaxModpack
             French.Add("invisible", "invisible");
             French.Add("SelectionFileIssuesDisplay", "Erreurs lors de l'application du fichier de sélection");
             French.Add("selectionFileIssues", French["SelectionFileIssuesDisplay"]);
-            French.Add("selectionFileIssuesHeader", TranslationNeeded);
+            French.Add("selectionFileIssuesHeader", "S’il vous plaît, lisez le message suivant au sujet de votre sélection de fichiers");
             French.Add("VersionInfo", "Mise à jour de l'application");
             French.Add("VersionInfoYesText", French["yes"]);
             French.Add("VersionInfoNoText", French["no"]);
@@ -643,31 +643,30 @@ namespace RelhaxModpack
             #endregion
 
             #region Conflicting Packages Dialog
-            French.Add("ConflictingPackageDialog", TranslationNeeded);
-            French.Add("conflictingPackageMessageOptionA", TranslationNeeded);
-            French.Add("conflictingPackageMessageOptionB", TranslationNeeded);
-            French.Add("conflictingPackageMessagePartA", TranslationNeeded);
-            French.Add("conflictingPackagePackageOfCategory", TranslationNeeded);
-            French.Add("conflictingPackageMessagePartB", TranslationNeeded);
-            French.Add("conflictingPackageMessagePartC", TranslationNeeded);
-            French.Add("conflictingPackageMessagePartD", TranslationNeeded);
-            French.Add("conflictingPackageMessagePartE", TranslationNeeded);
+            French.Add("ConflictingPackageDialog", "Boîte de dialogue des packages en conflit");
+            French.Add("conflictingPackageMessageOptionA", "Option A");
+            French.Add("conflictingPackageMessageOptionB", "Option B");
+            French.Add("conflictingPackageMessagePartA", "Vous avez selectionné des packages \"{0}\", mais cela rentre en conflit avec les package(s) suivants:");
+            French.Add("conflictingPackageMessagePartB", French["conflictingPackageMessageOptionA"] + ":  sélectionnez \"{0}\", pour décocher tous les  package(s) en conflits");
+            French.Add("conflictingPackageMessagePartC", French["conflictingPackageMessageOptionB"] + ": Ne sélectionnez pas\"{0}\", Qui continuera à créer des conflits de package(s)");
+            French.Add("conflictingPackageMessagePartD", "Fermer la fenêtre sélectionnera l'option B");
+            French.Add("conflictingPackageMessagePartE", "Veuillez sélectionner une option s'il vous plaît");
             #endregion
 
             #region End of Life announcement
-            French.Add("EndOfLife", TranslationNeeded);
+            French.Add("EndOfLife", "Relhax End of Life");
             French.Add("CloseWindowButton", French["close"]);
-            French.Add("WoTForumAnnouncementsTextBlock", TranslationNeeded);
-            French.Add("endOfLifeMessagePart1", TranslationNeeded);
-            French.Add("endOfLifeMessagePart2a", TranslationNeeded);
-            French.Add("endOfLifeMessagePart2b", TranslationNeeded);
-            French.Add("endOfLifeMessagePart2c", TranslationNeeded);
-            French.Add("endOfLifeMessagePart2d", TranslationNeeded);
-            French.Add("endOfLifeMessagePart3a", TranslationNeeded);
-            French.Add("endOfLifeMessagePart3b", TranslationNeeded);
-            French.Add("endOfLifeMessagePart3c", TranslationNeeded);
-            French.Add("endOfLifeMessagePart3d", TranslationNeeded);
-            French.Add("endOfLifeMessagePart4", TranslationNeeded);
+            French.Add("WoTForumAnnouncementsTextBlock", "Poste d’annonce sur le forum WoT:");
+            French.Add("endOfLifeMessagePart1", "Le 20 Avril 2022, Le Modpack Relhax a été mis hors-service. Je veux remercier tout les contributeurs et utilisateurs pour ses 5+ années de succès !");
+            French.Add("endOfLifeMessagePart2a", "Le premier Janvier 2017, je me suis fixé un challenge : Ne pas uniquement recréer le modpack OMC avec une interface utilisateur plus moderne mais aussi pour créer le système d’installation de package la plus rapide de tous les modpacks qui ont existés");
+            French.Add("endOfLifeMessagePart2b", "J’ai commencer avec une équipe de 4, en prenant 3 membres d’OMC qui voulaient contribuer au projet. Durant la course des 4 dernières années, j’ai designé, construit et re-construit une application de modpack depuis Scratch, en y passant des dizaines de milliers d’heures");
+            French.Add("endOfLifeMessagePart2c", "A un moment, l’équipe est arrivée à 8 membres, de différents serveurs de WoT. Pendant le processus, j’ai évolué en tant que programmeur,j’ai aussi appris les pratiques logicielles courantes et je me suis spécialisé dans le multithreading des applications et la gestion des opérations simultanées.");
+            French.Add("endOfLifeMessagePart2d", "J’ai gagné de l’expérience à travers ce projet, j’ai interagit avec une excellente communauté de moddeur. Cela m’a permis de contribuer à nouveau à la Relic Gaming Community que j’ai rejoins en 2014.");
+            French.Add("endOfLifeMessagePart3a", "Depuis cette année, j’ai enfin terminé mon travail de design sur le plus optimisé et le plus efficace des installateurs que j’aurai pu créer pour cette communauté.");
+            French.Add("endOfLifeMessagePart3b", "Voir le projet atteindre mon but originel, and voir mes intérêts sur le jeu (et sur le projet) diminuer, j’ai décider de stopper ce projet.");
+            French.Add("endOfLifeMessagePart3c", "C’était une décision très difficile à prendre, mais je ne veux pas continuer à supporter un projet pour lequel je n’éprouve plus aucun intérêt");
+            French.Add("endOfLifeMessagePart3d", "I think it would have reflected poorly on the quality of product, and it would not be fair to end users. I wanted to close the project while it was still in a healthy state.");
+            French.Add("endOfLifeMessagePart4", "Encore une fois, merci à vous tous. C’était 5+ années bien amusantes, et cela me manquera.");
             #endregion
         }
     }
