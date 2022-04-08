@@ -637,6 +637,7 @@ namespace RelhaxModpack
 
             #region End of Life announcement
             Russian.Add("EndOfLife", "Прекращение поддержки Relhax");
+            Russian.Add("CloseWindowButton", Russian["close"]);
             Russian.Add("WoTForumAnnouncementsTextBlock", "Из анонса на форуме WoT:");
             Russian.Add("endOfLifeMessagePart1", "20.04.2022 сервера Relhax Modpack были выключены. Я хочу лично поблагодарить всю нашу команду и пользователей за успешную работу на протяжении более пяти лет!");
             Russian.Add("endOfLifeMessagePart2a", "01.01.2017 я поставил себе необычную задачу не только воссоздать модпак OMC с современным интерфейсом, но и создать самую быструю систему установки пакетов в сравнении с другими существующими модпаками.");
