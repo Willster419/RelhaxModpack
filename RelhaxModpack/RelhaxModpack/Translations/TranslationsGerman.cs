@@ -661,14 +661,14 @@ namespace RelhaxModpack
             #endregion
 
             #region End of Life announcement
-            German.Add("EndOfLife", TranslationNeeded);
+            German.Add("EndOfLife", "Relhax am Lebensende End of Life");
             German.Add("CloseWindowButton", German["close"]);
-            German.Add("WoTForumAnnouncementsTextBlock", TranslationNeeded);
-            German.Add("endOfLifeMessagePart1", TranslationNeeded);
-            German.Add("endOfLifeMessagePart2a", TranslationNeeded);
-            German.Add("endOfLifeMessagePart2b", TranslationNeeded);
-            German.Add("endOfLifeMessagePart2c", TranslationNeeded);
-            German.Add("endOfLifeMessagePart2d", TranslationNeeded);
+            German.Add("WoTForumAnnouncementsTextBlock", "WoT forum Bekanntmachung posts:");
+            German.Add("endOfLifeMessagePart1", "Am 22.April 2022 wird das Relhax Modpack beendet. Ich will ein ganz besonderes Dankeschön ausrichten an alle Mitarbeitende und Benutzer für mehr als 5 erfolgreiche Jahre!");
+            German.Add("endOfLifeMessagePart2a", "Am 1. Januar 2017, stellte ich mir selbst eine (die) Herausforderung nicht nur das alte (old) OMC Modpack mit einer modernen UI Wiederauferstehen zu lassen, sondern das schnellste Installationssystem aller existierenden Modpacks zu programmieren.");
+            German.Add("endOfLifeMessagePart2b", "Ich begann mit einem Team aus 4 Leuten, davon waren 3 Mitglieder von OMC weiter beim Projekt \"Relhax\" dabei. In den folgenden 4 Jahre, entwickelte ich es , baute es zusammen, verwarf es , began es neu und baute es erneut zusammen, verbrachte dabei 10.000 Stunden am PC.");
+            German.Add("endOfLifeMessagePart2c", "Zu einem Zeitpunkt wuchs das Team auf über 8 Personen aus allen Server Regionen von WoT. Während diese gesamten Prozess wuchs ich als Programmierer, lernte viel über Software im Allgemeinen und ganz speziell zu Anwendungen (\"Apps\") mit multi-threading und handling concurrent operations.");
+            German.Add("endOfLifeMessagePart2d", "Ich sammelte Erfahrung durch das Projekt und konnte mit einer großartigen Modding-Community interagieren. Es ermöglichte mir meinen Beitrag zur Relic Gaming Community, der ich 2014 beitrat.");
             German.Add("endOfLifeMessagePart3a", TranslationNeeded);
             German.Add("endOfLifeMessagePart3b", TranslationNeeded);
             German.Add("endOfLifeMessagePart3c", TranslationNeeded);
