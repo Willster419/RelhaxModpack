@@ -298,7 +298,7 @@ namespace RelhaxModpack
             German.Add("invisible", "unsichtbar");
             German.Add("SelectionFileIssuesDisplay", "Fehler beim Anwenden der Auswahldatei");
             German.Add("selectionFileIssues", German["SelectionFileIssuesDisplay"]);
-            German.Add("selectionFileIssuesHeader", TranslationNeeded);
+            German.Add("selectionFileIssuesHeader", "Bitte lesen Sie die folgenden Meldungen zu Ihrer Auswahldatei");
             German.Add("VersionInfo", "Porgrammaktualisierung");
             German.Add("VersionInfoYesText", German["yes"]);
             German.Add("VersionInfoNoText", German["no"]);
