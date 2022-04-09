@@ -669,11 +669,11 @@ namespace RelhaxModpack
             German.Add("endOfLifeMessagePart2b", "Ich begann mit einem Team aus 4 Leuten, davon waren 3 Mitglieder von OMC weiter beim Projekt \"Relhax\" dabei. In den folgenden 4 Jahre, entwickelte ich es , baute es zusammen, verwarf es , began es neu und baute es erneut zusammen, verbrachte dabei 10.000 Stunden am PC.");
             German.Add("endOfLifeMessagePart2c", "Zu einem Zeitpunkt wuchs das Team auf über 8 Personen aus allen Server Regionen von WoT. Während diese gesamten Prozess wuchs ich als Programmierer, lernte viel über Software im Allgemeinen und ganz speziell zu Anwendungen (\"Apps\") mit multi-threading und handling concurrent operations.");
             German.Add("endOfLifeMessagePart2d", "Ich sammelte Erfahrung durch das Projekt und konnte mit einer großartigen Modding-Community interagieren. Es ermöglichte mir meinen Beitrag zur Relic Gaming Community, der ich 2014 beitrat.");
-            German.Add("endOfLifeMessagePart3a", TranslationNeeded);
-            German.Add("endOfLifeMessagePart3b", TranslationNeeded);
-            German.Add("endOfLifeMessagePart3c", TranslationNeeded);
-            German.Add("endOfLifeMessagePart3d", TranslationNeeded);
-            German.Add("endOfLifeMessagePart4", TranslationNeeded);
+            German.Add("endOfLifeMessagePart3a", "(Der Rest dieser Nachricht wurde mit Google Translate übersetzt. Entschuldigung für die Unannehmlichkeiten.) In diesem Jahr habe ich endlich meine Designarbeit am optimiertesten und effizientesten Installer abgeschlossen, den ich für die Community machen konnte.");
+            German.Add("endOfLifeMessagePart3b", "Als ich sah, dass das Projekt mein ursprüngliches Ziel erreichte und mein Interesse am Spiel (und dem Projekt) nachließ, beschloss ich, das Projekt zu schließen.");
+            German.Add("endOfLifeMessagePart3c", "Es war eine schwere Entscheidung, aber ich wollte ein Projekt nicht weiter unterstützen, an dessen Fortführung ich kein Interesse mehr hatte.");
+            German.Add("endOfLifeMessagePart3d", "Ich denke, es hätte die Qualität des Produkts schlecht widergespiegelt und es wäre nicht fair gegenüber den Endverbrauchern. Ich wollte das Projekt schließen, während es noch in einem gesunden Zustand war.");
+            German.Add("endOfLifeMessagePart4", "Nochmals vielen Dank an alle. Es waren lustige 5+ Jahre, und ich werde es vermissen.");
             #endregion
         }
     }
