@@ -649,15 +649,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Conflicting Packages Dialog
-            German.Add("ConflictingPackageDialog", TranslationNeeded);
-            German.Add("conflictingPackageMessageOptionA", TranslationNeeded);
-            German.Add("conflictingPackageMessageOptionB", TranslationNeeded);
-            German.Add("conflictingPackageMessagePartA", TranslationNeeded);
-            German.Add("conflictingPackagePackageOfCategory", TranslationNeeded);
-            German.Add("conflictingPackageMessagePartB", TranslationNeeded);
-            German.Add("conflictingPackageMessagePartC", TranslationNeeded);
-            German.Add("conflictingPackageMessagePartD", TranslationNeeded);
-            German.Add("conflictingPackageMessagePartE", TranslationNeeded);
+            German.Add("ConflictingPackageDialog", "Widersprüchliche  Beschreibung");
+            German.Add("conflictingPackageMessageOptionA", "Option A");
+            German.Add("conflictingPackageMessageOptionB", "Option B");
+            German.Add("conflictingPackageMessagePartA", "Du hast \"{0}\" ausgewählt, aber es widerspricht der folgenden Auswahl:");
+            German.Add("conflictingPackagePackageOfCategory", "- {0}, der Kategorie {1}");
+            German.Add("conflictingPackageMessagePartB", German["conflictingPackageMessageOptionA"] + ": Wähle \"{0}\" aus, das alle Widersprüche in der Auswahl abwählt.");
+            German.Add("conflictingPackageMessagePartC", German["conflictingPackageMessageOptionB"] + ": Wähle \"{0}\" nicht aus, dann bleiben alle Widersprüche in der Auswahl erhalten.");
+            German.Add("conflictingPackageMessagePartD", "Schließe das Fenster, Option B wird ausgewählt");
+            German.Add("conflictingPackageMessagePartE", "Bitte wähle eine Option aus");
             #endregion
 
             #region End of Life announcement
