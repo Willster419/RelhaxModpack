@@ -10,9 +10,9 @@
 
 **_The fastest <abbr title="World of Tanks">WoT</abbr> modpack installer in the world. A refresh of <abbr title="Odem Mortis Community">OMC</abbr> modpack._**<br>
 
-| [Virustotal](https://www.virustotal.com/gui/file/0cecd539dbf22f7d0d8ebc04d6f3ebad7cff7c7fee087ea487ea0832e4a06062) |                                                [Our Website!](https://relhaxmodpack.com/)                                                 |                                           [Download](https://github.com/Willster419/RelhaxModpack/releases/latest)                                           |               [Our Discord](https://discordapp.com/invite/58fdPvK)|[License](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)
-| :---: | :---: | :---: | :---: | :---: |
-|![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=4c6f74&label=Version)|![](https://img.shields.io/website?color=85c6cc&down_message=Offline&label=WWW&up_message=Online&url=https%3A%2F%2Frelhaxmodpack.com)|![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=4c6f74&label=Downloads)|![](https://img.shields.io/discord/303262090741940226?color=85c6cc&label=Discord)|![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=License)|
+| [Virustotal](https://www.virustotal.com/gui/file/0cecd539dbf22f7d0d8ebc04d6f3ebad7cff7c7fee087ea487ea0832e4a06062) |                                           [Download](https://github.com/Willster419/RelhaxModpack/releases/latest)                                           |[License](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)
+| :---: | :---: | :---: |
+|![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=4c6f74&label=Version)|![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=4c6f74&label=Downloads)|![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=License)|
 
 <p align="center"><sub><i>The Relhax Modpack ~ Would you rather spend time on your mods, or your gameplay?</i></sub></p>
 
