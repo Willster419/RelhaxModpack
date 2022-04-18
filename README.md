@@ -104,9 +104,9 @@ Latest release notes can be found [here](https://github.com/Willster419/RelhaxMo
 
 **If you come across a bug or feature request please take one of these actions:**
 
-- Let us know via our [Discord](https://discordapp.com/invite/58fdPvK).
-- Report it on our [forum](http://forums.relhaxmodpack.com/).
-- If you have a GitHub account, [open an issue](https://github.com/Willster419/RelhaxModpack/issues).
+- ~Let us know via our [Discord](https://discordapp.com/invite/58fdPvK).~
+- ~Report it on our [forum](http://forums.relhaxmodpack.com/).~
+- ~If you have a GitHub account, [open an issue](https://github.com/Willster419/RelhaxModpack/issues)~.
 
 _When you do, please attach the diagnostic .zip file you create by clicking <kbd>Diagnostic Utilities -> Create ZIP file</kbd>_.
 
@@ -115,10 +115,10 @@ _When you do, please attach the diagnostic .zip file you create by clicking <kbd
 ## 🛡 Download
 
 You can download the modpack in couple of ways, via:
-|[Adf.ly Sponsored Link](http://adf.ly/1l28oP)|[Official <abbr title="Wargaming Mods">WGMods</abbr> Portal](https://wgmods.net/392/)|[Direct Download Link](http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe)|[GitHub Releases](https://github.com/Willster419/RelhaxModpack/releases)
-|:---:|:---:|:---:|:---:|
+|[Official <abbr title="Wargaming Mods">WGMods</abbr> Portal](https://wgmods.net/392/)|[GitHub Releases](https://github.com/Willster419/RelhaxModpack/releases)
+|:---:|:---:|
 
-**If you can spare a few dollars and like the Modpack, [please consider donating on Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2)**
+~**If you can spare a few dollars and like the Modpack, [please consider donating on Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2)**~
 
 ## 🛡 Credits
 
@@ -126,6 +126,7 @@ You can download the modpack in couple of ways, via:
 - <b>Rkk1945</b> — <i>For helping with code edits and resource support, along with helping with the closed alpha test.</i>
 - <i>All the Modpack team members for helping to add mods as quickly as possible.</i>
 - <i>Those who helped provide feedback during open alpha and beta testing.</i>
+- <b>The Relhax Modpack team</b> - <i>If it wern't for you all, this programs would have closed years before.</i>
 
 ---
 
